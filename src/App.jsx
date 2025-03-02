@@ -18,7 +18,7 @@ const router = createHashRouter([
         </>
     },
     {
-        path: "https://glen112-bit.github.io/nossocanto/Instalations",
+        path: "https://glen112-bit.github.io/nossocanto/#/Instalations",
         element:
         <>
             <Header text="NossoCantoSp"/>
@@ -27,7 +27,7 @@ const router = createHashRouter([
 
     },
     {
-        path: "https://glen112-bit.github.io/nossocanto/rules",
+        path: "https://glen112-bit.github.io/nossocanto/#/rules",
         element:
         <>
             <Header text="NossoCantoSp"/>
@@ -35,7 +35,7 @@ const router = createHashRouter([
         </>   
     },
     {
-        path: "https://glen112-bit.github.io/nossocanto/places",
+        path: "https://glen112-bit.github.io/nossocanto/#/places",
         element: 
         <>
             <Header text="NossoCantoSp"/>
