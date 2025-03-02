@@ -5,14 +5,10 @@ import Instalations from "./pages/Instalations"
 import Rules from "./pages/Rules"
 import Places from "./pages/Places"
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
-import { HashRouter } from 'react-router-dom'
+// import { HashRouter } from 'react-router-dom'
 
 
 const router = createBrowserRouter([
-    
-    {
-       element: <Header text="NossoCantoSp"/>
-    },
     {
         path: "https://glen112-bit.github.io/nossocanto",
         element:
@@ -54,9 +50,7 @@ function App() {
 
   return (
     <>
-        <HashRouter>
             <RouterProvider router={router}/>
-        </HashRouter>
     </>
   )
 }
