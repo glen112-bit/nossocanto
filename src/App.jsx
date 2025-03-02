@@ -13,7 +13,7 @@ const router = createBrowserRouter([
        element: <Header text="NossoCantoSp"/>
     },
     {
-        path: "/",
+        path: "/https://glen112-bit.github.io/nossocanto/",
         element:
         <>
             <Header text="NossoCantoSp"/>
@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         </>
     },
     {
-        path: "/instalations",
+        path: "https://glen112-bit.github.io/nossocanto/instalations",
         element:
         <>
             <Header text="NossoCantoSp"/>
@@ -30,7 +30,7 @@ const router = createBrowserRouter([
 
     },
     {
-        path: "/rules",
+        path: "https://glen112-bit.github.io/nossocanto/rules",
         element:
         <>
             <Header text="NossoCantoSp"/>
@@ -38,7 +38,7 @@ const router = createBrowserRouter([
         </>   
     },
     {
-        path: "/places",
+        path: "https://glen112-bit.github.io/nossocanto/places",
         element: 
         <>
             <Header text="NossoCantoSp"/>
