@@ -4,11 +4,11 @@ import NossoCantoSp from "./pages/NossoCantoSp"
 import Instalations from "./pages/Instalations"
 import Rules from "./pages/Rules"
 import Places from "./pages/Places"
-import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { RouterProvider, createHashRouter } from 'react-router-dom'
 // import { HashRouter } from 'react-router-dom'
 
 
-const router = createBrowserRouter([
+const router = createHashRouter([
     {
         path: "https://glen112-bit.github.io/nossocanto",
         element:
