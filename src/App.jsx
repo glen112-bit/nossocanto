@@ -10,7 +10,7 @@ import { RouterProvider, createHashRouter } from 'react-router-dom'
 
 const router = createHashRouter([
     {
-        path: "https://glen112-bit.github.io/nossocanto",
+        path: "/",
         element:
         <>
             <Header text="NossoCantoSp"/>
