@@ -6,6 +6,12 @@
     justify-content: center;
     margin: 0 auto;
 }
+.borderCanto{
+    border-radius: 6px solid gray;
+}
+.images{
+    margin: 0 auto;
+}
 
 h1{
     margin: 0 auto;

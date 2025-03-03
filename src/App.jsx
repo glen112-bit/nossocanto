@@ -5,7 +5,6 @@ import Instalations from "./pages/Instalations"
 import Rules from "./pages/Rules"
 import Places from "./pages/Places"
 import { RouterProvider, createHashRouter } from 'react-router-dom'
-// import { HashRouter } from 'react-router-dom'
 
 
 const router = createHashRouter([

@@ -19,7 +19,7 @@ const MapView = () => {
     })
     return(
         <>
-            <section>
+            <section className= "mapBorder">
                 <div>MapView</div>
                 <section className = "mapview">
                     {
