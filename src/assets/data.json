@@ -5,7 +5,7 @@
     "instalations": ["Cafeteira", "Lavadora"], 
     "images":[
     {
-        "src": "../../assets/images/cama.jpeg",
+        "src": "../../../assets/images/cama.jpeg",
         "name":"Cama"
     },  {
         "src": "src/assets/images/luces_cocinha.jpeg",
