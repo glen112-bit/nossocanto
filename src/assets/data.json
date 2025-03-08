@@ -8,16 +8,16 @@
         "src": "./assets/images/cama.jpeg",
         "name":"Cama"
     },  {
-        "src": "src/assets/images/luces_cocinha.jpeg",
+        "src": "./assets/images/luces_cocinha.jpeg",
         "name":"Luces Cozinha"
     },  {
-        "src": "src/assets/images/tomadas_baneiro.jpeg",
+        "src": "./assets/images/tomadas_baneiro.jpeg",
         "name":"Tomadas Banheiro"
     },  {
-        "src": "src/assets/images/torneiras.jpeg",
+        "src": "./assets/images/torneiras.jpeg",
         "name":"torneiras"
     },  {
-        "src": "src/assets/images/torneira_pia_aberta.jpeg",
+        "src": "./assets/images/torneira_pia_aberta.jpeg",
         "name":"Torneira Lavadoura Aberta"
     },  {
         "src": "src/assets/images/torneira_pia_fechada.jpeg",
