@@ -1,0 +1,27 @@
+{
+    "places": ["Galeria Metropole", "Biblioteca Mario de Andrade", "Rua Avanhandava", "Teatro Municipal", "Shopping Light", "Eduficio Copan","Terraco Italia"],
+    "bares": [" Rooftop Matiz", "Rooftop no Edificio Ester/Olivier", "Rooftop do Shopping Light", " Parador: Restaurante com DayUse incluso no edificio Renata", "Tokio Bar Karaoke"],
+    "rules": ["A cozinha esta a sua disposição, pedimos a penas que ao sair deixe o saco organizado, e descarta seu lixo.", "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.", "Será permitida a pernoite no nossoCanto a penas para os hóspedes registrados."],
+    "instalations": ["Cafeteira", "Lavadora"], 
+    "images":[
+    {
+        "src": "../../../assets/images/cama.jpeg",
+        "name":"Cama"
+    },  {
+        "src": "src/assets/images/luces_cocinha.jpeg",
+        "name":"Luces Cozinha"
+    },  {
+        "src": "src/assets/images/tomadas_baneiro.jpeg",
+        "name":"Tomadas Banheiro"
+    },  {
+        "src": "src/assets/images/torneiras.jpeg",
+        "name":"torneiras"
+    },  {
+        "src": "src/assets/images/torneira_pia_aberta.jpeg",
+        "name":"Torneira Lavadoura Aberta"
+    },  {
+        "src": "src/assets/images/torneira_pia_fechada.jpeg",
+        "name":"Torneita Lavadoura Fechada"
+    }
+    ]
+}
