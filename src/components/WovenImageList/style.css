@@ -1,0 +1,26 @@
+/* .fotos{ */
+/* width: 50px; */
+/* height: 50px; */
+/* } */
+/* .images > ul > li > img { */
+    /* height: 40%; */
+    /* width: 40%; */
+/* } */
+/* .imageBorder { */
+    /* margin: 0 auto; */
+    /* text-align: center; */
+    /* margin: 0 auto; */
+    /* max-width: 60%; */
+    /* max-height: 60%; */
+    /* border-radius: 15;  max-width: 80vw; */
+/* } */
+
+@media screen and (max-widht: 600px){
+    
+    .imageBorder > ul > li > img {
+        height: 50px;
+        width: 50px;
+    } 
+
+}
+

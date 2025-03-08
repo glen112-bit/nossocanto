@@ -13,7 +13,21 @@
     margin: 0 auto;
 }
 
-h1{
+h1 {
     margin: 0 auto;
     width: 100%;
+    font-size: 3.6em;
+}
+ @media (width:600px){
+	/* Estilizações CSS */
+     h1{
+         font-size: 55px;
+     }
+
+}
+ @media (max-width:400px){
+	/* Estilizações CSS */
+     h1{
+         font-size: 45px;
+     }
 }

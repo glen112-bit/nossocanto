@@ -11,7 +11,14 @@
   /* -webkit-font-smoothing: antialiased; */
   /* -moz-osx-font-smoothing: grayscale; */
 }
-
+/* @media screen and (width: 428px){ */
+    /* h1{ */
+        /* font-size: 1.6em; */
+    /* }[> Estilizações CSS <] */
+    /* .image > ul > li > img { */
+        /* width: 15vw; */
+    /* } */
+/* } */
 a {
   font-weight: 500;
   color: #646cff;
@@ -22,7 +29,7 @@ a:hover {
 }
 
 h1 {
-  font-size: 3.6em;
+  font-size: 4.6em;
   line-height: 2em;
   text-align: center
 }
