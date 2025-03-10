@@ -21,15 +21,15 @@ h1 {
     font-size: 3.6em;
 }
  @media (width:600px){
-	/* Estilizações CSS */
+        /* Estilizações CSS */
      h1{
          font-size: 55px;
      }
 
 }
- @media (max-width:400px){
-	/* Estilizações CSS */
+ @media (max-width:450px){
+        /* Estilizações CSS */
      h1{
-         font-size: 40px;
+         font-size: 32px;
      }
 }
