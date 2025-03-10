@@ -1,7 +1,8 @@
 {
-    "places": ["Galeria Metropole", "Biblioteca Mario de Andrade", "Rua Avanhandava", "Teatro Municipal", "Shopping Light", "Eduficio Copan","Terraco Italia"],
-    "bares": [" Rooftop Matiz", "Rooftop no Edificio Ester/Olivier", "Rooftop do Shopping Light", " Parador: Restaurante com DayUse incluso no edificio Renata", "Tokio Bar Karaoke"],
+    "places": [{"name":"Galeria Metropole", "value": "gyughjkbhugtyhuilgyoftifty"}, {"name":"Biblioteca Mario de Andrade","value": "gyuidhwuibhreuiqbveuoqviwo"}, {"name": "Rua Avanhandava", "value": "rua muito interesante"},{"name": "Teatro Municipal", "value": "teato mas antiguo"}, {"name": "Shopping Light", "value": "antigua estacao de eletricidade"}, {"name": "Eduficio Copan", "value": "obra de oscar niemeyer"},{"name": "Terraco Italia", "value": "dos predios mais atltos de Sao Paulo"}],
+    "bares": [{"name":"Rooftop Matiz", "value":"rooftop em saopaulo"}, {"name":"Rooftop no Edificio Ester/Olivier", "value": "rooftop do famoso chef com prato unico e de qualidade"}, {"name": "Rooftop do Shopping Light", "value": "rooftop sobre famosso shopping do centro"}, { "name":"Parador", "value":" Restaurante com DayUse incluso no edificio Renata"}, {"name":"Tokio Bar Karaoke", "value": "novo conceito de balada e karaoke em sao Paulo"}],
     "rules": ["A cozinha esta a sua disposição, pedimos a penas que ao sair deixe o saco organizado, e descarta seu lixo.", "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.", "Será permitida a pernoite no nossoCanto a penas para os hóspedes registrados."],
+    "descricoes": ["lorem imsum", "hjklgjlguiyuphuiohip", "lcuiodqvhfueiqvhuefiq"],
     "instalations": ["Cafeteira", "Lavadora"], 
     "images":[
     {

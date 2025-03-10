@@ -13,6 +13,7 @@ import './style.css'
 export default function Places() {
     let Lugares = data.places
     let Bares = data.bares
+    // let Descricoes = data.descricoes
     return (
         <div>
             <h1>Lugares Perto</h1>
@@ -29,23 +30,29 @@ export default function Places() {
                     </Typography>
                 </AccordionSummary>
                 <AccordionSummary
-                    expandIcon={<ArrowDropDownIcon />}
                     aria-controls="panel4-content"
                     id="panel1-header"
-
                 >
+                    <Stack sx={{width:'90vw', fontSize: '26px'}}>
+                        {Lugares.map((lugar, index) => 
+                        <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ArrowDropDownIcon />}
+                                key={lugar[index]}
+                            ><Stack sx={{fontSize: '36px'}} >
+                                {lugar.name}
+                            </Stack>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Stack spacing={2}>
+                                    <Stack>{lugar.value}</Stack>
+                                </Stack>
+                            </AccordionDetails>
+                        </Accordion>
+                        )}
 
-                    <Stack spacing={2}>
-                        {Lugares.map((lugar) => <AccordionSummary
-                            expandIcon={<ArrowDropDownIcon />}
-                            aria-controls="panel4-content"
-                            id="panel1-header"
-
-                        ><Item>{lugar}</Item></AccordionSummary>)}
-                    </Stack>
-
+                    </Stack>    
                 </AccordionSummary>
-
             </Accordion>
             <Accordion>
                 <AccordionSummary
@@ -59,11 +66,30 @@ export default function Places() {
                         </Item>
                     </Typography>
                 </AccordionSummary>
-                <AccordionDetails>
-                    <Stack spacing={2}>
-                        {Bares.map(bar => <Typography><Item>{bar}</Item></Typography>)}
-                    </Stack>
-                </AccordionDetails>
+                <AccordionSummary
+                    aria-controls="panel4-content"
+                    id="panel1-header"
+                >
+                    <Stack sx={{width:'90vw', fontSize: '26px'}}>
+                        {Bares.map((bar, index) => 
+                        <Accordion>
+                            <AccordionSummary
+                                expandIcon={<ArrowDropDownIcon />}
+                                key={bar[index]}
+                            ><Stack sx={{fontSize: '36px'}} >
+                                {bar.name}
+                            </Stack>
+                            </AccordionSummary>
+                            <AccordionDetails>
+                                <Stack spacing={2}>
+                                    <Stack>{bar.value}</Stack>
+                                </Stack>
+                            </AccordionDetails>
+                        </Accordion>
+                        )}
+                    </Stack>    
+                </AccordionSummary>
+
             </Accordion>
         </div>
     );

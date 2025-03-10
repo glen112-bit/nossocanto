@@ -25,7 +25,7 @@ export default function Rules() {
             </Stack>
         </AccordionSummary>
         <AccordionDetails>
-            <Stack spacing={2}>{Regras.map(rules => <Typography><Item>{rules}</Item></Typography>)}</Stack>
+            <Stack spacing={2}>{Regras.map(rules => <Stack>{rules}</Stack>)}</Stack>
         </AccordionDetails>
       </Accordion>
     </div>
