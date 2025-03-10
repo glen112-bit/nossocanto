@@ -6,6 +6,12 @@ Box{
 /* BottomNavigation{ */
     /* align-items: space-between; */
 /* } */
+.air{
+    display: flex;
+     align-items: center;
+     margin: auto;
+     max-height: 3.4rem;
+}
  @media (width:600px){
 	/* Estilizações CSS */
      BottomNavigation{
