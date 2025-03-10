@@ -5,6 +5,7 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import HomeIcon from '@mui/icons-material/Home';
 import MapIcon from '@mui/icons-material/Map';
 import DnsIcon from '@mui/icons-material/Dns';
+import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import {useNavigate} from 'react-router-dom';
 
@@ -21,10 +22,11 @@ export default function NavigationBar() {
         onChange={(event, newValue) => {
           setValue(newValue); }}
       >
-        <BottomNavigationAction onClick={()=> navigate("/")} label="NossoCanto" icon={<HomeIcon />} sx={{ width: 500 }}/> 
-        <BottomNavigationAction onClick={()=> navigate("/rules")} label="Regras" icon={<AssignmentLateIcon />} sx={{ width: 500 }}/> 
-        <BottomNavigationAction onClick={()=> navigate("/places")}label="Lugares" icon={<MapIcon/>} sx={{ width: 500 }}/>
-        <BottomNavigationAction onClick={()=> navigate("/instalations")}label="Instalacoes" icon={<DnsIcon />} sx={{ width: 500 }}/>
+        <BottomNavigationAction onClick={()=> navigate("/")} label="NossoCanto" icon={<HomeIcon />} sx={{ width: 400 }}/> 
+        <BottomNavigationAction onClick={()=> navigate("/rules")} label="Regras" icon={<AssignmentLateIcon />} sx={{ width: 400 }}/> 
+        <BottomNavigationAction onClick={()=> navigate("/places")}label="Lugares" icon={<MapIcon/>} sx={{ width: 400 }}/>
+        <BottomNavigationAction onClick={()=> navigate("/instalations")}label="Instalacoes" icon={<DnsIcon />} sx={{ width: 400 }}/>
+        <BottomNavigationAction onClick={()=> navigate("https://www.airbnb.com.br/rooms/1337549417158200548?location=Centro%2C%20São%20Paulo&search_mode=regular_search&source_impression_id=p3_1741601376_P3BVta8IfPNE5qMH&previous_page_section_name=1001&federated_search_id=ebcf265a-71a4-47c4-ba4f-6b1e7fadbe02&guests=1&adults=1")}label="AirBnb" icon={<TravelExploreIcon />} sx={{ width: 400 }}/>
       </BottomNavigation>
     </Box>
   );
