@@ -1,6 +1,4 @@
 .nossocantosp{
-    display: flex;
-    flex-direction: column; 
     align-content: center;
     text-align: center;
     justify-content: center;
@@ -10,7 +8,11 @@
     border-radius: 6px solid gray;
 }
 .images{
+    width: 100%;
+    display: flex;
+    justify-content: center;
     margin: 0 auto;
+    margin-top: 6rem;
 }
 
 h1 {
@@ -28,6 +30,6 @@ h1 {
  @media (max-width:400px){
 	/* Estilizações CSS */
      h1{
-         font-size: 45px;
+         font-size: 40px;
      }
 }

@@ -1,5 +1,7 @@
 import React from 'react';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api'
+import { GoogleMap, useJsApiLoader, Marker,
+    // withScriptsjs, withGoogleMap
+} from '@react-google-maps/api'
 import './style.css';
 
 const containerStyle = {
@@ -47,3 +49,9 @@ const MapView = () => {
     )
 }
 export default MapView 
+
+// export default withScriptsjs {
+    // withGoogleMap{
+//
+    // }
+// }

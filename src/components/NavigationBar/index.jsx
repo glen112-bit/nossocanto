@@ -14,7 +14,7 @@ export default function NavigationBar() {
   const [value, setValue] = React.useState(0);
 
   return (
-    <Box sx={{ width: "100%" }}>
+      <Box sx={{ width: "100%", height: "6vh", backgroundColor: 'white', alignContent: 'center' }}>
       <BottomNavigation 
         showLabels
         value={value}
