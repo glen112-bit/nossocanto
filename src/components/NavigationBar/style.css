@@ -3,9 +3,15 @@ Box{
     display: flex;
     flex-direction: row;
 }
-/* BottomNavigation{ */
-    /* align-items: space-between; */
-/* } */
+BottomNavigation{
+    align-items: space-between;
+    display: flex;
+    margin:0 auto;
+}
+.air{
+    top: 0;
+    height: 3.5rem;
+}
  @media (width:600px){
 	/* Estilizações CSS */
      BottomNavigation{
