@@ -44,10 +44,29 @@ export default function Places() {
                             </Stack>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Stack spacing={2}>
+                                <Stack sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
                                     <Stack>{lugar.value}</Stack>
                                 </Stack>
                             </AccordionDetails>
+                            {lugar.endereco ? 
+                                <Accordion>
+                                    <AccordionSummary
+                                        expandIcon={<ArrowDropDownIcon />}
+                                        key={lugar[index]}
+                                    ><Stack sx={{fontSize: '20px'}} >
+                                        Endereco
+                                    </Stack>
+                                    </AccordionSummary>
+
+                                    <AccordionDetails>
+                                        <Stack sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
+                                            <Stack>{lugar.endereco}</Stack>
+                                        </Stack>
+                                    </AccordionDetails>
+                                </Accordion>
+                                :
+                                null
+                            }
                         </Accordion>
                         )}
 

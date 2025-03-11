@@ -1,27 +1,95 @@
 {
-    "places": [{"name":"Galeria Metropole", "value": "gyughjkbhugtyhuilgyoftifty"}, {"name":"Biblioteca Mario de Andrade","value": "gyuidhwuibhreuiqbveuoqviwo"}, {"name": "Rua Avanhandava", "value": "rua muito interesante"},{"name": "Teatro Municipal", "value": "teato mas antiguo"}, {"name": "Shopping Light", "value": "antigua estacao de eletricidade"}, {"name": "Eduficio Copan", "value": "obra de oscar niemeyer"},{"name": "Terraco Italia", "value": "dos predios mais atltos de Sao Paulo"}],
-    "bares": [{"name":"Rooftop Matiz", "value":"rooftop em saopaulo"}, {"name":"Rooftop no Edificio Ester/Olivier", "value": "rooftop do famoso chef com prato unico e de qualidade"}, {"name": "Rooftop do Shopping Light", "value": "rooftop sobre famosso shopping do centro"}, { "name":"Parador", "value":" Restaurante com DayUse incluso no edificio Renata"}, {"name":"Tokio Bar Karaoke", "value": "novo conceito de balada e karaoke em sao Paulo"}],
-    "rules": ["A cozinha esta a sua disposição, pedimos a penas que ao sair deixe o saco organizado, e descarta seu lixo.", "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.", "Será permitida a pernoite no nossoCanto a penas para os hóspedes registrados."],
-    "instalations": ["Cafeteira", "Lavadora"], 
-    "images":[
+  "places": [
     {
-        "src": "./assets/images/cama.jpeg",
-        "name":"Cama"
-    },  {
-        "src": "./assets/images/luces_cocinha.jpeg",
-        "name":"Luces Cozinha"
-    },  {
-        "src": "./assets/images/tomadas_baneiro.jpeg",
-        "name":"Tomadas Banheiro"
-    },  {
-        "src": "./assets/images/torneiras.jpeg",
-        "name":"torneiras"
-    },  {
-        "src": "./assets/images/torneira_pia_aberta.jpeg",
-        "name":"Torneira Lavadoura Aberta"
-    },  {
-        "src": "src/assets/images/torneira_pia_fechada.jpeg",
-        "name":"Torneita Lavadoura Fechada"
+      "name": "Galeria Metropole",
+      "value": "Situado na esquina da avenida São Luiz com a praça Dom José Gaspar, o edifício Metrópole – originalmente denominado “Conjunto Máximus”. Galeria Metrópole se reinventa no Centro de SP após crise na pandemia e ganha nova vida com feiras e negócios criativos",
+      "endereco": "Av. São Luís, 187 Centro, São Paulo, Estado de São Paulo 01046-001 Brasil"
+    },
+    {
+      "name": "Biblioteca Mario de Andrade",
+      "value": "A Biblioteca Mário de Andrade (BMA) é uma das mais importantes bibliotecas de pesquisa do país. Fundada em 1925 como Biblioteca Municipal de São Paulo, é a maior biblioteca pública da cidade e a segunda maior biblioteca pública do país, superada, apenas, pela Biblioteca Nacional. Foi inaugurada, em 1926, na Rua 7 de Abril, com uma coleção inicial formada por obras que se encontravam em poder da Câmara Municipal de São Paulo, em cujo prédio a Biblioteca funcionava. Em 1937, incorporou a Biblioteca Pública do Estado e, a partir de então, importantes aquisições de livros, muitos deles raros e especiais, enriqueceram seu acervo. O crescimento de seu acervo e serviços ocasionou a mudança da biblioteca para o atual edifício, localizado na Rua da Consolação. Inaugurado em 1942, na gestão do Prefeito Prestes Maia e tendo Rubens Borba de Moraes como Diretor da Biblioteca, o novo edifício, projetado pelo arquiteto francês Jacques Pilon, é considerado um marco da arquitetura Moderna em São Paulo.",
+      "endereco": "Rua da Consolação, 94, São Paulo, Brazil 01302000"
+    },
+    {
+      "name": "Rua Avanhandava",
+      "value": "Situado na esquina da avenida São Luiz com a praça Dom José Gaspar, o edifício Metrópole – originalmente denominado “Conjunto Máximus”. Galeria Metrópole se reinventa no Centro de SP após crise na pandemia e ganha nova vida com feiras e negócios criativos. Quem passa pela rua se sente como se estivesse passeando por vila italiana. Isso porque, o império Mancini – grupo que conta com oito estabelecimentos na via – transformou a rua em um polo gastronômico e cultural. Aliado a isso, em 2007, a Rua Avanhandava “passou por transformações como o seu estreitamento e, em vários pontos, o desnível entre a calçada e a rua é mínimo; em outros é inexistente“.",
+      "endereco": "Rua Avanhandava, 137 a 25, São Paulo, Brazil 01306001"
+    },
+    {
+      "name": "Teatro Municipal",
+      "value": "O Theatro Municipal de São Paulo é um teatro brasileiro localizado na cidade paulista de São Paulo, projetado pelos arquitetos Ramos de Azevedo, Claudio Rossi e Domiziano Rossi no estilo arquitetônico eclético, inspirado na Ópera de Paris e inaugurado em 1911. É um dos cartões postais da cidade, localizado na Praça Ramos de Azevedo, também considerado um dos mais importantes teatros do país. Construído para atender ao desejo da elite paulista da época, que queria que a cidade estivesse à altura dos grandes centros culturais.",
+      "endereco": " Praça Ramos de Azevedo, s/nº Sé - São Paulo, SP"
+    },
+    {
+      "name": "Shopping Light",
+      "value": "http://www.oshoppinglight.com.br",
+      "endereco": "Rua Coronel Xavier de Toledo, 23, São Paulo, Brazil 01048-000"
+    },
+    {
+      "name": "Edificio Copan",
+      "value": "O Edifício Copan, ou apenas Copan, é um dos mais importantes e emblemáticos edifícios da cidade de São Paulo, localizado no número 200 da Avenida Ipiranga, no centro da cidade, e foi inaugurado em 1966. É um dos símbolos da arquitetura moderna brasileira, concebido pelo arquiteto Oscar Niemeyer com projeto estrutural do engenheiro Joaquim Cardozo, visando às comemorações do Quarto Centenário da cidade de São Paulo. A obra, contudo, foi iniciada apenas em 1957, com algumas alterações e executada com a ajuda de Carlos Lemos.",
+      "endereco": "Edificio CopanAv. Ipiranga, 200 - Centro Histórico de São Paulo, São Paulo - SP, 01046-010"
+    },
+    {
+      "name": "Terraco Italia",
+      "value": "A mais bela vista panorâmica da metrópole paulistana se tornou um cartão de visitas da cidade – e ponto de encontro de celebridades e personalidades. Até hoje, após 5 décadas de história, o Terraço Itália é sinônimo de requinte e exclusividade."
     }
-    ]
+  ],
+  "bares": [
+    {
+      "name": "Rooftop Matiz",
+      "value": "rooftop em saopaulo"
+    },
+    {
+      "name": "Rooftop no Edificio Ester/Olivier",
+      "value": "rooftop do famoso chef com prato unico e de qualidade"
+    },
+    {
+      "name": "Rooftop do Shopping Light",
+      "value": "rooftop sobre famosso shopping do centro"
+    },
+    {
+      "name": "Parador",
+      "value": " Restaurante com DayUse incluso no edificio Renata"
+    },
+    {
+      "name": "Tokio Bar Karaoke",
+      "value": "novo conceito de balada e karaoke em sao Paulo"
+    }
+  ],
+  "rules": [
+    "A cozinha esta a sua disposição, pedimos a penas que ao sair deixe o saco organizado, e descarta seu lixo.",
+    "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.",
+    "Será permitida a pernoite no nossoCanto a penas para os hóspedes registrados."
+  ],
+  "instalations": [
+    "Cafeteira",
+    "Lavadora"
+  ],
+  "images": [
+    {
+      "src": "./assets/images/cama.jpeg",
+      "name": "Cama"
+    },
+    {
+      "src": "./assets/images/luces_cocinha.jpeg",
+      "name": "Luces Cozinha"
+    },
+    {
+      "src": "./assets/images/tomadas_baneiro.jpeg",
+      "name": "Tomadas Banheiro"
+    },
+    {
+      "src": "./assets/images/torneiras.jpeg",
+      "name": "torneiras"
+    },
+    {
+      "src": "./assets/images/torneira_pia_aberta.jpeg",
+      "name": "Torneira Lavadoura Aberta"
+    },
+    {
+      "src": "src/assets/images/torneira_pia_fechada.jpeg",
+      "name": "Torneita Lavadoura Fechada"
+    }
+  ]
 }

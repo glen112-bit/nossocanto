@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { GoogleMap, useJsApiLoader, Marker,
     // withScriptsjs, withGoogleMap
 } from '@react-google-maps/api'
@@ -15,6 +16,7 @@ const center = {
 }
 
 const MapView = () => {
+    const [office, setOffice] = useState();
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyBkZr2Nl6Y4UIbhmpYU1xATNQhKh_4bG6E",
