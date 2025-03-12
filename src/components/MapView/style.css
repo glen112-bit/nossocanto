@@ -16,3 +16,8 @@
     width: 100vw;
     border-radius: 25px;
 }
+.mapMarcker {
+    margin-top: 4.8rem;
+    font-weight: 400;
+    background-color: rgba(224,223,219,200);
+}

@@ -18,8 +18,15 @@ export default function NossoCantoSp () {
                 <h1>
                     NossoCantoSp
                 </h1>
-          
-                <MapView/>
+
+                <MapView 
+                    width='100vw' 
+                    heigth='450px' 
+                    lat='-23.5487055' 
+                    lng='-46.6438873' 
+                    text="NossoCanto" 
+                    className='mapMarcker' 
+                />
                 <div className="images">
                     <Stack>
                         <Item>

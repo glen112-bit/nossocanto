@@ -5,22 +5,25 @@ import { GoogleMap, useJsApiLoader, Marker,
 } from '@react-google-maps/api'
 import './style.css';
 
-const containerStyle = {
-    width: '100vw',
-    height: '500px',
-}
 
-const center = {
-    lat: -23.5487055,
-    lng: -46.6438873,
-}
 
-export const MapView = ({props}) => {
-    const [office, setOffice] = useState();
+export const MapView = ({width, heigth, lat, lng, text, className}) => {
+    // const [office, setOffice] = useState();
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
         googleMapsApiKey: "AIzaSyBkZr2Nl6Y4UIbhmpYU1xATNQhKh_4bG6E",
     })
+const containerStyle = {
+    width: width,
+    height: heigth,
+}
+
+const center = {
+    lat: Number(lat),
+    lng: Number(lng),
+}
+
+    
     return(
         <>
             <section className= "mapBorder">
@@ -37,7 +40,15 @@ export const MapView = ({props}) => {
                             >
                                 {/* Child components, such as markers, info windows, etc. */}
                                 <></>
-                                <Marker position={center}/>
+                                <Marker 
+                                    position={center}
+                                    options={{
+                                        label:{
+                                            text: text,
+                                            className: className 
+                                        }
+                                    }}
+                                />
                             </GoogleMap>
                         ) : (
                             <></>
@@ -52,7 +63,7 @@ export const MapView = ({props}) => {
 }
 
 // export default withScriptsjs {
-    // withGoogleMap{
+// withGoogleMap{
 //
-    // }
+// }
 // }

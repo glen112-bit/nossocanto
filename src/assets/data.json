@@ -68,28 +68,39 @@
   ],
   "images": [
     {
+      "src": "./assets/images/banheiro.jpeg",
+      "name": "Banheiro"
+    },
+    {
       "src": "./assets/images/cama.jpeg",
       "name": "Cama"
     },
     {
-      "src": "./assets/images/luces_cocinha.jpeg",
-      "name": "Luces Cozinha"
+      "src": "./assets/images/comedor.jpeg",
+      "name": "Comedor"
     },
     {
-      "src": "./assets/images/tomadas_baneiro.jpeg",
-      "name": "Tomadas Banheiro"
+      "src": "./assets/images/banheiro.jpeg",
+      "name": "Banheiro"
     },
     {
-      "src": "./assets/images/torneiras.jpeg",
-      "name": "torneiras"
-    },
-    {
+      "src": "./assets/images/escrivaninha.jpeg",
+      "name": "Escrivaninha"
+    },{
       "src": "./assets/images/torneira_pia_aberta.jpeg",
-      "name": "Torneira Lavadoura Aberta"
+      "name": "Torneira Pia Aberta"
+    },{
+      "src": "src/assets/images/torneira_pia_fechada.jpeg",
+      "name": "Torneira Pia Fechada"
     },
     {
-      "src": "src/assets/images/torneira_pia_fechada.jpeg",
-      "name": "Torneita Lavadoura Fechada"
+      "src": "src/assets/images/torneiras.jpeg",
+      "name": "Torneitas"
     }
+  ],
+  "videos":[
+      {
+          "src": "./assets/images/entrada.MOV"
+      }
   ]
 }
