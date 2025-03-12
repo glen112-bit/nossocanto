@@ -6,8 +6,8 @@ import { GoogleMap, useJsApiLoader, Marker,
 import './style.css';
 
 const containerStyle = {
-    width: '60vw',
-    height: '600px',
+    width: '100vw',
+    height: '500px',
 }
 
 const center = {
@@ -15,7 +15,7 @@ const center = {
     lng: -46.6438873,
 }
 
-const MapView = () => {
+export const MapView = ({props}) => {
     const [office, setOffice] = useState();
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
@@ -24,14 +24,14 @@ const MapView = () => {
     return(
         <>
             <section className= "mapBorder">
-                <div>MapView</div>
+                <h2>Sao Paulo Centro</h2>
                 <section className = "mapview">
                     {
                         isLoaded ? (
                             <GoogleMap
                                 mapContainerStyle={containerStyle}
                                 center={center}
-                                zoom={18}
+                                zoom={13.5}
                                 // onLoad={onLoad}
                                 // onUnmount={onUnmount}
                             >
@@ -50,7 +50,6 @@ const MapView = () => {
         </>
     )
 }
-export default MapView 
 
 // export default withScriptsjs {
     // withGoogleMap{

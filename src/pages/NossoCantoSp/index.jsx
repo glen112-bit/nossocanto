@@ -1,5 +1,5 @@
 import * as React from "react"
-import MapView from '../../components/map'
+import {MapView} from '../../components'
 import WovenImageList from '../../components/WovenImageList'
 import { Item } from '../../components/Item'
 import { useState } from "react";
