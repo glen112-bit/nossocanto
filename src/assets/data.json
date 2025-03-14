@@ -28,7 +28,7 @@
     {
       "name": "Edificio Copan",
       "value": "O Edifício Copan, ou apenas Copan, é um dos mais importantes e emblemáticos edifícios da cidade de São Paulo, localizado no número 200 da Avenida Ipiranga, no centro da cidade, e foi inaugurado em 1966. É um dos símbolos da arquitetura moderna brasileira, concebido pelo arquiteto Oscar Niemeyer com projeto estrutural do engenheiro Joaquim Cardozo, visando às comemorações do Quarto Centenário da cidade de São Paulo. A obra, contudo, foi iniciada apenas em 1957, com algumas alterações e executada com a ajuda de Carlos Lemos.",
-      "endereco": "Edificio CopanAv. Ipiranga, 200 - Centro Histórico de São Paulo, São Paulo - SP, 01046-010"
+      "endereco": "Edificio Copan Av. Ipiranga, 200 - Centro Histórico de São Paulo, São Paulo - SP, 01046-010"
     },
     {
       "name": "Terraco Italia",
@@ -62,10 +62,7 @@
     "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.",
     "Será permitida a pernoite no nossoCanto a penas para os hóspedes registrados."
   ],
-  "instalations": [
-    "Cafeteira",
-    "Lavadora"
-  ],
+  "instalations": ["Cafeteira", "Lavadora"],
   "images": [
     {
       "src": "./assets/images/banheiro.jpeg",
@@ -86,10 +83,12 @@
     {
       "src": "./assets/images/escrivaninha.jpeg",
       "name": "Escrivaninha"
-    },{
+    },
+    {
       "src": "./assets/images/torneira_pia_aberta.jpeg",
       "name": "Torneira Pia Aberta"
-    },{
+    },
+    {
       "src": "src/assets/images/torneira_pia_fechada.jpeg",
       "name": "Torneira Pia Fechada"
     },
@@ -98,9 +97,9 @@
       "name": "Torneitas"
     }
   ],
-  "videos":[
-      {
-          "src": "./assets/images/entrada.MOV"
-      }
+  "videos": [
+    {
+      "src": "./assets/images/entrada.MOV"
+    }
   ]
 }

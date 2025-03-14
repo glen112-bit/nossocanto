@@ -3,3 +3,7 @@ h1{
     background-color: gray;
     align-content: center;
 }
+button{
+    font-size: 24px;
+    color: #fff;
+}
