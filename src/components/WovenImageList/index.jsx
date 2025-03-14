@@ -7,7 +7,6 @@ import Grid from '@mui/material/Grid2'
 // import Masonry from '@mui/lab/Masonry';
 import data from '../../assets/data.json'
 import ImageListItemBar from '@mui/material/ImageListItemBar';
-
 import { theme } from './style.js'
 
 

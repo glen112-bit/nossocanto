@@ -62,6 +62,50 @@
       "endereco": "R. Maj. Sertório, 110 - Vila Buarque, São Paulo - SP, 01222-001"
     }
   ],
+  "mercados": [
+    {
+      "name": "Mercado KL",
+      "value": "mercado com muita variedade de produtos de limpeza, comestiveis, fruts, verduras, e bebidas varias",
+      "endereco": "R. Martins Fontes, 159 - Consolação, São Paulo - SP, 01302-000"
+    },
+    {
+      "name": "OXXO Consolação",
+      "value": "24horas...",
+      "endereco": "R. da Consolação, 397 - Consolação, São Paulo - SP, 01301-000"
+    },
+    {
+      "name": "mini Extra",
+      "value": "https://www.clubeextra.com.br/",
+      "endereco": "R. da Consolação - República, São Paulo - SP, 01302-000"
+    },
+    {
+      "name": "Supermarkets M & M",
+      "value": "01132573826",
+      "endereco": "R. Nestor Pestana, 42 - Consolação, São Paulo - SP, 01303-010"
+    }
+  ],
+  "padarias": [
+    {
+      "name": "Bar e Lanches Estadão",
+      "value": "Abrto 24Horas",
+      "endereco": "Viaduto Nove de Julho, 193 - Centro Histórico de São Paulo, São Paulo - SP, 01050-060"
+    },
+    {
+      "name": "Restaurante Cantinho do Sabor",
+      "value": "01132575548",
+      "endereco": "Condomínio Edificio Barão de Penedo - R. da Consolação, 331/323 - Centro Histórico de São Paulo, São Paulo - SP, 01301-000"
+    },
+    {
+      "name": "Padaria Marajá",
+      "value": "http://www.padariamaraja.com/",
+      "endereco": "R. Martins Fontes, 153 - Centro Histórico de São Paulo, São Paulo - SP, 01050-000"
+    },
+    {
+      "name": "Padaria Bela Sagres",
+      "value": "01131595242",
+      "endereco": "R. da Consolação, 49 - Centro Histórico de São Paulo, São Paulo - SP, 01301-000"
+    }
+  ],
   "rules": [
     "A cozinha esta a sua disposição, pedimos a penas que ao sair deixe o saco organizado, e descarta seu lixo.",
     "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.",

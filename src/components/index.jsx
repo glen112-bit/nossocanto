@@ -1,5 +1,5 @@
 
-// export * from './MyAccordion';
+// export * from './MyAcc';
 export * from './Footer';
 export * from './Header';
 export * from './Item';

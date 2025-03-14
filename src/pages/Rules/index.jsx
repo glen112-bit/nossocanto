@@ -6,13 +6,14 @@ import Typography from '@mui/material/Typography';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import data from '../../assets/data.json';
 import Stack from '@mui/material/Stack';
-import { Item } from '../../components/Item'
+import { Item } from '../../components/'
 
 export default function Rules() {
     let Regras = data.rules
   return (
     <div>
       <h1>Regras do NossoCanto</h1>
+
       <Accordion>
         <AccordionSummary
          className='title'
@@ -25,7 +26,7 @@ export default function Rules() {
             </Stack>
         </AccordionSummary>
         <AccordionDetails>
-            <Stack spacing={2}>{Regras.map(rules => <Stack>{rules}</Stack>)}</Stack>
+            <Stack spacing={2}>{Regras.map(rules => <Typography component="span"><Stack>{rules}</Stack></Typography> )}</Stack>
         </AccordionDetails>
       </Accordion>
     </div>
