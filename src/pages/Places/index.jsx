@@ -108,6 +108,25 @@ export default function Places() {
                                     <Stack>{bar.value}</Stack>
                                 </Stack>
                             </AccordionDetails>
+                              {bar.endereco ? 
+                                <Accordion>
+                                    <AccordionSummary
+                                        expandIcon={<ArrowDropDownIcon />}
+                                        key={bar[index]}
+                                    ><Stack sx={{fontSize: '20px'}} >
+                                        Endereco
+                                    </Stack>
+                                    </AccordionSummary>
+
+                                    <AccordionDetails>
+                                        <Stack sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
+                                            <Link href={mylink + bar.endereco} target={"blanck"} >{bar.endereco}</Link>
+                                        </Stack>
+                                    </AccordionDetails>
+                                </Accordion>
+                                :
+                                null
+                            }
                         </Accordion>
                         )}
                     </Stack>    

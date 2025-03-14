@@ -38,23 +38,28 @@
   "bares": [
     {
       "name": "Rooftop Matiz",
-      "value": "rooftop em saopaulo"
+      "value": "Prédio antigo no centro, vista para a cidade, terraço ao ar livre, boa acústica. Repleto de atrações para paulistanos e visitantes da cidade, o bar Matiz, que foi anunciado em primeira mão por VEJA",
+      "endereco": "R. Martins Fontes, 91 - República, São Paulo - SP, 01050-905"
     },
     {
       "name": "Rooftop no Edificio Ester/Olivier",
-      "value": "rooftop do famoso chef com prato unico e de qualidade"
+      "value": "Bar e restaurante localizado no Centro de São Paulo em frente a praça da República. Cozinha contemporânea de inspiração francesa, vinhos brasileiros e coquetéis autorais.",
+      "endereco": "Rua Basílio da Gama, nº 29 sala 1101-Centro"
     },
     {
       "name": "Rooftop do Shopping Light",
-      "value": "rooftop sobre famosso shopping do centro"
+      "value": "O Centro de São Paulo ganha um novo rooftop, desta vez no edifício Alexandre Mackenzie, prédio construído em 1929 para ser a sede da Light e onde hoje funciona o Shopping Light. O Priceless, nome do novo empreendimento, é mais do que um restaurante. Trata-se de um complexo gastronômico com um restaurante, um bar, um espaço de intervenções artísticas, um ponto de café e um rooftop com vista para o Theatro Municipal.",
+      "endereco": "Rua Coronel Xavier de Toledo, 23, São Paulo, Brazil 01048-000"
     },
     {
       "name": "Parador",
-      "value": " Restaurante com DayUse incluso no edificio Renata"
+      "value": "Estamos localizados na a área de lazer do histórico Edifício Renata Sampaio, no centro de São Paulo. \n somos restaurante, bar e piscina, estamos de portas abertas tanto para quem quiser passar o dia relaxando com a gente, quanto para quem está a procura de um lugar com pratos e coquetéis divertidos e refrescantes. \n Nossas reservas para o restaurante são feitas apenas para o primeiro horário, mas também recebemos por ordem de chegada.\n*Em caso de ocupação máxima, trabalhamos com fila de espera.\n Nosso day use tem o valor de R$250,00 por pessoa. Com R$150 de crédito para consumo no restaurante e com o uso das áreas de lazer valido durante todo o dia, no período de funcionamento da casa. \n Nossa espaço possui piscina, área com espreguiçadeiras, ducha, sauna, academia e banheiros com chuveiro e guarda-volumes.",
+      "endereco": "Rua Araújo, 216, 3o andar, República, São Paulo-SP, 01220020"
     },
     {
       "name": "Tokio Bar Karaoke",
-      "value": "novo conceito de balada e karaoke em sao Paulo"
+      "value": "Tokyo, edifício de nove andares que reúne clube, karaokê, restaurante, bar e espaços para economia criativa, inaugura em maio em São Paulo. Idealizado após uma viagem ao Japão, o espaço é inspirado na verticalização cultural urbana e underground da capital japonesa. \n O prédio com vista privilegiada para alguns dos marcos urbanos da capital está localizado na rua Major Sertório 110, ponto de encontro da vida noturna paulistana no centro da cidade. Com amplas janelas de vidro em todos os andares, a empreitada é sediada no Edifício ABC, prédio modernista, projetado pelo arquiteto Oswaldo Bratke, em 1949. \n O projeto foi criado pelo escritório MM18 Arquitetura, conhecido por suas ambientações em locais de importância histórica, urbanística e cultural como o Mirante 9 de Julho e clubes noturnos renomados, como Lions e PanAm.",
+      "endereco": "R. Maj. Sertório, 110 - Vila Buarque, São Paulo - SP, 01222-001"
     }
   ],
   "rules": [
