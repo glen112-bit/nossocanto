@@ -145,12 +145,12 @@
     },
     {
       "id": "7",
-      "src": "src/assets/images/torneira_pia_fechada.jpeg",
+      "src": "./assets/images/torneira_pia_fechada.jpeg",
       "name": "Torneira Pia Fechada"
     },
     {
       "id": "8",
-      "src": "src/assets/images/torneiras.jpeg",
+      "src": "./assets/images/torneiras.jpeg",
       "name": "Torneitas"
     }
   ],
