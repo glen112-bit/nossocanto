@@ -17,19 +17,17 @@ import { v4 as uuidv4 } from 'uuid';
 
 export default function WovenImageList() {
     // const [imagenes, setImagenes] = useState();
+    const [myData, setMyData] = useState([]);
     // const uuid = require('uuid')
     // console.log(uuidv4)
 
-    // useEffect(() => {
-        // const myFiles = axios.get('../../assets/images/*')
-        // setImagenes()
-        // console.log(myFiles)
-    // },[]);
-    // const habndleImage = (e) => {
-        // console.log(e.target.files)
-        // setImagenes(e.target.files[0])
-    // }
-    let Images = data.images
+    useEffect(() => {
+         axios.get('../../assets/data.json')
+            .then(res => {
+                setMyData(res.data.images)
+            })
+    },[]);
+    // let Images = data.images
 
 
     const handleClick = (e) => {
@@ -42,7 +40,7 @@ export default function WovenImageList() {
                 container spacing={3}   
             >
 
-                {Images.map((item, id) => (
+                {myData.map((item, id) => (
                     <ImageListItem
                         id={uuidv4()}
                         sx={{ width: {

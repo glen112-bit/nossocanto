@@ -114,34 +114,42 @@
   "instalations": ["Cafeteira", "Lavadora"],
   "images": [
     {
+      "id": "1",
       "src": "./assets/images/banheiro.jpeg",
       "name": "Banheiro"
     },
     {
+      "id": "2",
       "src": "./assets/images/cama.jpeg",
       "name": "Cama"
     },
     {
+      "id": "3",
       "src": "./assets/images/comedor.jpeg",
       "name": "Comedor"
     },
     {
+      "id": "4",
       "src": "./assets/images/banheiro.jpeg",
       "name": "Banheiro"
     },
     {
+      "id": "5",
       "src": "./assets/images/escrivaninha.jpeg",
       "name": "Escrivaninha"
     },
     {
+      "id": "6",
       "src": "./assets/images/torneira_pia_aberta.jpeg",
       "name": "Torneira Pia Aberta"
     },
     {
+      "id": "7",
       "src": "src/assets/images/torneira_pia_fechada.jpeg",
       "name": "Torneira Pia Fechada"
     },
     {
+      "id": "8",
       "src": "src/assets/images/torneiras.jpeg",
       "name": "Torneitas"
     }
