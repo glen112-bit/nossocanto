@@ -130,26 +130,21 @@
     },
     {
       "id": "4",
-      "src": "./assets/images/banheiro.jpeg",
-      "name": "Banheiro"
-    },
-    {
-      "id": "5",
       "src": "./assets/images/escrivaninha.jpeg",
       "name": "Escrivaninha"
     },
     {
-      "id": "6",
+      "id": "5",
       "src": "./assets/images/torneira_pia_aberta.jpeg",
       "name": "Torneira Pia Aberta"
     },
     {
-      "id": "7",
+      "id": "6",
       "src": "./assets/images/torneira_pia_fechada.jpeg",
       "name": "Torneira Pia Fechada"
     },
     {
-      "id": "8",
+      "id": "7",
       "src": "./assets/images/torneiras.jpeg",
       "name": "Torneitas"
     }
