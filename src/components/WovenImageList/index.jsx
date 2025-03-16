@@ -22,7 +22,7 @@ export default function WovenImageList() {
     // console.log(uuidv4)
 
     useEffect(() => {
-         axios.get('../../assets/data.json')
+        axios.get('../../assets/data.json')
             .then(res => {
                 setMyData(res.data.images)
             })
@@ -47,7 +47,7 @@ export default function WovenImageList() {
                             mobile: 200,
                                 tablet:200,
                                 desktop:300,
-                        } }}
+                        }, marginTop:'2rem'}}
                         key={id}
                     >
                         <img onClick={handleClick}
@@ -59,9 +59,11 @@ export default function WovenImageList() {
                             // id={v4}
                             loading="lazy"
                         />
-                        <ImageListItemBar position="below" title={item.name} />
-                    </ImageListItem>
-                        ))
+                        <div>
+                            <ImageListItemBar position="below" title={item.name} />
+                        </div>
+                    </ImageListItem >
+                ))
                 }
             </Grid>
         </ThemeProvider>
