@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { Item } from '../../components'
+import { v4 as uuidv4 } from 'uuid';
 import data from '../../assets/data.json';
 import './style.css'
 
@@ -46,6 +47,7 @@ export default function Places() {
                         {Lugares.map((lugar, index) => 
                         <Accordion>
                             <AccordionSummary
+                                id={uuidv4()}
                                 expandIcon={<ArrowDropDownIcon />}
                                 key={lugar[index]}
                             ><Stack sx={{fontSize: '36px'}} >
@@ -53,8 +55,8 @@ export default function Places() {
                             </Stack>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Stack sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
-                                    <Stack>{lugar.value}</Stack>
+                                <Stack id={uuidv4()}sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
+                                    <Stack id={uuidv4()}>{lugar.value}</Stack>
                                 </Stack>
                             </AccordionDetails>
                             {lugar.endereco ? 
@@ -98,19 +100,19 @@ export default function Places() {
                     aria-controls="panel4-content"
                     id="panel1-header"
                 >
-                    <Stack sx={{width:'90vw', fontSize: '26px'}}>
+                    <Stack id={uuidv4()}sx={{width:'90vw', fontSize: '26px'}}>
                         {Bares.map((bar, index) => 
                         <Accordion>
                             <AccordionSummary
                                 expandIcon={<ArrowDropDownIcon />}
                                 key={bar[index]}
-                            ><Stack sx={{fontSize: '36px'}} >
+                            ><Stack id={uuidv4()}sx={{fontSize: '36px'}} >
                                 {bar.name}
                             </Stack>
                             </AccordionSummary>
                             <AccordionDetails>
-                                <Stack spacing={2}>
-                                    <Stack>{bar.value}</Stack>
+                                <Stack id={uuidv4()}spacing={2}>
+                                    <Stack id={uuidv4()}>{bar.value}</Stack>
                                 </Stack>
                             </AccordionDetails>
                               {bar.endereco ? 
@@ -118,14 +120,14 @@ export default function Places() {
                                     <AccordionSummary
                                         expandIcon={<ArrowDropDownIcon />}
                                         key={bar[index]}
-                                    ><Stack sx={{fontSize: '20px'}} >
+                                    ><Stack id={uuidv4()}sx={{fontSize: '20px'}} >
                                         Endereco
                                     </Stack>
                                     </AccordionSummary>
 
                                     <AccordionDetails>
-                                        <Stack sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
-                                            <Link href={mylink + bar.endereco} target={"blanck"} >{bar.endereco}</Link>
+                                        <Stack id={uuidv4()}sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
+                                            <Link id={uuidv4()}href={mylink + bar.endereco} target={"blanck"} >{bar.endereco}</Link>
                                         </Stack>
                                     </AccordionDetails>
                                 </Accordion>
