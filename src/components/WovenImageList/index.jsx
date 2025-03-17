@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid2'
 // import Masonry from '@mui/lab/Masonry';
 import data from '../../assets/data.json'
 import ImageListItemBar from '@mui/material/ImageListItemBar';
+import { CardView } from '../../components'
 import { theme } from './style.js'
 import{ useState, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
@@ -36,33 +37,20 @@ export default function WovenImageList() {
     };
     return (
         <ThemeProvider theme = {theme}>
+                <h2>NossaCasa</h2>
             <Grid sx={{width:'70vw', padding:'auto', display: 'flex', justifyContent:'center' }}
                 container spacing={3}   
             >
-
                 {myData.map((item, id) => (
-                    <ImageListItem
-                        id={uuidv4()}
-                        sx={{ width: {
-                            mobile: 200,
-                                tablet:200,
-                                desktop:300,
-                        }, marginTop:'2rem'}}
+                    <CardView 
+                        src={item.src} 
+                        title={item.name} 
+                        description={item.description} 
                         key={id}
-                    >
-                        <img onClick={handleClick}
-                            id={uuidv4()}
-                            key={id}
-                            srcSet={`${item.src}?w=161&fit=crop&auto=format&dpr=2 2x`}
-                            src={`${item.src}?w=161&fit=crop&auto=format`}
-                            alt={item.name}
-                            // id={v4}
-                            loading="lazy"
-                        />
-                        <div>
-                            <ImageListItemBar position="below" title={item.name} />
-                        </div>
-                    </ImageListItem >
+                        heigth={460}
+                        width={350}
+                    />
+
                 ))
                 }
             </Grid>

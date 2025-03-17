@@ -35,6 +35,7 @@ const center = {
                                 mapContainerStyle={containerStyle}
                                 center={center}
                                 zoom={13.5}
+                                sx={{padding:'6rem'}}
                                 // onLoad={onLoad}
                                 // onUnmount={onUnmount}
                             >
