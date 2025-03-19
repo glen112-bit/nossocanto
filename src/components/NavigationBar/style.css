@@ -1,27 +1,21 @@
-Box{
-    min-width: 100%;
-    display: flex;
-    flex-direction: row;
-}
-/* BottomNavigation{ */
-    /* align-items: space-between; */
+/* Box { */
+/* min-width: 100%; */
+/* display: flex; */
+/* flex-direction: column; */
 /* } */
-.air{
-    display: flex;
-     align-items: center;
-     margin: auto;
-     max-height: 3.4rem;
-}
- @media (width:600px){
-	/* Estilizações CSS */
-     BottomNavigation{
-         font-size: 55px;
-     }
+/* BottomNavigation{ */
+/* align-items: space-between; */
+/* } */
+/* .air { */
+/* display: flex; */
+/* align-items: center; */
+/* margin: auto; */
+/* max-height: 5.4rem; */
+/* } */
 
-}
- @media (max-width:400px){
-	/* Estilizações CSS */
-     BottomNavigation{
-         font-size: 12px;
-     }
+@media screen and (max-width: 300px) {
+  /* Estilizações CSS BottomNavigationAction { */
+  a {
+    padding: 0;
+  }
 }

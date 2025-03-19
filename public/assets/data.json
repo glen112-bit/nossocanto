@@ -111,22 +111,25 @@
     "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.",
     "Será permitida a pernoite no nossoCanto a penas para os hóspedes registrados."
   ],
-  "instalations": ["Cafeteira", "Lavadora"],
+  "instalations": ["Cafeteira", "Lavadora", "Wif"],
   "images": [
     {
       "id": "1",
       "src": "./assets/images/banheiro.jpeg",
-      "name": "Banheiro"
+      "name": "Banheiro",
+      "description": "es un baño muy bonito"
     },
     {
       "id": "2",
       "src": "./assets/images/cama.jpeg",
-      "name": "Cama"
+      "name": "Cama",
+      "description": "cama de cassal"
     },
     {
       "id": "3",
       "src": "./assets/images/comedor.jpeg",
-      "name": "Comedor"
+      "name": "Comedor",
+      "description": "lugar de refeicao saindo da cozinha"
     },
     {
       "id": "4",

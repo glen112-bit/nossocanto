@@ -1,1 +1,5 @@
-mport
+@media screen and (max-width: 400px) {
+  .subtitle {
+    font-size: 2.5rem;
+  }
+}
