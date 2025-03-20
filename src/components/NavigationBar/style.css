@@ -6,16 +6,18 @@
 /* BottomNavigation{ */
 /* align-items: space-between; */
 /* } */
-/* .air { */
-/* display: flex; */
-/* align-items: center; */
-/* margin: auto; */
-/* max-height: 5.4rem; */
-/* } */
-
+.air {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  max-height: 5.4rem;
+}
+.MuiBottomNavigationAction-label {
+  font-size: 12px;
+}
 @media screen and (max-width: 300px) {
   /* Estilizações CSS BottomNavigationAction { */
-  a {
-    padding: 0;
+  .air {
+    font-size: 12px;
   }
 }
