@@ -1,14 +1,18 @@
 import * as React from 'react';
-import Accordion from '@mui/material/Accordion';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import Typography from '@mui/material/Typography';
+import { v4 as uuidv4 } from 'uuid';
+import {
+    Typography, 
+    Link,
+    Accordion,
+    AccordionDetails,
+    AccordionSummary
+} from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import Stack from '@mui/material/Stack';
 import { Item } from '../../components/Item'
 import './style.css'
 
-export const MyAccordion = ({Lugares, title }) => {
+export const MyAccordion = ({Lugares, title, link }) => {
     return(
         <>
             <Accordion>
@@ -27,13 +31,15 @@ export const MyAccordion = ({Lugares, title }) => {
                     aria-controls="panel4-content"
                     id="panel1-header"
                 >
-                    <Stack sx={{width:'90vw', fontSize: '26px'}}>
-                        {Lugares.map((lugar, index) => 
+                    <Stack id={uuidv4()} sx={{width:'90vw', fontSize: '26px'}}>
+                        {Lugares.map((lugar ) => 
                         <Accordion>
                             <AccordionSummary
+
+                                sx={{ backgroundColor: 'rgba(224, 224, 235, 002)'}}
                                 expandIcon={<ArrowDropDownIcon />}
-                                key={lugar[index]}
-                            ><Stack sx={{fontSize: '36px'}} >
+                                key={uuidv4()}
+                            ><Stack key={uuidv4()} sx={{fontSize: '36px'}} >
                                 {lugar.name}
                             </Stack>
                             </AccordionSummary>
@@ -45,20 +51,22 @@ export const MyAccordion = ({Lugares, title }) => {
                             {lugar.endereco ? 
                                 <Accordion>
                                     <AccordionSummary
+                                        sx={{ backgroundColor: 'rgba(224, 224, 235, 002)'}}
                                         expandIcon={<ArrowDropDownIcon />}
-                                        key={lugar[index]}
+                                        key={uuidv4()}
                                     ><Stack sx={{fontSize: '20px'}} >
                                         Endereco
                                     </Stack>
                                     </AccordionSummary>
 
-                                    <AccordionDetails>
+                                    <AccordionDetails
+                                        sx={{ backgroundColor: 'rgba(224, 224, 235, 002)'}}
+                                    >
                                         <Stack sx={{fontSize: '20px', fontWeight: '300'}}spacing={2}>
-                                            <Stack>{lugar.endereco}</Stack>
+                                            <Link href={link + lugar.endereco} target={"blanck"} >{lugar.endereco}</Link>
                                         </Stack>
                                     </AccordionDetails>
-                                </Accordion>
-                                :
+                                </Accordion>                                :
                                 null
                             }
                         </Accordion>

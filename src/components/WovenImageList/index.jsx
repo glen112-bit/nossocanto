@@ -5,46 +5,72 @@ import Grid from '@mui/material/Grid2'
 import { CardView } from '../../components'
 import { theme } from './style.js'
 import{ useState, useEffect } from 'react'
+import Lightbox from "yet-another-react-lightbox";
+import {
+    Captions,
+    Download,
+    Fullscreen,
+    Zoom,
+} from 'yet-another-react-lightbox/plugins';
+import "yet-another-react-lightbox/styles.css";
 import './style.css'
-
-
 
 export default function WovenImageList() {
     const [myData, setMyData] = useState([]);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         axios.get('../../assets/data.json')
             .then(res => {
                 setMyData(res.data.images)
             })
+
     },[]);
 
+    console.log(myData);
+    const Src = () => {
+        setOpen(true)
 
-    // const handleClick = (e) => {
-        // console.log('click');
-        // e.preventDefault()
-    // };
+    }
+
     return (
+
         <ThemeProvider theme = {theme}>
-                <h2 className = "subtitle">NossaCasa</h2>
+
+            <h2 className = "subtitle">NossaCasa</h2>
             <Grid sx={{width:'70vw', padding:'auto', display: 'flex', justifyContent:'center' }}
                 container spacing={3}   
             >
                 {myData.map((item, id) => (
-                    <CardView 
-                        src={item.src} 
-                        title={item.name} 
-                        description={item.description} 
-                        key={id}
-                        heigth={460}
-                        width={350}
-                    />
+                    <>
+                        <button onClick={() => Src()}>
+                            <CardView 
+                                src={item.src} 
+                                title={item.name} 
+                                description={item.description} 
+                                key={id}
+                                data-attribute={"SRL"}
+                                heigth={460}
+                                width={350}
+                            />
 
+                        </button> 
+
+                    </>
                 ))
                 }
+                <Lightbox
+                    plugins={[Captions, Download, Fullscreen, Zoom]}
+                    captions={{
+                        showToggle: true,
+                    }}
+                    open={open}
+                    close={() => setOpen(false)}
+                    slides={myData}
+                />
             </Grid>
-        </ThemeProvider>
 
+        </ThemeProvider>
     );
 }
 
