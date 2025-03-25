@@ -53,17 +53,13 @@ export default function WovenImageList() {
                                 heigth={460}
                                 width={350}
                             />
-
                         </button> 
-
                     </>
                 ))
                 }
                 <Lightbox
-                    plugins={[Captions, Download, Fullscreen, Zoom]}
-                    captions={{
-                        showToggle: true,
-                    }}
+                    plugins={[ Download, Fullscreen, Zoom]}
+                    
                     open={open}
                     close={() => setOpen(false)}
                     slides={myData}
@@ -73,4 +69,3 @@ export default function WovenImageList() {
         </ThemeProvider>
     );
 }
-

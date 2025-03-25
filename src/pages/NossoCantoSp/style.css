@@ -1,35 +1,35 @@
-.nossocantosp{
-    align-content: center;
-    text-align: center;
-    justify-content: center;
-    margin: 0 auto;
+.nossocantosp {
+  align-content: center;
+  text-align: center;
+  justify-content: center;
+  margin: 0 auto;
 }
-.borderCanto{
-    border-radius: 6px solid gray;
-}
-.images{
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin: 0 auto;
-    margin-top: 6rem;
+/* .borderCanto { */
+/* border-radius: 6px solid gray; */
+/* } */
+.images {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 0 auto;
+  margin-top: 6rem;
+  background-color: transparent;
 }
 
 h1 {
-    margin: 0 auto;
-    width: 100%;
-    font-size: 3.6em;
+  margin: 0 auto;
+  width: 100%;
+  font-size: 3.6em;
 }
- @media (width:600px){
-        /* Estilizações CSS */
-     h1{
-         font-size: 55px;
-     }
-
+@media (width: 600px) {
+  /* Estilizações CSS */
+  h1 {
+    font-size: 55px;
+  }
 }
- @media (max-width:450px){
-        /* Estilizações CSS */
-     h1{
-         font-size: 32px;
-     }
+@media (max-width: 450px) {
+  /* Estilizações CSS */
+  h1 {
+    font-size: 32px;
+  }
 }

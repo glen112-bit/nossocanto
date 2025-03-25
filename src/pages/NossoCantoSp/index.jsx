@@ -34,9 +34,7 @@ export default function NossoCantoSp () {
                         </Item>
                     </Stack>
                 </div>
-
             </section>
-
         </section>    
 
     )
