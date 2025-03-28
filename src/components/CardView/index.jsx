@@ -11,8 +11,6 @@ export const CardView = ({title, description, src, heigth, width}) => {
     return (
         <Card >
             <CardActionArea sx={{backgroundColor: 'grey'}}>
-                {/*
-                  */} 
                 <CardMedia
                     component="img"
                     height={heigth}

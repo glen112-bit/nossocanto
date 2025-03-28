@@ -9,4 +9,5 @@ export * from './CardView';
 export * from './WovenImageList';
 export * from './MyAccordion';
 export * from './Ligthbox';
+export * from './VideoView';
 
