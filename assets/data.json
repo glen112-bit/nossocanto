@@ -117,7 +117,7 @@
       "id": "1",
       "src": "./assets/images/banheiro.jpeg",
       "name": "Banheiro",
-      "description": "es un baño muy bonito"
+      "description": "Pintado recentemente"
     },
     {
       "id": "2",
@@ -134,27 +134,32 @@
     {
       "id": "4",
       "src": "./assets/images/escrivaninha.jpeg",
-      "name": "Escrivaninha"
+      "name": "Escrivaninha",
+      "description": "Otimo para trabalhar online enqanto fica na casa"
     },
     {
       "id": "5",
       "src": "./assets/images/torneira_pia_aberta.jpeg",
-      "name": "Torneira Pia Aberta"
+      "name": "Torneira Pia Aberta",
+      "description": "torneira da Lavadora"
     },
     {
       "id": "6",
       "src": "./assets/images/torneira_pia_fechada.jpeg",
-      "name": "Torneira Pia Fechada"
+      "name": "Torneira Pia Fechada",
+      "description": "torneira da Lavadora"
     },
     {
       "id": "7",
       "src": "./assets/images/torneiras.jpeg",
-      "name": "Torneitas"
+      "name": "Torneitas",
+      "description": "torneira da Lavadora"
     }
   ],
   "videos": [
     {
-      "src": "./assets/images/entrada.MOV"
+      "src": "./assets/images/entrada.MOV",
+      "name": "Entrada de Casa"
     }
   ]
 }
