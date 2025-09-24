@@ -23,7 +23,7 @@ export default function WovenImageList() {
     const [open, setOpen] = useState(false);
 
     useEffect(() => {
-        axios.get('../../assets/data.json')
+        axios.get('../../assets/myData.json')
             .then(res => {
                 // console.log(res);
                 setMyData(res.data.images)
@@ -32,7 +32,8 @@ export default function WovenImageList() {
 
     },[]);
 
-    console.log(myVideo);
+    // console.log(myVideo);
+    console.log(myData)
     const Src = () => {
         setOpen(true)
 
@@ -47,12 +48,14 @@ export default function WovenImageList() {
                 <Grid sx={{width:'70vw', padding:'auto', display: 'flex', justifyContent:'center' }}
                     container spacing={3}   
                 >
+                    <img src={'`${process.env.PUBLIC_URL}/assets/images/banheiro.jpeg`'} />
                     {myData.map((item, id) => (
                         <>
                             <button onClick={() => Src()}>
                                 <CardView 
                                     src={item.src} 
                                     title={item.name} 
+                                    loading= {"lazy"}
                                     description={item.description} 
                                     key={id}
                                     data-attribute={"SRL"}

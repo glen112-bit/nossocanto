@@ -1,0 +1,20 @@
+ 
+{
+  "compilerOptions": {
+    "target": "es2016",
+    "module": "commonjs",
+    "rootDir": "./src/",
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "outDir": "./dist/",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "ignoreDeprecations": "6.0",
+
+    "skipLibCheck": true
+
+  },
+  "ts-node": { "transpileOnly": true }
+}
+ 

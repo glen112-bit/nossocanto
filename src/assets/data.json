@@ -115,17 +115,17 @@
   "images": [
     {
       "id": "1",
-      "src": "./assets/images/banheiro.jpeg",
+      "src": "../../../assets/images/banheiro.jpeg",
       "name": "Banheiro"
     },
     {
       "id": "2",
-      "src": "./assets/images/cama.jpeg",
+      "src": "../../assets/images/cama.jpeg",
       "name": "Cama"
     },
     {
       "id": "3",
-      "src": "./assets/images/comedor.jpeg",
+      "src": "../../assets/images/comedor.jpeg",
       "name": "Comedor"
     },
     {

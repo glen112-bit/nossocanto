@@ -1,0 +1,25 @@
+const express = require(´express´);
+const mysql = require('mysql');
+
+const app = express();
+const PORT = 3001;
+
+const DB = mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'nossocantosp'
+});
+
+DB.connect((err) => {
+  err ? throw err : console.log('coneccion exitosa')
+});
+
+app.get('/api/datos', (req, res) => {
+  const SQL_QUERY = 'SELECT * FROM datos'
+  DB.query(SQL_QUERY, (err, result) => {
+    err ? throw err : res.json(result)
+  })
+})
+
+app.listen
