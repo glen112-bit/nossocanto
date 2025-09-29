@@ -1,13 +1,140 @@
-button {
-  background-color: transparent;
-  border: none;
-  box-sizing: border-box;
+/* style.css - ADICIONAR NO FINAL ABSOLUTO */
+/*  */
+/* 1. ANULAÇÃO DIRECTA DO CONTAINER DA IMAGEM EM MATERIAL UI */
+/* .MuiCardMedia-root { */
+/* CRÍTICO: Força o contêiner do componente a ter altura total */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/* display: flex !important; */
+/* } */
+/*  */
+/* 2. ANULAÇÃO MÁXIMA PARA A ETIQUETA <img> */
+/* img { */
+/* Mantenha o que você já tinha */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/* max-width: 100% !important; */
+/* max-height: 100% !important; */
+/*  */
+/* CRÍTICO: Garante que a imagem ocupe pelo menos 1px, se tudo mais falhar */
+/* min-height: 1px !important; */
+/* min-width: 1px !important; */
+/*  */
+/* CRÍTICO: Garante que não esteja oculto */
+/* display: block !important; */
+/* visibility: visible !important; */
+/* opacity: 1 !important; */
+/* object-fit: cover !important; */
+/*  */
+/* REMOVA ESTE BORDER DEPOIS DE TESTAR */
+/* border: 5px dashed orange !important; */
+/* } */
+/*  */
+/* 3. REGRAS DO LIGHTBOX (Apenas para garantir a tela cheia) */
+/* .yarl__slide_content { */
+/* width: 100% !important; */
+/* height: 100% !important; */
+/* display: flex !important; */
+/* } */
+/*  */
+/* style.css - SUBSTITUIR REGRAS ANTERIORES NO FINAL */
+/*  */
+/* 1. ANULAÇÃO ULTRA-ESPECÍFICA PARA A IMAGEM DENTRO DE UM COMPONENTE Card */
+/* .MuiCard-root .MuiCardMedia-root { */
+/* CRÍTICO: Anula a regra de altura no componente Material UI */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/* display: flex !important; */
+/* align-items: center !important; */
+/* justify-content: center !important; */
+/* } */
+/*  */
+/* 2. ANULAÇÃO GLOBAL À ETIQUETA IMG */
+/* Esta é a linha de defesa final. */
+/* .MuiCard-root img { */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/* max-width: 100% !important; */
+/* max-height: 100% !important; */
+/* display: block !important; */
+/* object-fit: cover !important; */
+/* opacity: 1 !important; */
+/* } */
+/*  */
+/* Mantenha as regras do Lightbox se ele estiver funcionando, mas estas não afetam o CardView */
+/* .yarl__slide_content { ... } */
+/* .MuiCard-root .MuiCardActionArea-root .MuiCardMedia-root img { */
+/* Força todas as dimensões de tamanho e visibilidade */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/* max-width: 100% !important; */
+/* max-height: 100% !important; */
+/* min-height: 1px !important; [> Defesa contra height: 0 <] */
+/* min-width: 1px !important; [> Defesa contra width: 0 <] */
+/* display: block !important; */
+/* visibility: visible !important; */
+/* opacity: 1 !important; */
+/* object-fit: cover !important; */
+/* } */
+/*  */
+/* .MuiCard-root .MuiCardActionArea-root .MuiCardMedia-root img { */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/*  */
+/* min-height: 1px !important; */
+/* min-width: 1px !important; */
+/*  */
+/* display: block !important; */
+/* visibility: visible !important; */
+/* opacity: 1 !important; */
+/*  */
+/* object-fit: cover !important; */
+/* } */
+/*  */
+/*  */
+/* .MuiCard-root .MuiCardMedia-root img { */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/*  */
+/* min-height: 1px !important; */
+/* min-width: 1px !important; */
+/*  */
+/* display: block !important; */
+/* visibility: visible !important; */
+/* opacity: 1 !important; */
+/*  */
+/* object-fit: cover !important; */
+/* } */
+/*  */
+/* .MuiCard-root .MuiCardMedia-root { */
+/* height: 100% !important; */
+/* width: 100% !important; */
+/*  */
+/* flex-grow: 1 !important; */
+/* } */
+/* style.css - SOLUÇÃO NUCLEAR */
+
+/* 1. Garante que o CardMedia pai da imagem preencha 100% (o que deveria estar acontecendo via flex) */
+.MuiCard-root .MuiCardActionArea-root {
+  flex-grow: 1 !important; /* Reafirma o crescimento */
+  min-height: 0 !important;
+  position: relative !important; /* CRÍTICO: Define o contexto absoluto */
 }
-CardView {
-  box-sizing: border-box;
-}
-@media screen and (max-width: 400px) {
-  .subtitle {
-    font-size: 2.5rem;
-  }
+
+/* 2. FORÇA a tag <img> a preencher o CardMedia (Agora com Posicionamento Absoluto) */
+.MuiCard-root .MuiCardActionArea-root img {
+  height: 100% !important;
+  width: 100% !important;
+
+  /* Garante que a imagem está no canto e tem tamanho */
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+
+  /* Visibilidade e prevenção de colapso */
+  min-height: 1px !important;
+  object-fit: cover !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
 }

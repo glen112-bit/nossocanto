@@ -4,12 +4,12 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import data from '../../assets/data.json';
+import myData from '../../assets/myData.json';
 import Stack from '@mui/material/Stack';
 import { Item } from '../../components/'
 
 export default function Rules() {
-    let Regras = data.rules
+    let Regras = myData.rules
   return (
     <div>
       <h1>Regras do NossoCanto</h1>

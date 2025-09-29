@@ -11,14 +11,24 @@
   /* -webkit-font-smoothing: antialiased; */
   /* -moz-osx-font-smoothing: grayscale; */
 }
+/* index.css - Añadir al principio o después de :root */
 
+html,
+body,
+#root {
+  /* Incluir #root si su aplicación de React utiliza este ID */
+  /* CRÍTICO: Garantiza la altura completa */
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 /* @media screen and (width: 428px){ */
-    /* h1{ */
-        /* font-size: 1.6em; */
-    /* }[> Estilizações CSS <] */
-    /* .image > ul > li > img { */
-        /* width: 15vw; */
-    /* } */
+/* h1{ */
+/* font-size: 1.6em; */
+/* }[> Estilizações CSS <] */
+/* .image > ul > li > img { */
+/* width: 15vw; */
+/* } */
 /* } */
 a {
   /* font-weight: 500; */
@@ -29,12 +39,70 @@ a:hover {
   color: #535bf2;
 }
 h1 {
-  font-family:  "Kanit", sans-serif;
+  font-family: "Kanit", sans-serif;
   font-size: 4.6em;
   line-height: 2em;
-  text-align: center
+  text-align: center;
 }
-.title{
-    font: 4,2rem;
+.title {
+  font: 4, 2rem;
+}
+/* Regla crítica que afecta a todas las imágenes en la aplicación */
+/* ANULACIÓN FINAL Y AGRESIVA PARA TODAS LAS IMÁGENES */
+img {
+  /* CRÍTICO: Elimina todas las propiedades heredadas o conflictivas */
+  /* all: unset !important; */
+
+  /* FUERZA LA VISUALIZACIÓN Y DIMENSIONES */
+  display: block !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+
+  /* Reestablece el ajuste de la imagen */
+  object-fit: cover !important;
+  opacity: 1 !important;
 }
 
+/* REFUERZO DEL LIGHTBOX (Mantenga esto para evitar que el modal colapse) */
+.yarl__container {
+  z-index: 99999999 !important;
+}
+.yarl__slide_content {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+}
+.yarl__slide_image {
+  object-fit: contain !important; /* Ajuste dentro del Lightbox */
+}
+
+/* style.css - AÑADIR NO FINAL PARA ANULAR REGRAS GLOBAIS DE MATERIAL UI */
+
+/* 1. ANULAÇÃO DIRECTA DO CONTAINER DA IMAGEM EM MATERIAL UI */
+.MuiCardMedia-root {
+  /* OBRIGA o contêiner a ter altura */
+  height: 100% !important;
+  width: 100% !important;
+  display: flex !important;
+}
+
+/* 2. ANULAÇÃO MÁXIMA PARA A ETIQUETA <img> */
+img {
+  /* Força o render de altura/largura, anulando qualquer height: 0 */
+  height: 100% !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  max-height: 100% !important;
+  display: block !important;
+  object-fit: cover !important;
+  opacity: 1 !important;
+}
+
+/* 3. REGRAS DO LIGHTBOX */
+.yarl__slide_content {
+  width: 100% !important;
+  height: 100% !important;
+  display: flex !important;
+}

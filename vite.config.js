@@ -4,5 +4,14 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "https://nossocantosp.com.br"
+  base: "/",
+
+  resolve: {
+        // Isso pode ajudar o axios a encontrar myData.json
+        alias: {
+              '@assets': '/src/assets',
+                  },
+                    },
+        // }
+  // }
 })

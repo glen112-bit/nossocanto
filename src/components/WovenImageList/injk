@@ -1,0 +1,101 @@
+import * as React from 'react';
+import axios from 'axios'
+import{ useState, useEffect } from 'react'
+
+
+export default function WovenImageList() {
+    const [images, setImages] = useState([]);
+
+    // Função para registrar erros de imagem no console
+    const handleImageError = (e, item) => {
+        // Loga a URL que falhou. Se a URL deu 200, mas o onError disparou,
+        // o conteúdo do arquivo é inválido.
+        console.error(`[ERRO DE RENDERIZAÇÃO] Imagem '${item.name}' falhou ao carregar. URL: ${e.target.src}`);
+        e.target.style.display = 'none'; // Esconde a imagem quebrada
+    };
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                // 1. Carrega os dados (myData.json)
+                const res = await axios.get('../../assets/myData.json');
+                
+                const resolvedImages = res.data.images
+                    .map(item => ({ 
+                        ...item, 
+                        src: item.src 
+                    }))
+                    .filter(item => item.src)
+                    .map(item => {
+                        // 2. Extrai o nome do arquivo
+                        const rawFilename = item.src.split('/').pop().split('\\').pop().trim();
+                        
+                        // 3. CRÍTICO: Caminho ABSOLUTO
+                        const publicSrc = `/images/imags/${rawFilename}`;
+                        
+                        return {
+                            ...item, 
+                            src: publicSrc
+                        };
+                    });
+                
+                setImages(resolvedImages.filter(item => item !== null));
+
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            }
+        };  
+        fetchData();
+    }, []);
+
+
+    return (
+        <div style={{ padding: '20px', textAlign: 'center' }}>
+            <h2>Visualização Simples (Sem Material UI)</h2>
+            
+            <div 
+                style={{ 
+                    display: 'flex', 
+                    flexWrap: 'wrap', 
+                    gap: '20px', 
+                    justifyContent: 'center',
+                    maxWidth: '1200px',
+                    margin: '0 auto'
+                }}>
+                
+                {images.length === 0 ? (
+                    <p>Carregando ou Nenhuma Imagem Encontrada...</p>
+                ) : (
+                    images.map((item, id) => (
+                        <div 
+                            key={item.id || id} 
+                            style={{ 
+                                width: '300px', 
+                                height: '400px', 
+                                overflow: 'hidden',
+                                border: '2px solid red', 
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center'
+                            }}
+                        >
+                            <img
+                                // ADICIONADO: Tratamento de erro
+                                onError={(e) => handleImageError(e, item)}
+                                src={item.src} 
+                                alt={item.name}
+                                style={{ 
+                                    width: '200px', 
+                                    height: '200px', 
+                                    border: '5px solid blue' 
+                                }}
+                            />
+                            <p style={{ margin: '5px 0' }}>{item.name}</p>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+}

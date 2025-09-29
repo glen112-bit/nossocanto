@@ -1,14 +1,14 @@
 
 import * as React from 'react';
-import {  MyAccordion } from '../../components'
-import data from '../../assets/data.json';
+import {  MyAccordion } from '../../components';
+import myData from '../../assets/myData.json';
 import './style.css'
 
 export default function Places() {
-    let Lugares = data.places
-    let Bares = data.bares
-    let Mercados = data.mercados
-    let Padarias = data.padarias
+    let Lugares = myData.places
+    let Bares = myData.bares
+    let Mercados = myData.mercados
+    let Padarias = myData.padarias
 
     var mylink = "https://www.google.com.br/maps/dir/R.+Martins+Fontes,+164+-+Consolação,+São+Paulo+-+SP,+01050-000,+Brasil/"
 
