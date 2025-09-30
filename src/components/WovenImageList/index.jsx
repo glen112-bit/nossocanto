@@ -86,63 +86,80 @@ export default function WovenImageList() {
                 <ThemeProvider theme={theme}>              
                     <Box 
                         sx={{ 
-                           width: '100%', 
-                            textAlign: 'center', 
-                            py: 4, 
-                            // Fundo: Off-White
-                            backgroundColor: '#f7f7f7', 
-                            // ✅ Arredondar as esquinas
-                            borderRadius: 2,
-                            // ✅ Sombra elegante e sutil para a borda
-                            boxShadow: 4, // Usa a sombra padrão do MUI (elevation 4)
-                            mb: 6,
-                        }}
-                    >
-                        <Typography 
-                            variant="h3" 
-                            component="h1" 
-                            fontWeight={400} // Fonte extra-fina e delicada
-                            color="text.primary"
-                            sx={{ 
-                                fontStyle: 'italic', 
-                                letterSpacing: 3, // Aumento sutil no espaçamento entre letras
-                                textTransform: 'uppercase', // Para um toque de elegância sutil
-                                textShadow: '4px 4px 6px rgba(0, 0, 0, 0.1)'
-                            }} 
+                            width: '100%', 
+                            textAlign: 'center', 
+                            py: 4, 
+                            // Fundo: Off-White
+                            //backgroundColor: '#f7f7f7',
+                            // ✅ Arredondar as esquinas
+                            borderRadius: 2,
+                            // ✅ Sombra elegante e sutil para a borda
+                            boxShadow: 4, // Usa a sombra padrão do MUI (elevation 4)
+                            mb: 6,
+                            transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out', // Transição suave
+                                '&:hover': {
+                                    transform: 'scale(1.05)', // Aumenta 5% ao passar o mouse
+                                    boxShadow: 6, // Sombra mais pronunciada ao passar o mouse
+                            },
+                            }}
                         >
-                            NossaCasa
-                        </Typography>
-                        <Typography
-                            variant="body1" 
-                            component="p" 
-                            color="#9e9e9e" 
-                            sx={{ mt: 1, letterSpacing: 1 }}>
-                              Um Refúgio de Paz e Serenidade.
-                        </Typography>
-                    </Box> 
-                    <Grid sx={{width:'70vw', padding:'auto', display: 'flex', justifyContent:'center' }}
-                        container spacing={3}   
-                    >
-                        {
+                            <Box
+                                sx={{
+                                    display: 'inline-block', // Crucial para que o hover afete o tamanho real do box
+                                    cursor: 'pointer', // Indica que é interativo
+                                    // Propriedades do "card" do título:
+                                    backgroundColor: 'white', 
+                                    padding: '10px 20px', 
+                                    borderRadius: '8px', 
+                                    boxShadow: 2, 
+                                }}
+                            >
+                                <Typography 
+                                    variant="h3" 
+                                    component="h1" 
+                                    fontWeight={400} // Fonte extra-fina e delicada
+                                    color="text.primary"
+                                    sx={{ 
+                                        fontStyle: 'italic', 
+                                        letterSpacing: 3, // Aumento sutil no espaçamento entre letras
+                                        textTransform: 'uppercase', // Para um toque de elegância sutil
+                                        textShadow: '4px 4px 6px rgba(0, 0, 0, 0.1)'
+                                    }} 
+                                >
+                                    NossaCasa
+                                </Typography>
+                                <Typography
+                                    variant="body1" 
+                                    component="p" 
+                                    color="#9e9e9e" 
+                                    sx={{ mt: 1, letterSpacing: 1 }}>
+                                    Um Refúgio de Paz e Serenidade.
+                                </Typography>
+                            </Box>
+                        </Box> 
+                        <Grid sx={{width:'70vw', padding:'auto', display: 'flex', justifyContent:'center' }}
+                            container spacing={3}   
+                        >
+                            {
 
-                            images.map((item, id) => (
-                                // <Grid item key={item.id || id} xs={12} sm={6} md={4} lg={3}>
-                                    <Grid item xs={12} sm={6} md={4} sx={{ 
-                                        // Garante que o Grid item tenha a altura exata que o Card espera
-                                        height: '460px', 
-                                        display: 'flex', // Adicione flex para garantir que o Card preencha o espaço
-                                        }}>
-                                        <CardView 
-                                            title={item.name}
-                                            src={item.src}
-                                            // src={getImageUrl(item.src)}
-                                            // src={console.log(getImageUrl(item.src)) || item.src}
-                                            loading= {"lazy"}
-                                            description={item.description}
-                                            key={item.id}
-                                            height="100%"
-                                            width="350px"
-                                            // onClick={() => openLightbox(index)}
+                                images.map((item, id) => (
+                                    // <Grid item key={item.id || id} xs={12} sm={6} md={4} lg={3}>
+                                        <Grid item xs={12} sm={6} md={4} sx={{ 
+                                            // Garante que o Grid item tenha a altura exata que o Card espera
+                                            height: '460px', 
+                                            display: 'flex', // Adicione flex para garantir que o Card preencha o espaço
+                                            }}>
+                                            <CardView 
+                                                title={item.name}
+                                                src={item.src}
+                                                // src={getImageUrl(item.src)}
+                                                // src={console.log(getImageUrl(item.src)) || item.src}
+                                                loading= {"lazy"}
+                                                description={item.description}
+                                                key={item.id}
+                                                height="100%"
+                                                width="350px"
+                                                // onClick={() => openLightbox(index)}
                                             onClick={() => Src(id)}
                                             alt={item.name}
                                         />
