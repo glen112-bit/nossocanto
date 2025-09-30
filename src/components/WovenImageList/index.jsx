@@ -1,6 +1,6 @@
 import * as React from 'react';
 import axios from 'axios'
-import { ThemeProvider , createTheme } from '@mui/material';
+import { ThemeProvider , createTheme, Typography, Box } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import { getImageUrl } from '../../utils/image-utils.js'
 
@@ -84,7 +84,42 @@ export default function WovenImageList() {
 
             <>
                 <ThemeProvider theme={theme}>              
-                    <h2 className = "subtitle">NossaCasa</h2>
+                    <Box 
+                        sx={{ 
+                           width: '100%', 
+                            textAlign: 'center', 
+                            py: 4, 
+                            // Fundo: Off-White
+                            backgroundColor: '#f7f7f7', 
+                            // ✅ Arredondar as esquinas
+                            borderRadius: 2,
+                            // ✅ Sombra elegante e sutil para a borda
+                            boxShadow: 4, // Usa a sombra padrão do MUI (elevation 4)
+                            mb: 6,
+                        }}
+                    >
+                        <Typography 
+                            variant="h3" 
+                            component="h1" 
+                            fontWeight={400} // Fonte extra-fina e delicada
+                            color="text.primary"
+                            sx={{ 
+                                fontStyle: 'italic', 
+                                letterSpacing: 3, // Aumento sutil no espaçamento entre letras
+                                textTransform: 'uppercase', // Para um toque de elegância sutil
+                                textShadow: '4px 4px 6px rgba(0, 0, 0, 0.1)'
+                            }} 
+                        >
+                            NossaCasa
+                        </Typography>
+                        <Typography
+                            variant="body1" 
+                            component="p" 
+                            color="#9e9e9e" 
+                            sx={{ mt: 1, letterSpacing: 1 }}>
+                              Um Refúgio de Paz e Serenidade.
+                        </Typography>
+                    </Box> 
                     <Grid sx={{width:'70vw', padding:'auto', display: 'flex', justifyContent:'center' }}
                         container spacing={3}   
                     >
@@ -117,18 +152,20 @@ export default function WovenImageList() {
                         }
                     </Grid>
                 </ThemeProvider> 
-                   {
-                  myVideo.map((item, id) => (
-                     <Grid> 
-                         <VideoView 
-                            // data={{...item, src: getImageUrl(item.src)}}
-                            data={ item}
-                            key={id}
-                        />
-                     </Grid>
+                <Grid style={{padding: '4vh'}} >
+                    {
+                        myVideo.map((item, id) => (
+                            <Grid> 
+                                <VideoView 
+                                    // data={{...item, src: getImageUrl(item.src)}}
+                                    data={ item}
+                                    key={id}
+                                />
+                            </Grid>
 
-                    ))
-                   } 
+                        ))
+                    } 
+                </Grid>
                 <Lightbox
                     plugins={[ Download, Fullscreen, Zoom]}
                     styles={{
@@ -161,9 +198,9 @@ export default function WovenImageList() {
                         // Include other properties Lightbox might use (optional)
                         title: item.name 
                     }))}
-                   />
+                />
 
-                        
+
             </>    
         );
 }

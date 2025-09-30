@@ -9,7 +9,8 @@ export const VideoView = ({data}) => {
   // const theme = useTheme();
 
   // Se o vídeo não for mp4, troque 'video/mp4' por 'video/quicktime' (para MOV) ou outro tipo MIME.
-  const videoMimeType = "video/quicktime"; 
+  // const videoMimeType = "video/quicktime";
+  const videoMimeType = "video/mp4"; 
 
   // URL absoluta do vídeo (resolvida no componente pai)
   const videoSrc = data.src;
@@ -35,7 +36,7 @@ export const VideoView = ({data}) => {
         sx={{ 
           // Coloque o texto no rodapé do Card, sobre o vídeo
           mt: 'auto', 
-          backgroundColor: 'rgba(0, 0, 0, 0.4)', 
+          // backgroundColor: 'rgba(0, 0, 0, 0.4)',
           zIndex: 1 
         }}
       >

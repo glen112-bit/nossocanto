@@ -4,39 +4,49 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Typography from '@mui/material/Typography';
 import CardActionArea from '@mui/material/CardActionArea';
+import Box from '@mui/material/Box'; // ⚠️ Importado para o Overlay
+import { styled } from '@mui/material/styles'; // ⚠️ Importado para o efeito de hover
 import "yet-another-react-lightbox/styles.css";
 import PropTypes from 'prop-types'; 
+
+// 1. Componente Estilizado (StyLED) para o efeito de zoom no hover
+const CustomCard = styled(Card)(({ theme }) => ({
+    transition: 'transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
+    '&:hover': {
+        // Leve aumento no tamanho (zoom sutil)
+        transform: 'scale(1.02)', 
+        // Aumenta a sombra para dar profundidade
+        boxShadow: theme.shadows[10], 
+    },
+}));
 
 export const CardView = ({title, description, src, height, width, onClick}) => {
 
     return (
-        // 1. Card: Define o tamanho total e o layout vertical (display: flex + flexDirection: column)
-        <Card sx={{ 
+        // Substituimos Card por CustomCard para aplicar o efeito de hover
+        <CustomCard sx={{ 
             height: height, 
             width: width, 
             maxWidth: "100%", 
             display: 'flex', 
-            flexDirection: 'column' 
+            flexDirection: 'column',
+            // Adicionamos um raio nas bordas para suavizar o design
+            borderRadius: 2, 
         }}>
             <CardActionArea
                 onClick={onClick}
                 sx={{
-                    // 2. CardActionArea: Precisa ser um flex container para o flexGrow funcionar
-                    // display: 'flex',
-                    // flexDirection: 'column',
-                    // CRÍTICO: Permite que ocupe todo o espaço vertical restante
                     flexGrow: 1,
-                    // CRÍTICO: Previne o colapso de altura (height: 0)
                     minHeight: 0,
                     position: 'relative',
                 }}>
+                
+                {/* 2. CardMedia (A Imagem) */}
                 <CardMedia
                     component="img"
-                    image={src} // URL válida, conforme status 304
+                    image={src} 
                     alt={title}
                     sx={{
-                        // 3. CardMedia: OBRIGA a preencher 100% da área de ação
-                        // flexFrow: 1,
                         height:"100%",
                         width: "100%", 
                         objectFit: "cover",
@@ -44,34 +54,72 @@ export const CardView = ({title, description, src, height, width, onClick}) => {
                         top: 0,
                         left:0,
                         minHeight: '1px',
-                        // Borda para depuração final (opcional):
-                        // border: '4px solid red', 
+                    }}
+                />
+                
+                {/* 3. ImageOverlay (Degradê preto sutil na parte inferior) */}
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        height: '50%', // Define a área do degradê (metade inferior)
+                        background: 'linear-gradient(to top, rgba(0,0,0,0.5), rgba(0,0,0,0))',
+                        zIndex: 1, // Garante que o overlay fique acima da imagem
                     }}
                 />
 
+                {/* 4. CardContent (Conteúdo sobre a imagem, para título/descrição) */}
+                {/* Posicionamos o conteúdo sobre a imagem, na parte inferior, para um visual de revista */}
+                <CardContent 
+                    sx={{ 
+                        position: 'absolute',
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        zIndex: 2, // Fica acima do overlay
+                        padding: 2, // Espaçamento interno
+                    }}
+                >
+                    <Typography 
+                        gutterBottom 
+                        variant="h6" // Título um pouco menor e mais nítido
+                        component="div"
+                        sx={{ color: 'white', textShadow: '1px 1px 2px rgba(0,0,0,0.8)' }} // Texto branco com sombra para destaque
+                    >
+                        {title}
+                    </Typography>
+                    <Typography 
+                        variant="body2" 
+                        sx={{ 
+                            color: 'rgba(255, 255, 255, 0.8)', // Cor clara para descrição
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.8)',
+                            // Oculta a descrição em telas pequenas para economizar espaço
+                            display: { xs: 'none', sm: 'block' } 
+                        }}
+                    >
+                        {description}
+                    </Typography>
+                </CardContent>
+
             </CardActionArea>
-            <CardContent sx={{ backgroundColor: 'transparent' }}>
-                <Typography  gutterBottom variant="h5" component="div">
-                    {title}
-                </Typography>
-                <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            
+            {/* 5. Se você ainda precisar de um rodapé separado abaixo da imagem: */}
+            {/* <CardContent sx={{ backgroundColor: 'background.paper', paddingTop: 1, paddingBottom: 1 }}>
+                <Typography variant="body2" color="text.secondary">
                     {description}
                 </Typography>
-            </CardContent>
-        </Card>
+            </CardContent> */}
+        </CustomCard>
     );
 }
+
 CardView.propTypes = {
-    // String - Usada no Typography
     title: PropTypes.string.isRequired, 
-    // String - Usada no Typography
     description: PropTypes.string, 
-    // String - URL da imagem (passada do WovenImageList)
     src: PropTypes.string.isRequired, 
-    // String - Altura do Card (passada como "100%" ou "460px")
     height: PropTypes.string.isRequired, 
-    // String - Largura do Card (passada como "350px")
     width: PropTypes.string, 
-    // Função - Handler de clique para abrir o Lightbox
     onClick: PropTypes.func, 
 };

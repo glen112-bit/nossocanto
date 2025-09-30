@@ -17,7 +17,7 @@ const router = createHashRouter([
         </>
     },
     {
-        path: "/Instalations",
+        path: "/instalations",
         element:
         <>
             <Header text="NossoCantoSp"/>

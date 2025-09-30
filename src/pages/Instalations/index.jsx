@@ -11,7 +11,7 @@ import { Item } from '../../components/Item'
 import './style.css'
 
 export default function Instalations() {
-    let Instalacoes = data.instalations
+    let Instalacoes = myData.instalations
   return (
     <div>
        <h1>Instalacoes</h1>
