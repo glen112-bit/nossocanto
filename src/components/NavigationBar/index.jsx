@@ -9,9 +9,11 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import { useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper'; // Adicionado para dar elevação
+import { useAuth } from '../../context/AuthContext.jsx';
 import './style.css'
 
 export default function NavigationBar() {
+ const { isAuthenticated, user, logout } = useAuth();
 
     const navigate = useNavigate()
 
@@ -22,8 +24,9 @@ export default function NavigationBar() {
         switch(pathname) {
             case '/': return 0;
             case '/rules': return 1;
-            case 'places' : return 2;
-            case 'instalations' : return 3;
+            case '/places' : return 2;
+            case '/instalations' : return 3;
+            case '/login' : return 4;
             default: return 0;
         }
     }, [pathname])
@@ -40,7 +43,9 @@ export default function NavigationBar() {
             case 1: navigate("/rules"); break;
             case 2: navigate("/places"); break;
             case 3: navigate("/instalations"); break;
-            case 4: 
+            case 4: navigate("/login"); break;
+            case 5: navigate("/register"); break;
+            case 6:
                 // Ação externa: não usa navigate, abre em nova aba
                 window.open("https://www.airbnb.com.br/rooms/1337549417158200548?location=Centro%2C%20São%20Paulo&search_mode=regular_search&source_impression_id=p3_1741601376_P3BVta8IfPNE5qMH&previous_page_section_name=1001&federated_search_id=ebcf265a-71a4-47c4-ba4f-6b1e7fadbe02&guests=1&adults=1", "_blank");
             break;
@@ -62,6 +67,8 @@ export default function NavigationBar() {
             <BottomNavigationAction label="Regras"  value={1} icon={<AssignmentLateIcon />}/> 
             <BottomNavigationAction label="Lugares" value={2}  icon={<MapIcon/>}/>
             <BottomNavigationAction label="Instalações" value={3}  icon={<DnsIcon />}/>
+            <BottomNavigationAction label="login" value={4}  icon={<DnsIcon />}/>
+            <BottomNavigationAction label="register" value={5}  icon={<DnsIcon />}/>
 
             {/* Para o link externo, usamos um design ligeiramente diferente para indicar que é externo */}
             <BottomNavigationAction 

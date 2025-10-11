@@ -4,7 +4,8 @@ import NavigationBar from "../NavigationBar"
 
  const Header = () => {
     return(
-        <div className="header">
+        <div 
+            className="header">
             <NavigationBar/>
         </div>
     )

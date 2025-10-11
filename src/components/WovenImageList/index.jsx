@@ -1,9 +1,9 @@
 import * as React from 'react';
-import axios from 'axios'
+import axios from 'axios';
 import { ThemeProvider , createTheme, Typography, Box } from '@mui/material';
 import Grid from '@mui/material/Grid2'
 import { getImageUrl } from '../../utils/image-utils.js'
-
+const API_BASE_URL = 'http://localhost:5000';
 // const imageModules = import.meta.glob('../../assets/images/*.{png,jpg,jpeg,webp}', { eager: true });
 
 import { 
