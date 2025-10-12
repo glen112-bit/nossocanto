@@ -1,13 +1,20 @@
+
+import express from 'express'; // Import the Express factory function and its main type
+import type { Request, Response } from 'express'; // ⬅️ IMPORT TYPES ONLY
 import User from '../models/User.ts'; 
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
-// 💡 Função auxiliar para gerar o Token JWT
-// Assume que process.env.JWT_SECRET está configurado
-const generateToken = (user) => {
+
+const JWT_SECRET = process.env.JWT_SECRET;
+const generateToken = (user: { _id: IUser['_id']  }): string => {
+    if (!JWT_SECRET) {
+        console.error("ERRO FATAL: JWT_SECRET não está definido. Verifique seu arquivo .env");
+        throw new Error("JWT_SECRET must be configured.");
+    }
     return jwt.sign(
         { id: user._id }, 
-        process.env.JWT_SECRET, 
+        JWT_SECRET, 
         { expiresIn: '1d' } // Expira em 1 dia
     );
 };
@@ -15,7 +22,7 @@ const generateToken = (user) => {
 /**
  * 🚀 Função para registrar um novo usuário
  */
-export const registerUser = async (req, res) => {
+export const registerUser = async (req: Request, res: Response) => {
     const { username, email, password } = req.body;
 
     // 1. Validação básica (o 'return' já estava correto aqui)
@@ -36,7 +43,7 @@ export const registerUser = async (req, res) => {
             email,
             password 
         });
-        
+
         // 4. Salva no MongoDB (o hook 'pre save' criptografa a senha aqui)
         await newUser.save(); 
 
@@ -55,12 +62,12 @@ export const registerUser = async (req, res) => {
 
     } catch (error) {
         console.error("Erro no registro:", error);
-        
+
         // 7. Trata erro de duplicidade (caso o username também seja unique, por exemplo)
         if (error.code === 11000) {
             return res.status(409).json({ message: 'Email ou nome de usuário já está em uso.' });
         }
-        
+
         // 8. Resposta de erro final (Adicionado 'return' para garantir o encerramento)
         return res.status(500).json({ message: 'Erro interno ao registrar usuário.', error: error.message });
     }
@@ -69,7 +76,7 @@ export const registerUser = async (req, res) => {
 /**
  * 🔑 Função para login de usuário
  */
-export const loginUser = async (req, res) => {
+export const loginUser = async (req: Request, res: Response) => {
     const { email, password } = req.body;
 
     if (!email || !password) {

@@ -45,13 +45,13 @@ const startServer = async () => {
             res.send('Backend Server está funcionando!');
         });
         // ✅ Montar o Roteador de Autenticação
-        app.use('/auth', authRouter); 
+        app.use('/api/auth', authRouter); 
 
         // ✅ Montar o Roteador de Mídia
-        app.use('/media', mediaRouter); 
+        app.use('/api/media', mediaRouter); 
 
         // ✅ Montar o Roteador de Comentários
-        app.use('/comment', commentRouter);         // Iniciar el servidor Express SÓLO después de la conexión exitosa
+        app.use('/api/comment', commentRouter);         // Iniciar el servidor Express SÓLO después de la conexión exitosa
         app.listen(PORT, () => {
             console.log(`🚀 Servidor Express rodando en la porta: http://localhost:${PORT}`);
         });
