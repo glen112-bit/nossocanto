@@ -1,0 +1,34 @@
+import * as React from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import myData from '../../assets/myData.json';
+import Stack from '@mui/material/Stack';
+import { Item } from '../../components/'
+
+export default function Rules() {
+    let Regras = myData.rules
+  return (
+    <div>
+      <h1>Regras do NossoCanto</h1>
+
+      <Accordion>
+        <AccordionSummary
+         className='title'
+          expandIcon={<ArrowDropDownIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+            <Stack spacing={2}>
+              <Typography component="span"><Item>Regras da Casa</Item></Typography>
+            </Stack>
+        </AccordionSummary>
+        <AccordionDetails>
+            <Stack spacing={2}>{Regras.map(rules => <Typography component="span"><Stack>{rules}</Stack></Typography> )}</Stack>
+        </AccordionDetails>
+      </Accordion>
+    </div>
+  );
+}

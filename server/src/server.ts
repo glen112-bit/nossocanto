@@ -8,16 +8,18 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import dotenv from 'dotenv';
 import connectDB from '../config/db.js'; // 🛑 Importar la función de conexión
-// import mediaRouter from './routes/mediaRoutes.js';
 import mediaRouter from '../routes/mediaRoutes.ts'; 
 import commentRouter from '../routes/commentRoutes.ts';
 import authRouter from '../routes/authRoutes.ts';
 // Carga las variables de entorno
-dotenv.config(); 
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+dotenv.config({
+    path: path.resolve(__dirname, '..', '.env')
+}); 
 // --- 1. CONFIGURACIÓN INICIAL ---
 const app: Express = express();
 const PORT: number = parseInt(process.env.PORT || '3000', 10);

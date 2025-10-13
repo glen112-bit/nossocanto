@@ -1,0 +1,9 @@
+h1{
+    margin: 0 auto;
+    background-color: gray;
+    align-content: center;
+}
+button{
+    font-size: 24px;
+    color: #fff;
+}

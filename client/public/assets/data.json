@@ -1,0 +1,165 @@
+{
+  "places": [
+    {
+      "name": "Galeria Metropole",
+      "value": "Situado na esquina da avenida São Luiz com a praça Dom José Gaspar, o edifício Metrópole – originalmente denominado “Conjunto Máximus”. Galeria Metrópole se reinventa no Centro de SP após crise na pandemia e ganha nova vida com feiras e negócios criativos",
+      "endereco": "Av. São Luís, 187 Centro, São Paulo, Estado de São Paulo 01046-001 Brasil"
+    },
+    {
+      "name": "Biblioteca Mario de Andrade",
+      "value": "A Biblioteca Mário de Andrade (BMA) é uma das mais importantes bibliotecas de pesquisa do país. Fundada em 1925 como Biblioteca Municipal de São Paulo, é a maior biblioteca pública da cidade e a segunda maior biblioteca pública do país, superada, apenas, pela Biblioteca Nacional. Foi inaugurada, em 1926, na Rua 7 de Abril, com uma coleção inicial formada por obras que se encontravam em poder da Câmara Municipal de São Paulo, em cujo prédio a Biblioteca funcionava. Em 1937, incorporou a Biblioteca Pública do Estado e, a partir de então, importantes aquisições de livros, muitos deles raros e especiais, enriqueceram seu acervo. O crescimento de seu acervo e serviços ocasionou a mudança da biblioteca para o atual edifício, localizado na Rua da Consolação. Inaugurado em 1942, na gestão do Prefeito Prestes Maia e tendo Rubens Borba de Moraes como Diretor da Biblioteca, o novo edifício, projetado pelo arquiteto francês Jacques Pilon, é considerado um marco da arquitetura Moderna em São Paulo.",
+      "endereco": "Rua da Consolação, 94, São Paulo, Brazil 01302000"
+    },
+    {
+      "name": "Rua Avanhandava",
+      "value": "Situado na esquina da avenida São Luiz com a praça Dom José Gaspar, o edifício Metrópole – originalmente denominado “Conjunto Máximus”. Galeria Metrópole se reinventa no Centro de SP após crise na pandemia e ganha nova vida com feiras e negócios criativos. Quem passa pela rua se sente como se estivesse passeando por vila italiana. Isso porque, o império Mancini – grupo que conta com oito estabelecimentos na via – transformou a rua em um polo gastronômico e cultural. Aliado a isso, em 2007, a Rua Avanhandava “passou por transformações como o seu estreitamento e, em vários pontos, o desnível entre a calçada e a rua é mínimo; em outros é inexistente“.",
+      "endereco": "Rua Avanhandava, 137 a 25, São Paulo, Brazil 01306001"
+    },
+    {
+      "name": "Teatro Municipal",
+      "value": "O Theatro Municipal de São Paulo é um teatro brasileiro localizado na cidade paulista de São Paulo, projetado pelos arquitetos Ramos de Azevedo, Claudio Rossi e Domiziano Rossi no estilo arquitetônico eclético, inspirado na Ópera de Paris e inaugurado em 1911. É um dos cartões postais da cidade, localizado na Praça Ramos de Azevedo, também considerado um dos mais importantes teatros do país. Construído para atender ao desejo da elite paulista da época, que queria que a cidade estivesse à altura dos grandes centros culturais.",
+      "endereco": " Praça Ramos de Azevedo, s/nº Sé - São Paulo, SP"
+    },
+    {
+      "name": "Shopping Light",
+      "value": "http://www.oshoppinglight.com.br",
+      "endereco": "Rua Coronel Xavier de Toledo, 23, São Paulo, Brazil 01048-000"
+    },
+    {
+      "name": "Edificio Copan",
+      "value": "O Edifício Copan, ou apenas Copan, é um dos mais importantes e emblemáticos edifícios da cidade de São Paulo, localizado no número 200 da Avenida Ipiranga, no centro da cidade, e foi inaugurado em 1966. É um dos símbolos da arquitetura moderna brasileira, concebido pelo arquiteto Oscar Niemeyer com projeto estrutural do engenheiro Joaquim Cardozo, visando às comemorações do Quarto Centenário da cidade de São Paulo. A obra, contudo, foi iniciada apenas em 1957, com algumas alterações e executada com a ajuda de Carlos Lemos.",
+      "endereco": "Edificio Copan Av. Ipiranga, 200 - Centro Histórico de São Paulo, São Paulo - SP, 01046-010"
+    },
+    {
+      "name": "Terraco Italia",
+      "value": "A mais bela vista panorâmica da metrópole paulistana se tornou um cartão de visitas da cidade – e ponto de encontro de celebridades e personalidades. Até hoje, após 5 décadas de história, o Terraço Itália é sinônimo de requinte e exclusividade."
+    }
+  ],
+  "bares": [
+    {
+      "name": "Rooftop Matiz",
+      "value": "Prédio antigo no centro, vista para a cidade, terraço ao ar livre, boa acústica. Repleto de atrações para paulistanos e visitantes da cidade, o bar Matiz, que foi anunciado em primeira mão por VEJA",
+      "endereco": "R. Martins Fontes, 91 - República, São Paulo - SP, 01050-905"
+    },
+    {
+      "name": "Rooftop no Edificio Ester/Olivier",
+      "value": "Bar e restaurante localizado no Centro de São Paulo em frente a praça da República. Cozinha contemporânea de inspiração francesa, vinhos brasileiros e coquetéis autorais.",
+      "endereco": "Rua Basílio da Gama, nº 29 sala 1101-Centro"
+    },
+    {
+      "name": "Rooftop do Shopping Light",
+      "value": "O Centro de São Paulo ganha um novo rooftop, desta vez no edifício Alexandre Mackenzie, prédio construído em 1929 para ser a sede da Light e onde hoje funciona o Shopping Light. O Priceless, nome do novo empreendimento, é mais do que um restaurante. Trata-se de um complexo gastronômico com um restaurante, um bar, um espaço de intervenções artísticas, um ponto de café e um rooftop com vista para o Theatro Municipal.",
+      "endereco": "Rua Coronel Xavier de Toledo, 23, São Paulo, Brazil 01048-000"
+    },
+    {
+      "name": "Parador",
+      "value": "Estamos localizados na a área de lazer do histórico Edifício Renata Sampaio, no centro de São Paulo. \n somos restaurante, bar e piscina, estamos de portas abertas tanto para quem quiser passar o dia relaxando com a gente, quanto para quem está a procura de um lugar com pratos e coquetéis divertidos e refrescantes. \n Nossas reservas para o restaurante são feitas apenas para o primeiro horário, mas também recebemos por ordem de chegada.\n*Em caso de ocupação máxima, trabalhamos com fila de espera.\n Nosso day use tem o valor de R$250,00 por pessoa. Com R$150 de crédito para consumo no restaurante e com o uso das áreas de lazer valido durante todo o dia, no período de funcionamento da casa. \n Nossa espaço possui piscina, área com espreguiçadeiras, ducha, sauna, academia e banheiros com chuveiro e guarda-volumes.",
+      "endereco": "Rua Araújo, 216, 3o andar, República, São Paulo-SP, 01220020"
+    },
+    {
+      "name": "Tokio Bar Karaoke",
+      "value": "Tokyo, edifício de nove andares que reúne clube, karaokê, restaurante, bar e espaços para economia criativa, inaugura em maio em São Paulo. Idealizado após uma viagem ao Japão, o espaço é inspirado na verticalização cultural urbana e underground da capital japonesa. \n O prédio com vista privilegiada para alguns dos marcos urbanos da capital está localizado na rua Major Sertório 110, ponto de encontro da vida noturna paulistana no centro da cidade. Com amplas janelas de vidro em todos os andares, a empreitada é sediada no Edifício ABC, prédio modernista, projetado pelo arquiteto Oswaldo Bratke, em 1949. \n O projeto foi criado pelo escritório MM18 Arquitetura, conhecido por suas ambientações em locais de importância histórica, urbanística e cultural como o Mirante 9 de Julho e clubes noturnos renomados, como Lions e PanAm.",
+      "endereco": "R. Maj. Sertório, 110 - Vila Buarque, São Paulo - SP, 01222-001"
+    }
+  ],
+  "mercados": [
+    {
+      "name": "Mercado KL",
+      "value": "mercado com muita variedade de produtos de limpeza, comestiveis, fruts, verduras, e bebidas varias",
+      "endereco": "R. Martins Fontes, 159 - Consolação, São Paulo - SP, 01302-000"
+    },
+    {
+      "name": "OXXO Consolação",
+      "value": "24horas...",
+      "endereco": "R. da Consolação, 397 - Consolação, São Paulo - SP, 01301-000"
+    },
+    {
+      "name": "mini Extra",
+      "value": "https://www.clubeextra.com.br/",
+      "endereco": "R. da Consolação - República, São Paulo - SP, 01302-000"
+    },
+    {
+      "name": "Supermarkets M & M",
+      "value": "01132573826",
+      "endereco": "R. Nestor Pestana, 42 - Consolação, São Paulo - SP, 01303-010"
+    }
+  ],
+  "padarias": [
+    {
+      "name": "Bar e Lanches Estadão",
+      "value": "Abrto 24Horas",
+      "endereco": "Viaduto Nove de Julho, 193 - Centro Histórico de São Paulo, São Paulo - SP, 01050-060"
+    },
+    {
+      "name": "Restaurante Cantinho do Sabor",
+      "value": "01132575548",
+      "endereco": "Condomínio Edificio Barão de Penedo - R. da Consolação, 331/323 - Centro Histórico de São Paulo, São Paulo - SP, 01301-000"
+    },
+    {
+      "name": "Padaria Marajá",
+      "value": "http://www.padariamaraja.com/",
+      "endereco": "R. Martins Fontes, 153 - Centro Histórico de São Paulo, São Paulo - SP, 01050-000"
+    },
+    {
+      "name": "Padaria Bela Sagres",
+      "value": "01131595242",
+      "endereco": "R. da Consolação, 49 - Centro Histórico de São Paulo, São Paulo - SP, 01301-000"
+    }
+  ],
+  "rules": [
+    "A cozinha esta a sua disposição, pedimos a penas que ao sair deixe o saco organizado, e descarta seu lixo.",
+    "Por se tratar de um predio residencial pedimos que após das 6 horas evitem escutar musica a uma altura que possa incomodar a os vizinhos.",
+    "Será permitida a pernoite no nossoCanto a penas para os hóspedes registrados."
+  ],
+  "instalations": ["Cafeteira", "Lavadora", "Wif"],
+  "images": [
+    {
+      "id": "1",
+      "src": "./assets/images/banheiro.jpeg",
+      "name": "Banheiro",
+      "description": "Pintado recentemente"
+    },
+    {
+      "id": "2",
+      "src": "./assets/images/cama.jpeg",
+      "name": "Cama",
+      "description": "cama de cassal"
+    },
+    {
+      "id": "3",
+      "src": "./assets/images/comedor.jpeg",
+      "name": "Comedor",
+      "description": "lugar de refeicao saindo da cozinha"
+    },
+    {
+      "id": "4",
+      "src": "./assets/images/escrivaninha.jpeg",
+      "name": "Escrivaninha",
+      "description": "Otimo para trabalhar online enqanto fica na casa"
+    },
+    {
+      "id": "5",
+      "src": "./assets/images/torneira_pia_aberta.jpeg",
+      "name": "Torneira Pia Aberta",
+      "description": "torneira da Lavadora"
+    },
+    {
+      "id": "6",
+      "src": "./assets/images/torneira_pia_fechada.jpeg",
+      "name": "Torneira Pia Fechada",
+      "description": "torneira da Lavadora"
+    },
+    {
+      "id": "7",
+      "src": "./assets/images/torneiras.jpeg",
+      "name": "Torneitas",
+      "description": "torneira da Lavadora"
+    }
+  ],
+  "videos": [
+    {
+      "src": "./assets/images/entrada.MOV",
+      "name": "Entrada de Casa"
+    }
+  ]
+}
