@@ -1,0 +1,23 @@
+/* Box { */
+/* min-width: 100%; */
+/* display: flex; */
+/* flex-direction: column; */
+/* } */
+/* BottomNavigation{ */
+/* align-items: space-between; */
+/* } */
+.air {
+  display: flex;
+  align-items: center;
+  margin: auto;
+  max-height: 5.4rem;
+}
+.MuiBottomNavigationAction-label {
+  font-size: 12px;
+}
+@media screen and (max-width: 300px) {
+  /* Estilizações CSS BottomNavigationAction { */
+  .air {
+    font-size: 12px;
+  }
+}

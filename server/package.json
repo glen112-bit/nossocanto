@@ -6,6 +6,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "npx nodemon src/server.ts --watch 'src/' -e ts",
+    "server-dev": "ts-node -r dotenv/config server/server.ts",
     "compile": "npx tsc",
     "start": "node ./dist/server.js"
   },
