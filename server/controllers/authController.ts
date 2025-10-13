@@ -6,11 +6,11 @@ import User from '../models/User.ts';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
-const generateToken = (id: string) => {
-    if(process.env.JWT_SECRET) {
+const generateToken = (id: string): string => {
+    if(!process.env.JWT_SECRET) {
         throw new Error('JWT_SECRET must be configurated')
     }
-    return jwt.sign({ id }, process.env.JWT_SECRET, {
+    return jwt.sign({ id }, process.env.JWT_SECRET as string,  {
         expiresIn: '30d',
     });
 };
