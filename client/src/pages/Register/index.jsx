@@ -1,17 +1,26 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
+    const [profileImage, setProfileImage] = useState(null); // Para o objeto File
     const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
-
+        // 1. Criar o objeto FormData
+        const formData = new FormData();
+        formData.append('username', username);
+        formData.append('email', email);
+        formData.append('password', password);
+        if (profileImage) {
+            formData.append('profileImage', profileImage); 
+        }
         try {
             const response = await fetch('/api/auth/register', {
                 method: 'POST',
@@ -42,7 +51,7 @@ const Register = () => {
             <div style={styles.card}>
                 <h2 style={styles.title}>Crear Cuenta</h2>
                 <form onSubmit={handleSubmit} style={styles.form}>
-                    
+
                     {error && <p style={styles.error}>{error}</p>}
 
                     <div style={styles.inputGroup}>
@@ -80,11 +89,17 @@ const Register = () => {
                             disabled={loading}
                         />
                     </div>
-
+                    <input 
+                        type="file" 
+                        name="profileImage" // Nome opcional, mas útil
+                        accept="image/*" // Permite apenas arquivos de imagem
+                        onChange={e => setProfileImage(e.target.files[0])} 
+                        required 
+                    />
                     <button type="submit" style={styles.button} disabled={loading}>
                         {loading ? 'Registrando...' : 'Registrar'}
                     </button>
-                    
+
                     {/* Link a la página de login usando el hash router */}
                     <p style={styles.switchText}>
                         ¿Ya tienes cuenta? <a href="/#/login" style={styles.link}>Inicia sesión</a>

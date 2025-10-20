@@ -16,6 +16,7 @@ export default function NossoCantoSp () {
 
     const { user, isAuthenticated, logout } = auth; // Desestruture após a verificação (ou diretamente se tiver certeza do Provider)
 
+    console.log(isAuthenticated, AuthContext)
     const handleLogout = () => {
         logout();
         // Se estiver usando react-router-dom, adicione: navigate('/login');

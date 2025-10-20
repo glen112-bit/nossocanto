@@ -1,45 +1,25 @@
-// server/models/User.ts
-
+// Exemplo de como deve ser o seu modelo User.js
 import mongoose from 'mongoose';
-import bcrypt from 'bcryptjs'; // Se necessário para o middleware 'pre-save'
 
-const { Schema } = mongoose;
-
-const UserSchema = new Schema({
-    username: {
-        type: String,
-        required: true,
+const userSchema = new mongoose.Schema({
+    // Campo crítico para o Passport rastrear usuários do Google
+    googleId: { 
+        type: String, 
         unique: true,
-        trim: true,
+        sparse: true // Permite que documentos sem este campo sejam criados (para login manual)
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true,
-        lowercase: true,
+    name: { type: String },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, minlength: 6 }, // Opcional, se você também permitir login manual
+
+    avatar: { type: String }, // Para armazenar a foto do perfil do Google
+    avatarUrl: { type: String, default: null }, // Armazenará o caminho ou URL da imagem
+    profileImagePath: { 
+        type: String, // Para armazenar o caminho onde a foto está salva
+        default: null 
     },
-    password: {
-        type: String,
-        required: true,
-    },
-    // ... outros campos
-});
+}, { timestamps: true });
 
-// Middleware para hash da senha antes de salvar
-UserSchema.pre('save', async function (next) {
-    if (!this.isModified('password')) {
-        return next();
-    }
-    try {
-        const salt = await bcrypt.genSalt(10);
-        this.password = await bcrypt.hash(this.password, salt);
-        next();
-    } catch (error) {
-        next(error);
-    }
-});
-
-
-// 🛑 Garanta que a exportação está no formato ESM
-const User = mongoose.model('User', UserSchema);
+const User = mongoose.model('User', userSchema);
 export default User;
+

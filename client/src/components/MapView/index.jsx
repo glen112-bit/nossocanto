@@ -11,7 +11,7 @@ export const MapView = ({width, heigth, lat, lng, text, className}) => {
     // const [office, setOffice] = useState();
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyBkZr2Nl6Y4UIbhmpYU1xATNQhKh_4bG6E",
+        googleMapsApiKey: "AIzaSyDW0aYcCfdsiu5-ItuULnTyZ6P2mL9eV2s",
     })
 const containerStyle = {
     width: width,

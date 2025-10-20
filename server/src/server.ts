@@ -1,74 +1,169 @@
+
 // 🛑 BLOCO DE CARREGAMENTO CRÍTICO (DEVE SER O PRIMEIRO) 🛑
 import dotenv from 'dotenv';
-import path from 'path'; 
+import path from 'path'; 
 import { fileURLToPath } from 'url';
-
-// 1. Definição de Caminho
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// 2. CONFIGURAÇÃO SÍNCRONA: Carrega o .env na raiz do projeto
-dotenv.config({
-    path: path.join(__dirname, '..', '.env'), 
-});
-
-// Verificação de segurança. Se isso ainda der FALSE, o arquivo .env não existe ou está vazio.
-console.log(`JWT Secret Loaded: ${!!process.env.JWT_SECRET ? 'TRUE' : 'FALSE'}`); 
+// ... (restante do bloco dotenv) ...
 // ------------------------------------------------------------
 
-
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 // --- AGORA, E SOMENTE AGORA, fazemos as importações restantes ---
-import express from 'express'; 
-import type { Express, Request, Response } from 'express'; // 2. Importa apenas os tipos (interfaces)
+import express from 'express'; 
+import type { Express, Request, Response } from 'express';
 import cors from 'cors';
-import connectDB from '../config/db.js'; // 🛑 Importar la función de conexión
-import mediaRouter from '../routes/mediaRoutes.ts'; // Usar .js para compatibilidade ESM
-import commentRouter from '../routes/commentRoutes.ts'; // Usar .js para compatibilidade ESM
-import authRouter from '../routes/authRoutes.ts'; // Usar .js para compatibilidade ESM
+import expressSession from 'express-session'; 
 
+import passport from 'passport';
+import { Strategy as GoogleStrategy } from 'passport-google-oauth20';
+import connectDB from '../config/db.js';
 
-// --- 1. CONFIGURAÇÃO INICIAL ---
+// 🚨 CORREÇÃO CRÍTICA: Mudar .ts para .js nos imports relativos para NodeNext/ESM
+import mediaRouter from '../routes/mediaRoutes.ts'; 
+import commentRouter from '../routes/commentRoutes.ts';
+import authRouter from '../routes/authRoutes.ts'; 
+import User from '../models/User.ts'; // ✅ CORRIGIDO: Deve ser .js// --- 1. CONFIGURAÇÃO INICIAL ---
 const app: Express = express();
 const PORT: number = parseInt(process.env.PORT || '3000', 10);
 
+// Define a URL do frontend a partir do .env
+const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+
+dotenv.config({
+    path: path.join(__dirname, '..', '.env')
+})
 // --- 2. MIDDLEWARE ---
 app.use(cors({
-  origin: 'http://localhost:5173', // A porta que seu React está usando (pode ser 3000 ou 5173)
+  origin: FRONTEND_URL, // Usa a variável do .env
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   credentials: true,
 })); 
 app.use(express.json()); 
-
+app.use(express.urlencoded({ extended: true })); 
 // Servir archivos estáticos (uploads)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// --- 3. INICIO DE LA APLICACIÓN ---
-// Usamos una función asíncrona para manejar la conexión antes de iniciar Express
+
+// --- 3. CONFIGURAÇÃO E MIDDLEWARE DO PASSPORT (Sessões) ---
+
+// Sessão Express: Passport usa sessões para manter o estado de autenticação
+app.use(expressSession({
+    secret: process.env.SESSION_SECRET || 'fallback_secret_key', // Usa chave do .env
+    resave: false,
+    saveUninitialized: false,
+    cookie: { 
+        maxAge: 24 * 60 * 60 * 1000, // 1 dia
+        secure: process.env.NODE_ENV === 'production', // Usa 'true' em produção (HTTPS)
+        sameSite: 'lax', // Permite que o cookie seja enviado em requisições OAuth
+    },
+}));
+
+// Inicializa o Passport e as sessões
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+// --- 4. CONFIGURAÇÃO DA ESTRATÉGIA DO GOOGLE ---
+
+// Serialização: Armazena apenas o ID do MongoDB na sessão
+passport.serializeUser((user: any, done) => {
+    // ✅ CORRIGIDO: Deve usar o ID interno do Mongoose (_id)
+    done(null, user._id); 
+});
+
+// Desserialização: Busca o usuário completo no MongoDB a partir do ID da sessão
+passport.deserializeUser(async (id: string, done) => {
+    try {
+        // ✅ IMPLEMENTAÇÃO REAL: Buscar o usuário no MongoDB pelo ID
+        const user = await User.findById(id); 
+        done(null, user);
+    } catch (err) {
+        done(err, null);
+    }
+});
+
+
+// Configura a estratégia do Google
+passport.use(new GoogleStrategy({
+    clientID: process.env.GOOGLE_CLIENT_ID!,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+    callbackURL: process.env.GOOGLE_CALLBACK_URL || "http://localhost:3000/auth/google/callback",
+},
+async (accessToken, refreshToken, profile, done) => {
+    try {
+        // ✅ LÓGICA COMPLETA DE USUÁRIO: Buscar ou Criar (Upsert)
+
+        // 1. Tenta encontrar o usuário pelo Google ID
+        let user = await User.findOne({ googleId: profile.id });
+
+        if (user) {
+            // Se o usuário existir, autentica
+            return done(null, user);
+        } else {
+            // Se o usuário NÃO existir, cria um novo
+            const email = profile.emails?.[0].value;
+            
+            if (!email) {
+                 return done(new Error('Email não fornecido pelo Google'), undefined);
+            }
+
+            const newUser = await User.create({
+                googleId: profile.id, // Armazenamos o ID do Google
+                name: profile.displayName,
+                email: email,
+                avatar: profile.photos?.[0].value,
+            });
+            
+            return done(null, newUser);
+        }
+
+    } catch (err) {
+        done(err as Error);
+    }
+}));
+
+// --- 5. INICIO DE LA APLICACIÓN ---
 const startServer = async () => {
     try {
         // 🛑 Llama a la función de conexión a la base de datos
         await connectDB(); 
 
-        // --- 4. RUTAS PRINCIPALES ---
+        // --- 6. ROTAS PRINCIPAIS E DE AUTENTICAÇÃO ---
         app.get('/', (req: Request, res: Response) => {
             res.send('Backend Server está funcionando!');
         });
-        // ✅ Montar o Roteador de Autenticação
+        
+        // ✅ Montar Roteadores
         app.use('/api/auth', authRouter); 
-
-        // ✅ Montar o Roteador de Mídia
         app.use('/api/media', mediaRouter); 
-
-        // ✅ Montar o Roteador de Comentários
         app.use('/api/comment', commentRouter);         
 
-        // Iniciar el servidor Express SÓLO después de la conexión exitosa
+        // ROTA 1: Inicia o fluxo de autenticação do Google
+        app.get('/auth/google',
+            passport.authenticate('google', { 
+                scope: ['profile', 'email']
+            })
+        );
+
+        // ROTA 2: Rota de callback após o Google autenticar
+        app.get('/auth/google/callback',
+            passport.authenticate('google', { 
+                // ✅ CORRIGIDO: Usa a URL completa do frontend para redirecionamento
+                failureRedirect: `${FRONTEND_URL}/#/login` 
+            }),
+            // Redireciona em caso de sucesso
+            (req: Request, res: Response) => {
+                // Redireciona para a página principal do frontend
+                res.redirect(`${FRONTEND_URL}/#/`);
+            }
+        );        
+        
+        // Iniciar el servidor Express SÓ após a conexão bem-sucedida
         app.listen(PORT, () => {
-            console.log(`🚀 Servidor Express rodando en la porta: http://localhost:${PORT}`);
+            console.log(`🚀 Servidor Express rodando na porta: http://localhost:${PORT}`);
         });
 
     } catch (error) {
-        // Si connectDB lanza un error, se maneja aquí (aunque connectDB ya hace process.exit(1))
         console.error('❌ Fallo al iniciar la aplicación:', error);
     }
 };

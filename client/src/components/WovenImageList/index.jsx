@@ -72,8 +72,6 @@ export default function WovenImageList() {
             }
         };   fetchData();
           }, []);
-        console.log(myVideo)
-        // console.log(myData)
 
         const Src = (index) => {
             setOpen(true)

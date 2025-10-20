@@ -1,6 +1,6 @@
 import express from 'express';
 import { protect  } from '../middlewares/authMiddleware.ts';
-import upload from '../middlewares/uploadMiddleware.ts';
+import { upload } from '../middlewares/uploadMiddleware.ts';
 import Media from '../models/Media.ts';
 
 const router = express.Router();
