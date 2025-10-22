@@ -8,7 +8,7 @@ const userSchema = new mongoose.Schema({
         unique: true,
         sparse: true // Permite que documentos sem este campo sejam criados (para login manual)
     },
-    name: { type: String },
+    username: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, minlength: 6 }, // Opcional, se você também permitir login manual
 

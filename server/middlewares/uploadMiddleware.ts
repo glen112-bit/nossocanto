@@ -8,7 +8,8 @@ import { fileURLToPath } from 'url';
 // --- Configuração de Caminho para ESM ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+// 1 Megabyte (MB) = 1024 * 1024 bytes
+const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB (Exemplo de limite ajustado)
 // --- 1. Configuração de Storage ---
 const storage = multer.diskStorage({
     // Define o destino do arquivo (a pasta onde será salvo)
@@ -43,6 +44,8 @@ export const upload: Multer = multer({
     storage: storage,
     fileFilter: fileFilter,
     limits: {
-        fileSize: 5 * 1024 * 1024, // Limite de 5MB por arquivo
+        // fileSize: 5 * 1024 * 1024, // Limite de 5MB por arquivo
+        // fileSize: MAX_FILE_SIZE,
+        fileSize: 100000000,
     }
 });

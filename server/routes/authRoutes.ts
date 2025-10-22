@@ -9,7 +9,7 @@ import { protect } from '../middlewares/authMiddleware.ts'; // Importe o middlew
 const router = express.Router();
 
 // Rota POST para registrar um novo usuário
-router.post('/register', upload.single('avatar') ,registerUser);
+router.post('/register', protect,  upload.single('avatar') ,registerUser);
 
 // Rota POST para autenticar e logar
 router.post('/login', loginUser);

@@ -1,7 +1,7 @@
 // server/src/routes/userRoutes.ts (Exemplo)
 
 import express from 'express';
-import { registerUser } from '../controllers/userController';
+import { registerUser } from '../controllers/authController';
 import { upload } from '../middleware/upload';
 
 const router = express.Router();

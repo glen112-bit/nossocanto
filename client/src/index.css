@@ -44,8 +44,17 @@ h1 {
   line-height: 2em;
   text-align: center;
 }
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+  padding: 0;
+}
 .title {
   font: 4, 2rem;
+  margin: 0;
+  padding: 0;
 }
 /* Regla crítica que afecta a todas las imágenes en la aplicación */
 /* ANULACIÓN FINAL Y AGRESIVA PARA TODAS LAS IMÁGENES */

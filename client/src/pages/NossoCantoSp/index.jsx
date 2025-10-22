@@ -15,27 +15,25 @@ export default function NossoCantoSp () {
     if (!auth) return <div>Erro: AuthContext não encontrado.</div>;
 
     const { user, isAuthenticated, logout } = auth; // Desestruture após a verificação (ou diretamente se tiver certeza do Provider)
+    // console.log(user, auth)
 
-    console.log(isAuthenticated, AuthContext)
-    const handleLogout = () => {
-        logout();
-        // Se estiver usando react-router-dom, adicione: navigate('/login');
+    // console.log(isAuthenticated, AuthContext)
+
+    const capitalize = (s) => {
+        if (!s) return 'Usuário';
+        return s.charAt(0).toUpperCase() + s.slice(1);
     };
-
-    return(
-        <section className = "borderCanto">
+        return(
+        <>
             {
                 isAuthenticated ? (
                     // 1. CONTEÚDO AUTENTICADO
                     <section className="nossocantosp">
                         
                         {/* 🛑 MOSTRAR NOME DO USUÁRIO E BOTÃO LOGOUT 🛑 */}
-                        <Typography variant="h4" component="h1" gutterBottom>
-                            Bem-vindo, {user?.username || 'Usuário'}!
+                        <Typography variant="h2" component="h1" >
+                            Bem-vindo, {capitalize(user?.username )|| 'Usuário'}!
                         </Typography>
-                        <Button variant="outlined" color="secondary" onClick={handleLogout} style={{marginBottom: '20px'}}>
-                            Sair (Logout)
-                        </Button>
                         
                         <MapView 
                         width='100vw' 
@@ -69,6 +67,6 @@ export default function NossoCantoSp () {
                     </div>
                 )
             }
-        </section>  
+        </>  
     )
 }

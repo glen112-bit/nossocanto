@@ -2,7 +2,7 @@
   "name": "nossocanto",
   "version": "1.0.0",
   "description": "",
-"type": "module",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev:server": "npm run dev --prefix server",
@@ -34,6 +34,7 @@
   "dependencies": {
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.3",
+    "lucide-react": "^0.546.0",
     "path": "^0.12.7"
   }
 }

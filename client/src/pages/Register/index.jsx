@@ -1,50 +1,81 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+// Eliminadas las importaciones de useNavigate y axios.
+// Se recomienda usar el sistema de navegación del componente App superior si está disponible.
+
+const REGISTER_URL = 'http://localhost:3000/api/auth/register'; 
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
-    const [profileImage, setProfileImage] = useState(null); // Para o objeto File
+    const [profileImage, setProfileImage] = useState(null); 
     const [loading, setLoading] = useState(false);
+    const [isRegistered, setIsRegistered] = useState(false); // Nuevo estado para éxito
+
+    // Manejar la selección del archivo
+    const handleFileChange = (event) => {
+        setProfileImage(event.target.files[0]); 
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
         setLoading(true);
-        // 1. Criar o objeto FormData
+        
+        // 1. Criar o objeto FormData (CORRECTO)
         const formData = new FormData();
         formData.append('username', username);
         formData.append('email', email);
         formData.append('password', password);
+
+        // O nome do campo no backend para a imagem deve ser 'avatar'
         if (profileImage) {
-            formData.append('profileImage', profileImage); 
+            formData.append('avatar', profileImage); 
         }
+
         try {
-            const response = await fetch('/api/auth/register', {
+            // CORRECCIÓN CLAVE: Enviar FormData como body, y NO especificar Content-Type
+            const response = await fetch(REGISTER_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ username, email, password }),
+                // ELIMINADA línea: headers: { 'Content-Type': 'application/json' },
+                body: formData, // Enviar el objeto FormData que incluye el archivo
             });
 
             const data = await response.json();
-
-            if (!response.ok) {
-                // Muestra el mensaje de error del backend (ej: "Email ya registrado")
-                setError(data.message || 'Error al crear la cuenta.');
-                setLoading(false);
-                return;
+            
+            if (response.ok) {
+                console.log('Registro exitoso:', data);
+                setIsRegistered(true); // Cambia a la vista de éxito
+            } else {
+                setError(data.message || 'Error en el registro. Inténtelo de nuevo.');
             }
-
-            // Registro e inicio de sesión automático exitoso
-            localStorage.setItem('userToken', data.token);
-            window.location.href = '/dashboard'; 
         } catch (err) {
-            setError('Error de conexión con el servidor.');
+            console.error('Error de red:', err);
+            setError('No se pudo conectar con el servidor. Verifique que su servidor backend esté activo en el puerto 3000 y tenga CORS habilitado.');
+        } finally {
             setLoading(false);
         }
     };
+
+    // Si el registro fue exitoso, muestra un mensaje de éxito (simulando la navegación)
+    if (isRegistered) {
+        return (
+            <div style={styles.pageContainer}>
+                <div style={styles.card}>
+                    <h2 style={styles.titleSuccess}>Registro Exitoso</h2>
+                    <p style={{ textAlign: 'center', color: '#555' }}>
+                        ¡Tu cuenta ha sido creada y la imagen de perfil ha sido subida!
+                    </p>
+                    {/* Botón para volver o navegar al login */}
+                    <button onClick={() => setIsRegistered(false)} style={{ ...styles.button, backgroundColor: '#1976d2', marginTop: '20px' }}>
+                        Volver al formulario
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
 
     return (
         <div style={styles.pageContainer}>
@@ -89,13 +120,20 @@ const Register = () => {
                             disabled={loading}
                         />
                     </div>
-                    <input 
-                        type="file" 
-                        name="profileImage" // Nome opcional, mas útil
-                        accept="image/*" // Permite apenas arquivos de imagem
-                        onChange={e => setProfileImage(e.target.files[0])} 
-                        required 
-                    />
+                    
+                    {/* Campo de carga de imagen */}
+                    <div style={{ ...styles.inputGroup, border: '1px dashed #ccc', padding: '10px', borderRadius: '8px' }}>
+                         <label style={{ ...styles.label, marginBottom: '5px' }}>Imagen de Perfil (Avatar)</label>
+                        <input 
+                            type="file" 
+                            name="profileImage" 
+                            accept="image/*" 
+                            onChange={handleFileChange} 
+                            // Eliminado 'required' para hacerlo opcional, ajustando la lógica de backend
+                            disabled={loading}
+                        />
+                    </div>
+
                     <button type="submit" style={styles.button} disabled={loading}>
                         {loading ? 'Registrando...' : 'Registrar'}
                     </button>
@@ -110,9 +148,8 @@ const Register = () => {
     );
 };
 
-// 2. Estilos limpios y consistentes (ajustando el color principal a verde)
+// 2. Estilos limpios y consistentes
 const styles = {
-    // Estilos del contenedor y tarjeta son idénticos al Login para consistencia
     pageContainer: {
         display: 'flex',
         justifyContent: 'center',
@@ -135,6 +172,13 @@ const styles = {
         color: '#333',
         fontSize: '24px',
         borderBottom: '2px solid #28a745', // Verde para registro
+        paddingBottom: '10px',
+    },
+    titleSuccess: {
+        textAlign: 'center',
+        marginBottom: '30px',
+        color: '#28a745',
+        fontSize: '24px',
         paddingBottom: '10px',
     },
     form: {

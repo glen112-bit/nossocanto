@@ -24,16 +24,18 @@ const Login = () => {
             });
 
             const data = await response.json();
-
             if (!response.ok) {
                 setError(data.message || 'Credenciales incorrectas.');
                 setLoading(false);
                 return;
             }
 
+// conole.log(response)
             // Lembre-se: idealmente você usaria o AuthContext aqui,
             // mas mantive a lógica original por enquanto.
             localStorage.setItem('userToken', data.token);
+            const user = localStorage.getItem('user');
+            console.log(user)
             window.location.hash = '/'; // Usando hash para React Router Hash
             window.location.reload()
         } catch (err) {

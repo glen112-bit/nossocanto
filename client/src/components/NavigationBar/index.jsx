@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import BottomNavigation from '@mui/material/BottomNavigation';
@@ -12,8 +11,10 @@ import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import Avatar from '@mui/material/Avatar';
 import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Ícono para Login
 import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Ícono para Register
+import LogoutIcon from '@mui/icons-material/Logout'; // Ícone para Logout
 import { useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper'; 
+import { AuthContext } from '../../context/AuthContext'
 
 // URL externa para mayor claridad
 const AIRBNB_URL = "https://www.airbnb.com.br/rooms/1337549417158200548?location=Centro%2C%20São%20Paulo&...";
@@ -24,47 +25,39 @@ const SERVER_BASE_URL = 'http://localhost:3000'; 
 const NAVIGATION_BAR_HEIGHT = 56;
 
 export default function NavigationBar() {
-    // Estado temporal para simular el estado de autenticación (idealmente vía Context/Redux)
-    const [user, setUser] = React.useState(null); 
-    const [loading, setLoading] = React.useState(true);
 
-    // Función de búsqueda (Simulación del 'useAuth')
-    async function fetchCurrentUser() {
-        try {
-            const response = await fetch('/api/auth/me', {
-                method: 'GET',
-                credentials: 'include', 
-                headers: { 'Content-Type': 'application/json' },
-            });
+    const auth = React.useContext(AuthContext);
+    // Obtém user, isAuthenticated e logout do AuthContext
+    const { user, isAuthenticated, logout } = auth; 
+    
+    // Você não precisa de um estado 'user' local se estiver usando o Context
+    // const [user, setUser] = React.useState(null); 
+    const [loading, setLoading] = React.useState(false); // Mudado para false e removida a lógica de fetch local
 
-            if (response.ok) {
-                const data = await response.json();
-                setUser(data.user);
-                return data.user;
-            } else {
-                setUser(null);
-                return null;
-            }
-        } catch (error) {
-            console.error('Error al buscar usuario:', error);
-            setUser(null);
-            return null;
-        } finally {
-            setLoading(false);
-        }
-    }
-
-    React.useEffect(() => {
-        fetchCurrentUser();
-    }, []);
-
-    // Función auxiliar para construir la URL de la imagen de perfil
-    const getProfileUrl = (path) => {
-        if (!path) return null;
-        return `${SERVER_BASE_URL}/${path.replace(/\\/g, '/')}`;
+    const navigate = useNavigate()
+    const handleLogout = () => {
+        logout();
+        navigate('/')
     };
 
-    const navigate = useNavigate();
+    // Removendo a função fetchCurrentUser e o useEffect relacionado, pois a lógica de autenticação
+    // e re-hidratação deve estar totalmente contida no AuthProvider (AuthContext.jsx).
+    
+    // React.useEffect(() => {
+    //     fetchCurrentUser();
+    // }, [isAuthenticated]);
+
+    // Función auxiliar para construir la URL de la imagen de perfil
+    // A propriedade para avatar do Google/local é 'avatar' (não 'profileImageUrl')
+    const getProfileUrl = (path) => {
+        if (!path) return null;
+        // Se for um caminho relativo (upload local), constrói o URL completo.
+        // Se for um URL absoluto (Google), o 'path' já será o URL completo.
+        return path.startsWith('http') || path.startsWith('data:') 
+            ? path 
+            : `${SERVER_BASE_URL}/${path.replace(/\\/g, '/')}`;
+    };
+
     const { pathname } = window.location;
 
     // Mapeo de valores para la navegación activa (Solo para las rutas del BottomNavigation)
@@ -85,9 +78,9 @@ export default function NavigationBar() {
 
     React.useEffect(() => {
         setValue(initialValue);
-        // Si estamos en /login, /register, o /profile, deseleccionamos todos los botones principales
+        // Se estivermos em /login, /register, ou /profile, deselecionamos todos os botões principais
         if (['/login', '/register', '/profile'].includes(pathname.toLowerCase())) {
-            setValue(-1); 
+            setValue(-1); 
         }
     }, [initialValue, pathname]);
 
@@ -106,79 +99,85 @@ export default function NavigationBar() {
             case 6: // Airbnb (Link externo)
                 window.open(AIRBNB_URL, "_blank");
                 break;
-            default: 
+            default: 
                 // No navegar por defecto si no es una de las rutas definidas
                 break;
         }
     };
 
-    // Renderiza la parte de Acceso/Perfil (AHORA SIEMPRE FUERA DEL BottomNavigation PRINCIPAL)
+    // Renderiza la parte de Acceso/Perfil
     const UserProfileContent = () => {
-        // Si está cargando, no muestra nada
-        if (loading) {
-            return null; 
-        }
-
-        // Caso: Usuario NO autenticado -> Mostrar Login y Register
+        // Se o user está null (deslogado)
         if (!user) {
-            // Determinamos si el botón activo debe ser Login o Register
+            // Determinamos se o botão ativo deve ser Login ou Register
             const isLoginPage = pathname.toLowerCase() === '/login';
             const isRegisterPage = pathname.toLowerCase() === '/register';
 
             return (
                 <>
-                    {/* Botón de LOGIN */}
+                    {/* Botão de LOGIN */}
                     <BottomNavigationAction 
                         label="Login" 
                         icon={<VpnKeyIcon />} 
-                        onClick={() => {setValue(-1); navigate("/login");}} // Deseleccionar principal
+                        onClick={() => {setValue(-1); navigate("/login");}} 
                         sx={{ minWidth: 'auto', p: 0.5 }}
                         showLabel
-                        value={isLoginPage ? 99 : undefined} // Usamos un valor alto para activarlo
+                        value={isLoginPage ? 99 : undefined} // Ativa se estiver na rota /login
                     />
-                    {/* Botón de REGISTER */}
+                     {/* Botão de REGISTER */}
                     <BottomNavigationAction 
                         label="Registro" 
                         icon={<AccountCircleIcon />} 
-                        onClick={() => {setValue(-1); navigate("/register");}} // Deseleccionar principal
+                        onClick={() => {setValue(-1); navigate("/register");}}
                         sx={{ minWidth: 'auto', p: 0.5 }}
                         showLabel
-                        value={isRegisterPage ? 99 : undefined}
-                    />
+                        value={isRegisterPage ? 99 : undefined} // Ativa se estiver na rota /register
+                    /> 
                 </>
             );
         }
 
-        // Caso: Usuario autenticado -> Mostrar Perfil (Avatar)
-        const profileUrl = getProfileUrl(user.profileImageUrl);
+        // Caso: Usuário autenticado -> Mostrar Perfil (Avatar) e Logout
+        const profileUrl = getProfileUrl(user.avatar); // USAR user.avatar
         const isActive = pathname.toLowerCase() === '/profile';
 
         return (
-            // Acción de Perfil: Muestra el primer nombre o "Perfil"
-            <BottomNavigationAction
-                label={user.name ? user.name.split(' ')[0] : "Perfil"}
-                onClick={() => {setValue(-1); navigate("/profile");}} // Deseleccionar principal y navegar
-                showLabel
-                icon={
-                    <Avatar 
-                        alt={user.name} 
-                        src={profileUrl || undefined} 
-                        sx={{ 
-                            width: 24, 
-                            height: 24, 
-                            cursor: 'pointer',
-                            border: isActive ? '2px solid' : 'none',
-                            borderColor: 'primary.main',
-                            boxSizing: 'content-box'
-                        }}
-                    >
-                        {/* Fallback para la primera letra o ícono de Persona */}
-                        {!profileUrl && (user.name ? user.name[0] : <PersonIcon />)}
-                    </Avatar>
-                }
-                sx={{ minWidth: 'auto', p: 0.5 }}
-                value={isActive ? 99 : undefined}
-            />
+            <>
+                {/* AÇÃO DE PERFIL: Muestra el Avatar y el nombre (o "Perfil") */}
+                <BottomNavigationAction
+                    label={user.name ? user.name.split(' ')[0] : "Perfil"}
+                    onClick={() => {setValue(-1); navigate("/profile");}} // Deseleccionar principal y navegar
+                    showLabel
+                    icon={
+                        <Avatar 
+                            alt={user.name} 
+                            src={profileUrl || undefined} 
+                            sx={{ 
+                                width: 24, 
+                                height: 24, 
+                                cursor: 'pointer',
+                                border: isActive ? '2px solid' : 'none',
+                                borderColor: 'primary.main',
+                                boxSizing: 'content-box'
+                            }}
+                        >
+                            {/* Fallback para a primeira letra ou ícono de Persona */}
+                            {!profileUrl && (user.name ? user.name[0] : <PersonIcon />)}
+                        </Avatar>
+                    }
+                    sx={{ minWidth: 'auto', p: 0.5 }}
+                    value={isActive ? 99 : undefined}
+                />
+
+                {/* AÇÃO DE LOGOUT (Botão separado) */}
+                <BottomNavigationAction
+                    label="Sair"
+                    icon={<LogoutIcon />}
+                    onClick={handleLogout}
+                    sx={{ minWidth: 'auto', p: 0.5 }}
+                    showLabel
+                />
+            </>
         );
     };
 
@@ -209,7 +208,7 @@ export default function NavigationBar() {
                 >
                     {/* 0. Home */}
                     <BottomNavigationAction label="Home" value={0} icon={<HomeIcon />}/> 
-                    {/* 1. Reglas */}
+                    {/* 1. Regras */}
                     <BottomNavigationAction label="Regras" value={1} icon={<AssignmentLateIcon />}/> 
                     {/* 2. Lugares */}
                     <BottomNavigationAction label="Lugares" value={2} icon={<MapIcon/>}/>
@@ -232,4 +231,3 @@ export default function NavigationBar() {
         </Box>
     );
 }
-

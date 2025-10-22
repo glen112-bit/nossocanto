@@ -8,6 +8,21 @@ import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+const envResult = dotenv.config({ // Capturamos el resultado para debug
+    path: path.join(__dirname, '..', '.env')
+})
+
+// --- INÍCIO DO DEBUGGING: VERIFICAR VARIÁVEL SECRETA ---
+if (envResult.error) {
+    console.error('❌ ERRO AO CARREGAR .env:', envResult.error.message);
+} else {
+    // Verificamos se o JWT_SECRET foi carregado com sucesso
+    if (process.env.JWT_SECRET) {
+        console.log('✅ JWT_SECRET CARREGADO com sucesso. (Primeiros 5 caracteres):', process.env.JWT_SECRET.substring(0, 5) + '...');
+    } else {
+        console.error('⚠️ ATENÇÃO: JWT_SECRET NÃO FOI ENCONTRADO em process.env, verifique seu arquivo .env.');
+    }
+}
 // --- AGORA, E SOMENTE AGORA, fazemos as importações restantes ---
 import express from 'express'; 
 import type { Express, Request, Response } from 'express';
@@ -36,6 +51,7 @@ dotenv.config({
 app.use(cors({
   origin: FRONTEND_URL, // Usa a variável do .env
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+
   credentials: true,
 })); 
 app.use(express.json()); 

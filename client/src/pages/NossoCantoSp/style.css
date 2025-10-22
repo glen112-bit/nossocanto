@@ -15,12 +15,34 @@
   margin-top: 6rem;
   /* background-color: transparent; */
 }
+.nossocantosp h1 {
+  /* Tornar o texto grande e muito audacioso (bold) */
+  font-size: 2.5rem;
+  font-weight: 900; /* Extra bold para impacto */
+  color: #333333; /* Cinza escuro para suavizar o preto puro */
+  margin-bottom: 5px;
+  padding-bottom: 10px; /* Adiciona espaço para o sublinhado */
 
+  /* 💡 Efeito Moderno: Sublinhado sutil e cor de destaque */
+  border-bottom: 4px solid #007bff; /* Linha azul de destaque */
+  display: inline-block; /* Faz a linha se ajustar ao tamanho do texto */
+  line-height: 1.2;
+}
+
+.nossocantosp .MuiButton-root {
+  /* Isso garante que o botão de logout siga o alinhamento do título */
+  margin-top: 20px;
+  margin-bottom: 40px;
+  /* Estilo de botão "ghost" ou sem fundo para minimalismo */
+  border: 1px solid #007bff;
+  color: #007bff;
+}
 h1 {
   margin: 0 auto;
   width: 100%;
   font-size: 3.6em;
 }
+
 @media (width: 600px) {
   /* Estilizações CSS */
   h1 {
