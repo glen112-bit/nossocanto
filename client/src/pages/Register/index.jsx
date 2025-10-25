@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate  } from "react-router-dom";
 // Eliminadas las importaciones de useNavigate y axios.
 // Se recomienda usar el sistema de navegación del componente App superior si está disponible.
 
@@ -69,7 +70,7 @@ const Register = () => {
                     </p>
                     {/* Botón para volver o navegar al login */}
                     <button onClick={() => setIsRegistered(false)} style={{ ...styles.button, backgroundColor: '#1976d2', marginTop: '20px' }}>
-                        Volver al formulario
+Login
                     </button>
                 </div>
             </div>
