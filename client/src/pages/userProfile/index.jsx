@@ -1,119 +1,180 @@
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../context/AuthContext'; // Assumindo que você usa um contexto
 import { useNavigate } from 'react-router-dom'; // Para redirecionar após logout
+import { LogOut, User, Mail, Hash } from 'lucide-react'; // Ícones modernos
+import './style.css'
 
 // --- Assuma que esta é a URL base do seu backend para uploads ---
-const BACKEND_URL = 'http://localhost:3000'; 
+const BACKEND_URL = 'http://localhost:3000';
 
 function ProfilePage() {
     // Substitua 'AuthContext' pelo seu método real de gerenciamento de estado global
-    const { user, logout } = useContext(AuthContext); 
+    const { user, logout } = useContext(AuthContext);
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
     // Função auxiliar para obter a URL correta da imagem
     const getProfilePictureUrl = (path) => {
-        // Se for uma URL externa (Google), retorna a URL diretamente
         // Se o caminho for nulo ou vazio, retorna o avatar padrão
         if (!path) {
             // Retorna um avatar gerado se o nome/email estiver disponível
-            const initials = user?.username ? user.username.split(' ').map(n => n[0]).join('') : 'U';
-            return `https://ui-avatars.com/api/?name=${initials}&background=3B82F6&color=fff&size=128`;
+            const nameToUse = user?.name || user?.username || user?.email?.split('@')[0];
+            const initials = nameToUse ? nameToUse.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+            // Avatar mais moderno com cor primária
+            return `https://ui-avatars.com/api/?name=${initials}&background=1D4ED8&color=FFFFFF&size=128&bold=true`;
         }
-            if (path && path.startsWith('http')) {
-                return path;
+        
+        // Se for uma URL externa (Google, etc.), retorna a URL diretamente
+        if (path && path.startsWith('http')) {
+            return path;
+        }
+        
+        // Se for um caminho local (Multer), constrói a URL completa
+        if (path) {
+            // IMPORTANTE: Se o Multer salvar caminhos com '\', substitua por '/'
+            const normalizedPath = path.replace(/\\/g, '/');
+            // Tenta isolar o caminho relativo após /uploads/
+            const parts = normalizedPath.split('/uploads/');
+            const relativePath = parts.length > 1 ? parts[parts.length - 1] : '';
+            
+            if( !relativePath ) {
+                // Fallback mais seguro ou debug
+                console.warn("Caminho do Multer não pôde ser normalizado corretamente:", path);
+                return getProfilePictureUrl(null); // Volta para o avatar de iniciais
             }
-            // Se for um caminho local (Multer), constrói a URL completa
-            // O path do Multer provavelmente precisa de ajuste (ex: remover 'server\' do caminho)
-
-            if (path) {
-                // IMPORTANTE: Se o Multer salvar caminhos com '\', substitua por '/'
-                const normalizedPath = path.replace(/\\/g, '/');
-                const parts = normalizedPath.split('/uploads/');
-                const relativePath = parts.length > 1 ? parts[parts.length - 1] : '';
-                if( !relativePath ) {
-                    return `${BACKEND_URL}/uploads/DEFAULT_IMAGE_NOT_FOUND_CHECK_LOGIC`;   
-                }
-                return `${BACKEND_URL}/uploads/${relativePath}`;
-            }
-            // Retorna um avatar padrão se não houver imagem
-            return '/default-avatar.png'; 
+            
+            // Retorna a URL completa
+            return `${BACKEND_URL}/uploads/${relativePath}`;
+        }
+        
+        // Retorna um avatar padrão se todas as outras verificações falharem
+        return getProfilePictureUrl(null); 
     };
 
     // Lógica de Logout
     const handleLogout = () => {
         setIsLoading(true);
-        // Chama a função de logout do seu Context/Redux
-        logout(); 
-        setIsLoading(false);
-        navigate('/login');
+        // Simulação de delay para a requisição de logout (melhora a UX)
+        setTimeout(() => {
+            logout();
+            setIsLoading(false);
+            navigate('/login');
+        }, 500); // 500ms de delay
     };
 
     if (!user) {
-        // Exibe enquanto carrega ou se não estiver logado (deve redirecionar)
-        return <div className="text-center p-8">Carregando perfil...</div>;
+        // Exibe um carregamento mais elegante
+        return (
+            <div className="flex justify-center items-center min-h-screen bg-gray-50">
+                <div className="text-center p-12 bg-white rounded-xl shadow-lg animate-pulse">
+                    <p className="text-xl font-medium text-blue-600">Carregando Perfil...</p>
+                </div>
+            </div>
+        );
     }
-    console.log(user)
+    
+    // Obter a URL da imagem de perfil
+    const profilePicUrl = getProfilePictureUrl(user.userImagePath || user.profileImageUrl || user.avatarUrl);
+
     // Estrutura do Perfil
     return (
-        <div className="flex justify-center items-center min-h-screen bg-gray-100 p-4">
-            <div className="bg-white shadow-xl rounded-lg p-8 w-full max-w-md">
-
-                {/* Cabeçalho do Perfil (Imagem e Nome) */}
-                <div className="flex flex-col items-center border-b pb-6 mb-6">
+        <div className="profile-container"> 
+        {/* Cartão do Perfil */}
+        <div className="profile-card">
+            
+            {/* Cabeçalho do Perfil (Imagem e Nome) */}
+            <div className="profile-header">
+                <div className="relative">
                     <img
-                        className="w-24 h-24 object-cover rounded-full mb-4 border-4 border-blue-500"
-                        src={getProfilePictureUrl(user.userImagePath || user.profileImageUrl || user.avatarUrl)} 
+                        className="profile-avatar" // ⬅️ Classe CSS
+                        src={profilePicUrl}
                         alt={`Foto de Perfil de ${user.name || user.username}`}
                         onError={(e) => {
-                            console.error("Erro ao carregar a imagem, URL sendo usada:", e.target.src);
-                            // Fallback se a imagem falhar ao carregar
                             e.target.src = getProfilePictureUrl(null); 
+                            e.target.onerror = null; 
                         }}
-                        // style={{'maxWith: 120px'}}
-                        />
-                            <h1 className="text-3xl font-bold text-gray-800">
-                                {user.name || user.username || 'Usuário'}
-                            </h1>
-                                <p className="text-sm text-gray-500">{user.email}</p>
-                                </div>
+                    />
+                </div>
 
-                                {/* Detalhes e Estatísticas */}
-                                <div className="space-y-4">
-                                    <h2 className="text-xl font-semibold text-gray-700 border-b pb-2">Informações da Conta</h2>
+                <h1 className="profile-name">
+                    {user.name || user.username || 'Usuário Desconhecido'}
+                </h1>
+                <p className="profile-email">{user.email}</p>
+            </div>
 
-                                    {/* Linha de Detalhes: Email */}
-                                    <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-                                        <span className="font-medium text-gray-600">Email:</span>
-                                        <span className="text-gray-800">{user.email}</span>
-                                    </div>
+            {/* Detalhes da Conta */}
+            <div className="details-section">
+                <h2 className="details-title flex items-center">
+                    {/* Ícone adicionado aqui para manter a funcionalidade visual, mas a classe CSS principal é 'details-title' */}
+                    {/* Ícones como 'User' não são do CSS Puro, mas mantidos para a funcionalidade React */}
+                    <User className="w-5 h-5 mr-2 text-indigo-500"/> Informações da Conta
+                </h2>
 
-                                    {/* Linha de Detalhes: ID (Opcional) */}
-                                    <div className="flex justify-between p-3 bg-gray-50 rounded-lg">
-                                        <span className="font-medium text-gray-600">ID de Usuário:</span>
-                                        <span className="text-gray-800 text-sm">{user.id}</span>
-                                    </div>
+                {/* Linha de Detalhes: Email */}
+                <div className="detail-item">
+                    <span className="detail-label flex items-center">
+                        <Mail className="w-5 h-5 mr-2 text-indigo-600"/> Email:
+                    </span>
+                    <span className="detail-value">{user.email}</span>
+                </div>
 
-                                    {/* Botão de Logout */}
-                                    <button
-                                        onClick={handleLogout}
-                                        disabled={isLoading}
-                                        className="w-full mt-6 py-2 px-4 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-300 disabled:opacity-50"
-                                    >
-                                        {isLoading ? 'Saindo...' : 'Sair da Conta'}
-                                    </button>
+                {/* Linha de Detalhes: Nome de Usuário (se diferente do Nome) */}
+                {(user.username && user.username !== user.name) && (
+                    <div className="detail-item">
+                        <span className="detail-label flex items-center">
+                            <User className="w-5 h-5 mr-2 text-indigo-600"/> Usuário:
+                        </span>
+                        <span className="detail-value">{user.username}</span>
+                    </div>
+                )}
 
-                                    {/* Botão de Edição (Opcional) */}
-                                    {/* <button className="w-full mt-3 py-2 px-4 border border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-50 transition duration-300">
-                                        Editar Perfil
-                                        </button> */}
-                                </div>
-                                </div>
-                                </div>
+                {/* Linha de Detalhes: ID (Opcional) */}
+                {user.id && (
+                    <div className="detail-item">
+                        <span className="detail-label flex items-center">
+                            <Hash className="w-5 h-5 mr-2 text-gray-500"/> ID de Usuário:
+                        </span>
+                        <span className="detail-value">{user.id}</span>
+                    </div>
+                )}
+
+                {/* Botão de Logout */}
+                <button
+                    onClick={handleLogout}
+                    disabled={isLoading}
+                    className="btn-logout" // ⬅️ Classe CSS
+                >
+                    {/* O spinner de carregamento (SVG) precisa das classes do Tailwind para animação, ou você precisará adicionar animação/estilo CSS puro. */}
+                    {isLoading ? (
+                        <>
+                            {/* Este SVG usa classes Tailwind (animate-spin) - se o Tailwind não estiver presente, a animação não funcionará. */}
+                            {/* Para CSS Puro, você precisaria definir a regra @keyframes 'spin' no seu ProfilePage.css */}
+                            <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Saindo...
+                        </>
+                    ) : (
+                        <>
+                            <LogOut className="w-5 h-5 mr-2" /> Sair da Conta
+                        </>
+                    )}
+                </button>
+
+                {/* Botão de Edição (Opcional) */}
+                <button 
+                    onClick={() => alert("Funcionalidade de Edição (Navegar para /edit-profile)")}
+                    className="btn-edit" // ⬅️ Classe CSS
+                >
+                    Editar Perfil
+                </button>
+            </div>
+        </div>
+    </div> 
+
+
     );
-                        }
+}
 
-                        // ⚠️ Importante: Lembre-se de importar o AuthContext, bcrypt e jwt em seus arquivos de backend e rotas
-                        // e garantir que os dados do usuário estejam disponíveis via user.name, user.email, etc.
-
-                        export default ProfilePage;
+export default ProfilePage;
