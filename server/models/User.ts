@@ -11,14 +11,8 @@ const userSchema = new mongoose.Schema({
     username: { type: String },
     email: { type: String, required: true, unique: true },
     password: { type: String, minlength: 6 }, // Opcional, se você também permitir login manual
-
-    avatar: { type: String }, // Para armazenar a foto do perfil do Google
-    avatarUrl: { type: String, default: null }, // Armazenará o caminho ou URL da imagem
-    profileImagePath: { 
-        type: String, // Para armazenar o caminho onde a foto está salva
-        default: null 
-    },
-}, { timestamps: true });
+    userImagePath: { type: String, default: null },
+    }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 export default User;
