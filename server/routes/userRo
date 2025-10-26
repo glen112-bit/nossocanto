@@ -1,0 +1,51 @@
+// server/src/routes/userRoutes.ts (Exemplo)
+
+import express from 'express';
+import { registerUser } from '../controllers/authController';
+import { authenticate } from '../middlewares/authMiddleware';
+import { upload } from '../middleware/upload';
+import { userController } from '../controllers/userController'
+
+
+import { getProfile, updateUserDetails, updateAvatar } from '../controllers/userController.ts'; 
+import { protect, uploadMiddleware } from '../middleware/authMiddleware.ts'; // Importa o middleware
+
+const router = express.Router();
+
+/**
+ * @route GET /api/users/edit-profile
+ * @description Rota para obter detalhes do perfil do usuário logado.
+ * @access Private
+ */
+router.get('/edit-profile', protect, getProfile);
+
+/**
+ * @route PATCH /api/users/edit-profile
+ * @description Rota para atualizar detalhes de texto do perfil (nome, email, senha).
+ * @access Private
+ */
+router.patch('/edit-profile', protect, updateUserDetails);
+
+
+/**
+ * @route PATCH /api/users/update-avatar
+ * @description Rota para fazer upload e atualizar a imagem do perfil (avatar).
+ * @access Private
+ */
+router.patch('/update-avatar', protect, uploadMiddleware, updateAvatar);
+// A rota agora espera 'username', 'email', 'password' (textos) 
+// E um arquivo chamado 'profileImage' (file)
+router.patch(
+    '/update-avatar',
+    authenticate,
+    upload.single('avatar'),
+    userController.updateAvatar
+)
+
+router.post(
+    '/register', 
+    upload.single('profileImage'), // O nome 'profileImage' deve corresponder ao campo do formulário do frontend
+    registerUser
+);
+
+export default router;

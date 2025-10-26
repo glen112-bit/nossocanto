@@ -23,7 +23,7 @@ function ProfilePage() {
             // Avatar mais moderno com cor primária
             return `https://ui-avatars.com/api/?name=${initials}&background=1D4ED8&color=FFFFFF&size=128&bold=true`;
         }
-        
+            console.log('datos de usuario: ', user)
         // Se for uma URL externa (Google, etc.), retorna a URL diretamente
         if (path && path.startsWith('http')) {
             return path;
@@ -36,7 +36,9 @@ function ProfilePage() {
             // Tenta isolar o caminho relativo após /uploads/
             const parts = normalizedPath.split('/uploads/');
             const relativePath = parts.length > 1 ? parts[parts.length - 1] : '';
-            
+            console.log('1. Caminho Original:', path);
+    console.log('2. Caminho Relativo:', relativePath);
+    console.log('3. URL FINAL:', `${BACKEND_URL}/uploads/${relativePath}`); // 🛑 VERIFIQUE ESTA URL
             if( !relativePath ) {
                 // Fallback mais seguro ou debug
                 console.warn("Caminho do Multer não pôde ser normalizado corretamente:", path);
@@ -164,7 +166,7 @@ function ProfilePage() {
 
                 {/* Botão de Edição (Opcional) */}
                 <button 
-                    onClick={() => alert("Funcionalidade de Edição (Navegar para /edit-profile)")}
+                    onClick={() => navigate('/edit-profile')}
                     className="btn-edit" // ⬅️ Classe CSS
                 >
                     Editar Perfil

@@ -34,6 +34,8 @@ const Login = () => {
             // Lembre-se: idealmente você usaria o AuthContext aqui,
             // mas mantive a lógica original por enquanto.
             localStorage.setItem('userToken', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user))
+
             const user = localStorage.getItem('user');
             console.log(user)
             window.location.hash = '/'; // Usando hash para React Router Hash
