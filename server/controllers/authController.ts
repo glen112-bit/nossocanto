@@ -5,7 +5,7 @@ import * as fs from 'fs/promises';
 import User from '../models/User.ts'; // Alterado para .js para consistência ESM
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-
+import { generateToken } from '../utils/generateToken.ts'; // Ou onde esta função estiver
 // A lógica de configuração do Passport (estrategias, serialize/deserialize)
 // foi removida daqui. A configuração do Google já está correta em server.ts.
 
@@ -31,64 +31,56 @@ const UserPlaceholder = {
 const bcryptPlaceholder = { hash: async (p: string) => p + '_hashed' }; // Placeholder para hashing
 const jwtPlaceholder = { sign: (p: any) => 'dummy_token' }; // Placeholder para JWT
 // --- FIM PLACEHOLDERS ---
-const generateToken = (id: string): string => {
-      if(!process.env.JWT_SECRET) {
-            throw new Error('JWT_SECRET must be configured');
-        }
-        return jwt.sign({ id }, process.env.JWT_SECRET as string,  {
-              expiresIn: '30d',
-          });
-};
-export const getMe = async (req: AuthRequest, res: Response) => {
-  // O ID do usuário é anexado à requisição pelo middleware 'protect'
-  const userId = req.userId;
+// const generateToken = (id: string): string => {
+  //     if(!process.env.JWT_SECRET) {
+    //         throw new Error('JWT_SECRET must be configured');
+    //     }
+    //     return jwt.sign({ id }, process.env.JWT_SECRET as string,  {
+      //         expiresIn: '30d',
+      //     });
+// };
+//
 
-  if (!userId) {
-    // Isso não deve acontecer se o middleware estiver funcionando, mas é uma segurança.
-    return res.status(401).json({ message: 'Não autorizado, ID do usuário ausente.' });
-  }
-  async function fetchProtectedData() {
-    const token = localStorage.getItem('userToken');
 
-    if (!token) {
-      throw new Error("Usuário não logado");
+export const getMe = async (req: Request, res: Response) => {
+    // 1. O middleware 'protect' ou 'authenticate' DEVE ter populado req.user
+    // Se estiver usando TypeScript, você pode precisar estender a interface Request.
+    const userObject = (req as any).user;
+    
+    // 2. Verifica se o usuário autenticado existe na requisição.
+    // Se o middleware de proteção funcionou, userObject deve existir.
+    if (!userObject || !userObject._id) {
+        // Se este erro ocorrer, significa que o Middleware falhou.
+        // O cliente não deveria nem chegar aqui sem autenticação.
+        console.warn('Tentativa de acesso a /me sem req.user. Verifique o Middleware de Proteção.');
+        return res.status(401).json({ message: 'Não autorizado. Usuário não autenticado.' });
     }
 
-    const response = await fetch('/api/media', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}` // <--- ENVIA O TOKEN AQUI
-      },
-      // Não use 'credentials: include' junto com o JWT, a menos que você também precise de cookies.
-    });
-    // ...
-  }
-  try {
-    // Busca o usuário pelo ID, mas exclui a senha
-    const user = await User.findById(userId).select('-password');
+    try {
+        // Usa o ID REAL (que deve ser um ObjectId válido, como string)
+        const userId = userObject._id; 
+        
+        // Busca o usuário no banco de dados.
+        const user = await User.findById(userId).select('-password'); 
 
-    if (user) {
-      // ✅ CORRETO: Retorna os dados do usuário no formato esperado pelo frontend
-      return res.status(200).json({
-        message: 'Dados do usuário recuperados com sucesso.',
-        user: {
-          id: user._id,
-          username: user.username,
-          // profileImageUrl: user.profileImageUrl,
-          userImagePath: user.userImagePath,
-          email: user.email,
-          // Inclua quaisquer outros campos que você precise (ex: avatar, name)
+        if (!user) {
+            // Se o ID for válido, mas o usuário foi deletado do DB
+            return res.status(404).json({ message: 'Usuário não encontrado no banco de dados.' });
         }
-      });
-    } else {
-      return res.status(404).json({ message: 'Usuário não encontrado.' });
+
+        res.status(200).json(user);
+
+    } catch (error) {
+        console.error('Erro ao buscar dados do usuário /me:', error);
+        // O erro CastError ocorre antes do bloco catch, mas se a lógica acima for corrigida
+        // ele será evitado. Mantenha o tratamento de erro genérico para outros problemas.
+        res.status(500).json({ message: 'Erro interno ao buscar perfil.' });
     }
-  } catch (error) {
-    console.error('Erro ao buscar dados do usuário /me:', error);
-    return res.status(500).json({ message: 'Erro no servidor ao buscar dados do usuário.' });
-  }
 };
+
+
+
+
 /**
  * Lida com o registro de novos usuários com credenciais de email/senha.
  */
@@ -144,7 +136,7 @@ export const registerUser = async(req: Request, res: Response) => {
       user: {
         id: newUser._id, // Usar _id do Mongoose
         username: newUser.username,
-        password: hashedPassword,
+        // password: hashedPassword,
         email: newUser.email,
         // profileImagePath: newUser.profileImagePath
         userImagePath: avatarPath,

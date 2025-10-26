@@ -6,7 +6,8 @@ import Rules from "./pages/Rules"
 import Places from "./pages/Places"
 import Login from "./pages/Login"
 import Register from "./pages/Register"
-import UserProfile from "./pages/userProfile"
+import UserProfile from "./pages/UserProfile"
+import EditProfile from "./pages/EditProfile"
 import { RouterProvider, createHashRouter } from 'react-router-dom'
 
 
@@ -67,7 +68,16 @@ const router = createHashRouter([
             <Header text="NossoCantoSp"/>
             <UserProfile/>
         </>
+    },
+    {
+        path: "/edit-profile",
+        element:
+        <>
+            <Header text="NossoCantoSp"/>
+            <EditProfile/>
+        </>
     }
+
 
 
 ])
