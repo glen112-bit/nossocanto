@@ -1,44 +1,51 @@
+// server/middlewares/uploadMiddleware.ts
 import multer from 'multer';
 import type { Multer } from 'multer';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import fs from 'fs';
+import * as fs from 'fs';
+// 💡 CORREÇÃO/SIMPLIFICAÇÃO: Importe o Request e Response diretamente
+import express from 'express';
+import type { Request, Response } from 'express'; 
+
+// --- Tipagem para a Requisição do Express (CustomRequest) ---
+// Extende a interface Request (importada do 'express') para incluir propriedades personalizadas
+interface CustomRequest extends Request {
+    // Tipagem segura para req.user (que será populado por middlewares)
+    user?: { _id?: string | number; id?: string | number; [key: string]: any }; 
+    uploadedFilename?: string; 
+    // Express.Multer.File é o tipo correto para o arquivo adicionado pelo Multer
+    file?: Express.Multer.File; 
+}
 
 // --- Configuração de Caminho para ESM ---
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// UPLOADS_ROOT_DIR aponta para /nossocanto/uploads
-// Deve subir dois níveis a partir de /server/middlewares/
-const UPLOADS_ROOT_DIR = path.join(__dirname, '..', '..', 'uploads');
-
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB (Aumentado de 5MB para resolver o erro "File too large")
+// UPLOADS_ROOT_DIR aponta para o diretório raiz 'uploads'
+const UPLOADS_ROOT_DIR = path.resolve(__dirname, '..', '..', 'uploads');
+const TEMP_FOLDER_NAME = 'temp_register'; 
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 
 // --- 1. Configuração de Storage ---
 const storage = multer.diskStorage({
-    // Define o destino do arquivo (a pasta onde será salvo)
-    destination: (req, file, cb) => {
+    destination: (req: CustomRequest, file, cb) => {
+        const userId = req.user?._id || req.user?.id;
         
-        // 🚨 CRÍTICO: Verifica se o ID do usuário existe como '_id' (Mongoose) ou 'id'
-        const userId = (req.user as any)?._id || (req.user as any)?.id; 
-        
-        // 💡 LÓGICA DE ROTA PÚBLICA (REGISTRO):
-        // Verifica se a rota atual é de registro E se o usuário não está autenticado.
+        // Usa req.originalUrl para capturar a rota, garantindo que o registro funcione
         const isRegistrationRoute = req.originalUrl.includes('/register');
 
         let targetDir: string;
 
         if (isRegistrationRoute && !userId) {
-            // Rota pública de registro: Salva em 'temp'. 
-            // O controller DEVE MOVER este arquivo após a criação do usuário.
-            targetDir = path.join(UPLOADS_ROOT_DIR, 'temp');
+            // Rota de registro: Salva em 'temp_register'
+            targetDir = path.join(UPLOADS_ROOT_DIR, TEMP_FOLDER_NAME);
         } else if (userId) {
             // Rota autenticada: Salva em uploads/USER_ID/
             targetDir = path.join(UPLOADS_ROOT_DIR, userId.toString());
         } else {
-            // Rota que deveria ser autenticada (ex: update-avatar), mas o ID está faltando.
-            // Isso aciona o erro original de runtime, que é o que queremos evitar se a rota for patch/delete.
-            return cb(new Error("User ID is required for file destination."), false);
+            // Fallback para rotas autenticadas não-identificadas
+            return cb(new Error("User ID is required for file destination and upload."), false);
         }
 
         // 2. Cria o diretório se não existir
@@ -46,28 +53,28 @@ const storage = multer.diskStorage({
             fs.mkdirSync(targetDir, { recursive: true });
         }
         
-        // 3. Define o destino
         cb(null, targetDir);
     },
 
     // Define o nome do arquivo
-    filename: (req, file, cb) => {
+    filename: (req: CustomRequest, file, cb) => {
         const extension = path.extname(file.originalname);
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+        const generatedFilename = `${file.fieldname}-${uniqueSuffix}${extension}`;
         
-        // Armazena o nome do arquivo na requisição para que o controller possa usá-lo
-        (req as any).uploadedFilename = `${file.fieldname}-${uniqueSuffix}${extension}`;
+        // Armazena na requisição (opcional, mas útil para debug/controller)
+        req.uploadedFilename = generatedFilename; 
 
-        cb(null, (req as any).uploadedFilename);
+        cb(null, generatedFilename); // Usa o nome de arquivo gerado para salvar no disco
     }
 });
 
-// --- 2. Filtro de Arquivos (Opcional, mas recomendado) ---
-const fileFilter = (req: Express.Request, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
+// --- 2. Filtro de Arquivos ---
+// Usa CustomRequest na tipagem
+const fileFilter = (req: CustomRequest, file: Express.Multer.File, cb: multer.FileFilterCallback) => {
     if (file.mimetype.startsWith('image/')) {
         cb(null, true);
     } else {
-        // Retorna um erro que o Multer pode processar
         cb(new Error('Apenas arquivos de imagem são permitidos!'), false);
     }
 };

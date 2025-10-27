@@ -6,6 +6,7 @@ import User from '../models/User.ts'; // Alterado para .js para consistência ES
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/generateToken.ts'; // Ou onde esta função estiver
+import path from 'path';
 // A lógica de configuração do Passport (estrategias, serialize/deserialize)
 // foi removida daqui. A configuração do Google já está correta em server.ts.
 
@@ -85,6 +86,7 @@ export const getMe = async (req: Request, res: Response) => {
  * Lida com o registro de novos usuários com credenciais de email/senha.
  */
 const saltRounds = 10;
+const UPLOADS_BASE_DIR = path.resolve(process.cwd(), 'uploads');
 
 export const registerUser = async(req: Request, res: Response) => {
   console.log("Iniciando registro...");
@@ -92,8 +94,9 @@ export const registerUser = async(req: Request, res: Response) => {
   const { username, email, password } = req.body;
 
   const avatarPath = req.file ? (req.file as Express.Multer.File).path : null;
-
-  console.log("Caminho Multer (avatarPath):", avatarPath);
+  let userImagePath: string | undefined = undefined; // ⬅️ MUST BE DECLARED HERE!
+  let newUser;
+  console.log("Caminho Multer ():", avatarPath);
   // console.log("Dados recebidos para registro:", req.body);
   if(!username || !email || !password) {
     // ... (código para deletar avatar e erro 400)
@@ -127,6 +130,27 @@ export const registerUser = async(req: Request, res: Response) => {
     });
 
     await newUser.save();
+    if(avatarPath) {
+      const userId = newUser._id.toString()
+      const filename = path.basename(avatarPath)
+        // 1. Define o destino final
+        const destFolder = path.join(UPLOADS_BASE_DIR, userId);
+        const absolutePathFinal = path.join(destFolder, filename);
+
+        // 2. Garante que a pasta de destino exista
+        await fs.mkdir(destFolder, { recursive: true });
+
+        // 3. Move/Renomeia o arquivo
+        // Usa o novo nome da variável como origem
+        await fs.rename(avatarPath, absolutePathFinal);
+
+        // 4. Calcula o caminho RELATIVO para salvar no DB ('uploads/ID/filename')
+        userImagePath = path.join('uploads', userId, filename).replace(/\\/g, '/');
+
+        // 5. Atualiza o usuário no DB com o caminho final
+        newUser.userImagePath = userImagePath;
+        await newUser.save();
+    }
     //🛑 NOVO PASSO: GERAR O TOKEN
     const token = generateToken(newUser._id.toString());
     // ... (código para retorno 201)
