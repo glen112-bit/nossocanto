@@ -1,16 +1,16 @@
-
-import React, { useState , useContext, useEffect } from 'react';
-import { AuthContext } from '../../context/AuthContext'; // Assumindo que você usa um contexto
-import { useNavigate } from 'react-router-dom'; // Para redirecionar após logout
+import React, { useState , useCallback, useEffect, useContext } from 'react';
+import { AuthContext } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const API_BASE_URL = 'http://localhost:3000/api/users'
-
+const BACKEND_URL = 'http://localhost:3000';
+const DEFAULT_AVATAR_URL = 'https://placehold.co/120x120/007bff/ffffff?text=AV';
 
 
 const EditProfile = () => {
-    // 1. Estados para los datos del formulario (inicializados con datos mock)
-
-    // Estados para os campos do formulário
+    // 1. OBTENÇÃO DA FUNÇÃO DO CONTEXTO
+    const { user, updateUserAvatarPath } = useContext(AuthContext);
+    const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [currentPassword, setCurrentPassword] = useState('');
@@ -18,133 +18,117 @@ const EditProfile = () => {
 
     // Estados para o gerenciamento de arquivos e UI
     const [profileImage, setProfileImage] = useState(null);
-    const [currentImageUrl, setCurrentImageUrl] = useState('https://placehold.co/120x120/007bff/ffffff?text=AV'); 
+    const [currentImageUrl, setCurrentImageUrl] = useState(DEFAULT_AVATAR_URL); 
 
+    const [removeProfileImage, setRemoveProfileImage] = useState(false);
     const [loading, setLoading] = useState(false);
     const [dataLoaded, setDataLoaded] = useState(false);
     const [error, setError] = useState(null);
     const [success, setSuccess] = useState(null);
 
-    // Obtém o token (substitua por seu contexto de autenticação se necessário)
+    // Obtém o token
     const token = localStorage.getItem('userToken'); 
 
-    // Dentro do componente EditProfile
-// Dentro do componente EditProfile.jsx
+    // Função de URL de Imagem (corrigida e usada no useEffect e no handleSubmit)
+    const getProfilePictureUrl = useCallback((path) => {
+        // ... sua lógica de URL (correta) ...
+        if (!path) return DEFAULT_AVATAR_URL;
 
-const getProfilePictureUrl = (path) => {
-    const BACKEND_URL = 'http://localhost:3000';
+        const normalizedPath = path.replace(/\\/g, '/');
+        const startIndex = normalizedPath.indexOf('uploads/');
+        let relativePath = normalizedPath;
+        if (startIndex !== -1) {
+            relativePath = normalizedPath.substring(startIndex); 
+        } 
+        let finalUrl = `${BACKEND_URL}/${relativePath}`;
+        finalUrl += `?t=${new Date().getTime()}`; // Anti-cache
+        return finalUrl;
+    }, []);
     
-    // ... (restante da lógica de fallback e URLs externas)
+    // Função para buscar dados do usuário (correta)
+    const fetchUserData = useCallback(async () => {
+        // ... (Sua lógica fetchUserData) ...
+        // ...
+        try {
+            const url = `${API_BASE_URL}/details`;
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
 
-    // 1. Normaliza as barras do caminho de arquivo do Windows
-    const normalizedPath = path.replace(/\\/g, '/');
-    
-    // 2. Encontra a posição onde a string 'uploads/' começa
-    const startIndex = normalizedPath.indexOf('uploads/');
-    
-    let relativePath = normalizedPath;
-    
-    // 3. Extrai o caminho relativo, INCLUINDO "uploads/"
-    if (startIndex !== -1) {
-        // 🛑 CORREÇÃO: Pega a substring a partir da posição da palavra "uploads/"
-        relativePath = normalizedPath.substring(startIndex); 
-        // Agora, relativePath deve ser: "uploads/temp/avatar-*.jpg"
-    } 
-    
-    // 4. Constrói a URL FINAL
-    const finalUrl = `${BACKEND_URL}/${relativePath}`;
-    
-    // Verifique se o log agora mostra "uploads/..."
-    console.log('2. Caminho Relativo CORRIGIDO:', relativePath); 
-    console.log('3. URL FINAL CORRIGIDA:', finalUrl); 
+            if (!response.ok) {
+                let errorData = {};
+                try { errorData = await response.json(); } catch(e) { /* ignore non-json error */ }
+                const errorMessage = errorData.message || 
+                    (response.status === 404 ? `Erro 404: Rota GET ${url} não encontrada.` : response.statusText) || 
+                    `Falha ao carregar dados do usuário (Status: ${response.status}).`;
+                throw new Error(errorMessage);
+            }
 
-    return finalUrl;
-};
+            const data = await response.json();
+            const userData = data?.user;
 
+            if (!userData || !userData.username) {
+                console.error("API retornou dados inválidos ou incompletos:", data);
+                throw new Error("Estrutura de dados inválida. Objeto de usuário não encontrado.");
+            }
+            // Preenche os estados com os dados retornados
+            setUsername(userData.username || '');
+            setEmail(userData.email || '');
 
+            if (userData.userImagePath) {
+                setCurrentImageUrl(getProfilePictureUrl(userData.userImagePath));
+            }
+        } catch (err) {
+            console.error("Erro ao carregar perfil:", err);
+            if (err.message && err.message.includes('Failed to fetch')) {
+                setError('Erro de Rede: Não foi possível conectar ao backend (http://localhost:3000). O servidor está ativo?');
+            } else {
+                setError(err.message || 'Erro ao conectar com o servidor.');
+            }
+        } finally {
+            setDataLoaded(true);
+        }
+    }, [token, navigate, getProfilePictureUrl]);
 
+    // Efeito para carregar dados
     useEffect(() => {
         if (!token) {
             setError('Usuário não autenticado. Redirecionando...');
             setDataLoaded(true);
-            // navigate('/login'); // Você pode adicionar redirecionamento aqui
+            navigate('/login'); 
             return;
         }
 
-        const fetchUserData = async () => {
-            try {
-                const url = `${API_BASE_URL}/edit-profile`;
-                const response = await fetch(url, {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
-                });
-
-                if (!response.ok) {
-                    // Tenta ler o JSON de erro se houver
-                    let errorData = {};
-                    try {
-                        errorData = await response.json();
-                    } catch(e) { /* ignore non-json error */ }
-
-                    // Adiciona mensagem específica para 404 na URL de carregamento
-                    const errorMessage = errorData.message || 
-                        (response.status === 404 ? `Erro 404: Rota GET ${url} não encontrada.` : response.statusText) || 
-                        `Falha ao carregar dados do usuário (Status: ${response.status}).`;
-
-                    throw new Error(errorMessage);
-                }
-
-                const data = await response.json();
-                                
-                                // 🛑 CORREÇÃO PRINCIPAL: Verificação de existência do objeto 'user'
-                                // Usa Encadeamento Opcional para evitar o erro "Cannot read properties of undefined"
-                                const userData = data?.user;
-                // const userData = data;
-
-                if (!userData || !userData.username) {
-                    // Se 'data' não tiver 'username', lança um erro
-                    console.error("API retornou dados inválidos ou incompletos:", data);
-                    throw new Error("Estrutura de dados inválida. Objeto de usuário não encontrado.");
-                    }
-                    // Preenche os estados com os dados retornados
-                    setUsername(userData.username || ''); // Acessa userData em vez de data.user
-                    setEmail(userData.email || ''); // Acessa userData em vez de data.user
-                   
-                    if (userData.userImagePath) {
-                        setCurrentImageUrl(getProfilePictureUrl(userData.userImagePath));
-                    }
-            } catch (err) {
-                console.error("Erro ao carregar perfil:", err);
-                // Detecta erro de rede e fornece mensagem clara
-                if (err.message && err.message.includes('Failed to fetch')) {
-                    setError('Erro de Rede: Não foi possível conectar ao backend (http://localhost:3000). O servidor está ativo?');
-                } else {
-                    setError(err.message || 'Erro ao conectar com o servidor.');
-                }
-            } finally {
-                setDataLoaded(true);
-            }
-        };
-
         fetchUserData();
-    }, [token]);
+    }, [token, navigate, fetchUserData]);
 
-    // 2. Manejadores de eventos
+    // 2. Manejadores de eventos (handleFileChange, handleRemoveImage, handleCancelRemove - Mantidos)
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setProfileImage(file);
-        // Pré-visualiza a nova imagem localmente
-        setCurrentImageUrl(URL.createObjectURL(file));
+        setRemoveProfileImage(false);
     };
 
+    const handleRemoveImage = () => {
+        setProfileImage(null);
+        setRemoveProfileImage(true); 
+    };
+
+    const handleCancelRemove = () => {
+        setRemoveProfileImage(false);
+    };
+
+    // 3. MANEJADOR DE ENVIO (CORRIGIDO)
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null);
         setSuccess(null);
         setLoading(true);
 
+        // ... (Verificações iniciais - Mantidas) ...
         if (!token) {
             setError('Usuário não autenticado.');
             setLoading(false);
@@ -153,94 +137,120 @@ const getProfilePictureUrl = (path) => {
 
         let detailsUpdateSuccess = false;
         let detailsError = null;
+        let avatarUpdateSuccess = false;
         let avatarError = null;
+        let newAvatarPath = null; // Variável para armazenar o novo caminho
 
-        // --- 2a. ATUALIZAR DETALHES DE TEXTO E SENHA (PATCH /) ---
-        try {
-            // Verifica se a senha atual é fornecida (obrigatório pelo userController para qualquer atualização)
-            if (!currentPassword) {
-                throw new Error("A senha atual é obrigatória para guardar as alterações de detalhes ou de senha.");
-            }
+        const isDetailsOrPasswordUpdate = username || email || newPassword;
+        const isAvatarUpdate = profileImage;
+        const isAvatarRemoval = removeProfileImage && currentImageUrl !== DEFAULT_AVATAR_URL;
 
-            const updateDetailsPayload = {
-                username,
-                email,
-                currentPassword,
-                newPassword: newPassword || undefined, 
-            };
-
-            const detailsUrl = `${API_BASE_URL}/`;
-            // Requisição PATCH para atualizar texto
-            const detailsResponse = await fetch(detailsUrl, {
-                method: 'PATCH',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
-                },
-                body: JSON.stringify(updateDetailsPayload),
-            });
-
-            if (detailsResponse.ok) {
-                detailsUpdateSuccess = true;
-            } else {
-                let detailsData = {};
-                try {
-                    detailsData = await detailsResponse.json();
-                } catch (e) {
-                    // Caso o servidor retorne um status de erro (ex: 500) sem um corpo JSON
-                    console.error("Detalhes: Resposta de erro do servidor não-JSON ou vazia. Status:", detailsResponse.status);
+        // 1. ATUALIZAÇÃO DE DETALHES/SENHA (Mantida)
+        if (isDetailsOrPasswordUpdate || currentPassword) {
+            // ... (Sua lógica de PATCH /details) ...
+             try {
+                if (!currentPassword) {
+                    throw new Error("A senha atual é obrigatória para guardar as alterações de detalhes ou de senha.");
                 }
 
-                // Adiciona mensagem específica para 404 nos detalhes
-                const errorMessage = detailsData.message || 
-                    (detailsResponse.status === 404 ? `Erro 404: Rota PATCH ${detailsUrl} não encontrada.` : detailsResponse.statusText) || 
-                    `Falha desconhecida com status ${detailsResponse.status}.`;
+                const updateDetailsPayload = {
+                    username,
+                    email,
+                    currentPassword,
+                    newPassword: newPassword || undefined,
+                };
 
-                throw new Error(errorMessage);
-            }
+                const detailsUrl = `${API_BASE_URL}/details`;
+                const detailsResponse = await fetch(detailsUrl, {
+                    method: 'PATCH',
+                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                    body: JSON.stringify(updateDetailsPayload),
+                });
 
-        } catch (err) {
-            console.error('Erro de Detalhes Detalhado:', err);
-            if (err.message.includes('Failed to fetch')) {
-                detailsError = 'Erro de Rede: Não foi possível conectar ao backend (http://localhost:3000). Verifique se o servidor está rodando e se o CORS está configurado.';
-            } else {
-                detailsError = err.message || 'Erro de aplicação ao atualizar detalhes.';
+                if (detailsResponse.ok) {
+                    detailsUpdateSuccess = true;
+                } else {
+                    let detailsData = {};
+                    try { detailsData = await detailsResponse.json(); } catch (e) { /* ignore non-json error */ }
+
+                    const errorMessage = detailsData.message || 
+                        (detailsResponse.status === 404 ? `Erro 404: Rota PATCH ${detailsUrl} não encontrada.` : detailsResponse.statusText) || 
+                        `Falha desconhecida ao atualizar detalhes (Status: ${detailsResponse.status}).`;
+
+                    throw new Error(errorMessage);
+                }
+
+            } catch (err) {
+                console.error('Erro de Detalhes:', err);
+                if (err.message.includes('Failed to fetch')) {
+                    detailsError = 'Erro de Rede: Não foi possível conectar ao backend. O servidor está ativo?';
+                } else {
+                    detailsError = err.message || 'Erro ao atualizar detalhes do perfil.';
+                }
             }
         }
 
-        // --- 2b. ATUALIZAR IMAGEM (PATCH /update-avatar) ---
-        if (profileImage) {
+
+        // 2a. REMOÇÃO DE IMAGEM
+        if (isAvatarRemoval) {
+            try {
+                const removeAvatarUrl = `${API_BASE_URL}/avatar/remove`; 
+                const removeAvatarResponse = await fetch(removeAvatarUrl, {
+                    method: 'DELETE',
+                    headers: { 'Authorization': `Bearer ${token}` },
+                });
+
+                if (removeAvatarResponse.ok) {
+                    avatarUpdateSuccess = true;
+                    newAvatarPath = null; // 💡 Define o novo caminho como NULO (para remover/usar padrão)
+                    setCurrentImageUrl(DEFAULT_AVATAR_URL); 
+                    setRemoveProfileImage(false); 
+                } else {
+                    // ... (Tratamento de erro de remoção) ...
+                     let avatarData = {};
+                    try { avatarData = await removeAvatarResponse.json(); } catch (e) { /* ignore non-json error */ }
+
+                    const errorMessage = avatarData.message || removeAvatarResponse.statusText || 
+                        `Falha desconhecida ao remover avatar (Status: ${removeAvatarResponse.status}).`;
+
+                    throw new Error(errorMessage);
+                }
+
+            } catch (err) {
+                console.error('Erro de Remoção de Avatar Detalhado:', err);
+                avatarError = err.message || 'Erro ao remover avatar.';
+            }
+        }
+
+
+        // 2b. UPLOAD DE NOVA IMAGEM
+        else if (isAvatarUpdate) {
             try {
                 const formData = new FormData();
-                formData.append('avatar', profileImage); // 'avatar' DEVE corresponder ao campo em userRoutes.ts
+                formData.append('avatar', profileImage); 
 
-                const avatarUrl = `${API_BASE_URL}/update-avatar`;
+                const avatarUrl = `${API_BASE_URL}/avatar`;
                 const avatarResponse = await fetch(avatarUrl, {
                     method: 'PATCH',
-                    headers: {
-                        'Authorization': `Bearer ${token}`,
-                    },
+                    headers: { 'Authorization': `Bearer ${token}` },
                     body: formData,
                 });
 
                 if (avatarResponse.ok) {
+                    avatarUpdateSuccess = true;
                     const avatarData = await avatarResponse.json();
 
-                    // Atualiza o URL da imagem atual com o novo caminho retornado pelo servidor
                     if(avatarData.userImagePath) {
-                        setCurrentImageUrl(getProfilePictureUrl(avatarData.userImagePath));
+                        newAvatarPath = avatarData.userImagePath; // 💡 Obtém o novo caminho
+                        setCurrentImageUrl(getProfilePictureUrl(newAvatarPath));
                     }
-                    setProfileImage(null); // Limpa o estado da imagem pendente
+                    setProfileImage(null); 
+                    setRemoveProfileImage(false);
                 } else {
+                    // ... (Tratamento de erro de upload) ...
                     let avatarData = {};
-                    try {
-                        avatarData = await avatarResponse.json();
-                    } catch (e) {
-                        // Caso o servidor retorne um status de erro (ex: 500) sem um corpo JSON
-                        console.error("Avatar: Resposta de erro do servidor não-JSON ou vazia. Status:", avatarResponse.status);
-                    }
+                    try { avatarData = await avatarResponse.json(); } catch (e) { /* ignore non-json error */ }
 
-                    // Adiciona mensagem específica para 404 no avatar
                     const errorMessage = avatarData.message || 
                         (avatarResponse.status === 404 ? `Erro 404: Rota PATCH ${avatarUrl} não encontrada.` : avatarResponse.statusText) || 
                         `Falha desconhecida com status ${avatarResponse.status}.`;
@@ -249,74 +259,95 @@ const getProfilePictureUrl = (path) => {
                 }
 
             } catch (err) {
-                console.error('Erro de Avatar Detalhado:', err);
+                console.error('Erro de Upload de Avatar Detalhado:', err);
                 if (err.message.includes('Failed to fetch')) {
-                    avatarError = 'Erro de Rede: Não foi possível conectar ao backend (http://localhost:3000). Verifique se o servidor está rodando e se o CORS está configurado.';
+                    avatarError = 'Erro de Rede: Não foi possível conectar ao backend. Verifique se o servidor está rodando.';
                 } else {
                     avatarError = err.message || 'Erro de aplicação ao atualizar avatar.';
                 }
             }
         }
-
+        
         // 3. COMBINAR E EXIBIR MENSAGENS DE ERRO/SUCESSO
+        // ... (Sua lógica de mensagens - Mantida) ...
+        let finalSuccessMessage = [];
+        let finalErrorMessage = [];
 
-        // Se houve erro nos detalhes e no avatar
-        if (detailsError && avatarError) {
-            setError(`Houve falhas múltiplas. Detalhes: [${detailsError}]. Avatar: [${avatarError}]. Verifique se o servidor está ativo.`);
-        } 
-        // Se houve erro apenas nos detalhes (o avatar nem foi tentado ou já deu erro antes)
-        else if (detailsError) {
-            setError(`Falha ao atualizar detalhes do perfil: ${detailsError}.`);
-        } 
-        // Se a atualização de detalhes foi bem-sucedida, mas o avatar falhou
-        else if (detailsUpdateSuccess && avatarError) {
-            setError(`Detalhes do perfil atualizados com sucesso, mas houve falha ao atualizar o Avatar: ${avatarError}.`);
-        } 
-        // Se o avatar falhou mas nenhum detalhe foi alterado (apenas para casos onde só a imagem foi submetida)
-        else if (!detailsUpdateSuccess && avatarError && profileImage) {
-            setError(`Falha ao atualizar o Avatar: ${avatarError}.`);
+        if (detailsError) {
+            finalErrorMessage.push(`Detalhes: ${detailsError}`);
+        } else if (isDetailsOrPasswordUpdate && detailsUpdateSuccess) {
+            finalSuccessMessage.push('Detalhes (Nome/Email/Senha) atualizados.');
         }
-        // Se tudo foi bem (ou se apenas o avatar foi atualizado com sucesso e não havia detalhes para atualizar)
-        else if (detailsUpdateSuccess || profileImage) {
-            setSuccess("¡Perfil atualizado com éxito!");
+
+        if (avatarError) {
+            finalErrorMessage.push(`Avatar: ${avatarError}`);
+        } else if ((isAvatarUpdate || isAvatarRemoval) && avatarUpdateSuccess) {
+            finalSuccessMessage.push(isAvatarRemoval ? 'Avatar removido com sucesso.' : 'Avatar atualizado com sucesso.');
+        }
+
+
+        if (finalErrorMessage.length > 0) {
+            setError(finalErrorMessage.join(' | '));
+        } else if (finalSuccessMessage.length > 0) {
+            setSuccess(`✅ ${finalSuccessMessage.join(' e ')}`);
+            // Limpa campos de senha
             setCurrentPassword('');
             setNewPassword('');
+            
+            // 🎯 AÇÃO CRÍTICA: ATUALIZA O CONTEXTO SE O AVATAR FOI MUDADO
+            if (isAvatarUpdate || isAvatarRemoval) {
+                // newAvatarPath será o novo caminho (string) ou null (se removido)
+                updateUserAvatarPath(newAvatarPath); 
+            }
+            
+            // 🎯 REDIRECIONAMENTO APÓS SUCESSO
+            // É melhor não redirecionar imediatamente após um PATCH/PUT para dar tempo do usuário ver a mensagem. 
+            // Mas, se for o comportamento desejado, descomente abaixo ou use um setTimeout:
+            // navigate('/profile'); 
+            
+        } else {
+            setSuccess("Nenhuma alteração detectada para salvar.");
         }
+
 
         setLoading(false);
-    };
+    }; 
+    
+    // 🛑 REMOVIDAS AS LINHAS ABAIXO QUE CAUSAVAM O ERRO:
+    // updateUserAvatarPath(newPath);
+    // navigate('/profile');
 
-    // Placeholder para a imagem de perfil
-    const avatarToDisplay = profileImage 
-        ? URL.createObjectURL(profileImage) 
-        : currentImageUrl;
 
-        if (!dataLoaded) {
-            return (
-                <div style={{ ...styles.pageContainer, color: '#007bff' }}>
-                    <p>Cargando datos del perfil...</p>
-                </div>
-            );
-        }
+    // ... (Lógica de pré-visualização e JSX - Mantidos) ...
+    const avatarToDisplay = removeProfileImage
+        ? DEFAULT_AVATAR_URL 
+        : profileImage
+            ? URL.createObjectURL(profileImage) 
+            : currentImageUrl; 
 
+    if (!dataLoaded) {
         return (
-            <div style={styles.pageContainer}>
-                <div style={styles.card}>
-                    <h2 style={styles.title}>Editar Perfil</h2>
+            <div style={{ ...styles.pageContainer, color: '#007bff' }}>
+                <p>Cargando datos del perfil...</p>
+            </div>
+        );
+    }
 
-                    {/* Visualização do Avatar atual */}
-                    <div style={styles.avatarContainer}>
-                        <img src={avatarToDisplay} alt="Avatar actual" style={styles.avatar} />
-                        <p style={styles.usernameDisplay}>{username}</p>
-                    </div>
-
-                    {error && <p style={styles.error}>{error}</p>}
-                    {success && <p style={styles.success}>{success}</p>}
-
-                    <form onSubmit={handleSubmit} style={styles.form}>
-                        {/* Campos de Información Básica */}
-                        <div style={styles.sectionTitle}>Información de Cuenta</div>
-
+    return (
+        // ... seu JSX aqui ...
+        <div style={styles.pageContainer}>
+             <div style={styles.card}>
+                <h2 style={styles.title}>Editar Perfil</h2>
+                <div style={styles.avatarContainer}>
+                    <img src={avatarToDisplay} alt="Avatar actual" style={styles.avatar} />
+                    <p style={styles.usernameDisplay}>{username}</p>
+                </div>
+                {error && <p style={styles.error}>🚨 {error}</p>}
+                {success && <p style={styles.success}>✨ {success}</p>}
+                <form onSubmit={handleSubmit} style={styles.form}>
+                    {/* ... campos do formulário ... */}
+                    
+                     <div style={styles.sectionTitle}>Información de Cuenta</div>
                         <div style={styles.inputGroup}>
                             <label style={styles.label}>Nombre de Usuario</label>
                             <input
@@ -328,7 +359,6 @@ const getProfilePictureUrl = (path) => {
                                 disabled={loading}
                             />
                         </div>
-
                         <div style={styles.inputGroup}>
                             <label style={styles.label}>Email</label>
                             <input
@@ -341,9 +371,7 @@ const getProfilePictureUrl = (path) => {
                             />
                         </div>
 
-                        {/* Sección de Cambio de Contraseña */}
                         <div style={styles.sectionTitle}>Cambiar Contraseña (Opcional)</div>
-
                         <div style={styles.inputGroup}>
                             <label style={styles.label}>Contraseña Actual</label>
                             <input
@@ -353,10 +381,9 @@ const getProfilePictureUrl = (path) => {
                                 style={styles.input}
                                 placeholder="Necesaria para cualquier cambio"
                                 disabled={loading}
-                                required // Mantida como requerida pelo userController
+                                required
                             />
                         </div>
-
                         <div style={styles.inputGroup}>
                             <label style={styles.label}>Nueva Contraseña</label>
                             <input
@@ -368,38 +395,73 @@ const getProfilePictureUrl = (path) => {
                                 disabled={loading}
                             />
                         </div>
+                    
+                    {/* Campo de Carga de Imagen - AGORA COM OPÇÃO DE REMOVER */}
+                    <div style={{ ...styles.inputGroup, ...styles.fileInputContainer }}>
+                        <label style={{ ...styles.label, marginBottom: '10px' }}>
+                            🖼️ Atualizar ou Remover Foto de Perfil
+                        </label>
 
-                        {/* Campo de Carga de Imagen */}
-                        <div style={{ ...styles.inputGroup, ...styles.fileInputContainer }}>
-                            <label style={{ ...styles.label, marginBottom: '5px' }}>
-                                Actualizar Foto de Perfil
-                            </label>
-                            <input 
-                                type="file" 
-                                accept="image/*" 
-                                onChange={handleFileChange}
+                        {/* Botão de Remoção Condicional */}
+                        {currentImageUrl !== DEFAULT_AVATAR_URL && !removeProfileImage && (
+                            <button 
+                                type="button" 
+                                onClick={handleRemoveImage} 
+                                style={{...styles.removeButton, marginBottom: '10px'}}
                                 disabled={loading}
-                            />
-                            {profileImage && <p style={styles.fileName}>Archivo seleccionado: {profileImage.name}</p>}
-                        </div>
+                            >
+                                🗑️ Remover Foto Atual
+                            </button>
+                        )}
 
-                        <div style={styles.buttonGroup}>
-                            <button type="button" onClick={() => window.history.back()} style={styles.cancelButton} disabled={loading}>
-                                Cancelar
-                            </button>
-                            <button type="submit" style={styles.button} disabled={loading}>
-                                {loading ? 'Guardando...' : 'Guardar Cambios'}
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                        {/* Opção de Cancelar Remoção */}
+                        {removeProfileImage && (
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
+                                <p style={styles.warningText}>⚠️ A foto será removida ao salvar.</p>
+                                <button 
+                                    type="button" 
+                                    onClick={handleCancelRemove} 
+                                    style={styles.cancelRemoveButton}
+                                    disabled={loading}
+                                >
+                                    Manter Foto Atual
+                                </button>
+                            </div>
+                        )}
+
+                        {/* Input de Upload, desabilitado se a remoção estiver pendente */}
+                        <label style={{ ...styles.label, marginTop: '10px' }}>
+                            Ou selecione uma nova imagem:
+                        </label>
+                        <input 
+                            type="file" 
+                            accept="image/*" 
+                            onChange={handleFileChange}
+                            disabled={loading || removeProfileImage}
+                        />
+
+                        {profileImage && <p style={styles.fileName}>Arquivo selecionado: **{profileImage.name}**</p>}
+
+                    </div>
+
+                    <div style={styles.buttonGroup}>
+                        <button type="button" onClick={() => navigate(-1)} style={styles.cancelButton} disabled={loading}>
+                            Cancelar
+                        </button>
+                        <button type="submit" style={styles.button} disabled={loading}>
+                            {loading ? 'Guardando...' : 'Guardar Cambios'}
+                        </button>
+                    </div>
+                </form>
             </div>
-        );
+        </div>
+    );
 };
 
-// Estilos limpios y centrados
+// ... (Restante dos estilos - Mantidos) ...
 const styles = {
-    pageContainer: {
+    // ... estilos
+     pageContainer: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -517,6 +579,41 @@ const styles = {
         fontWeight: 'bold',
         transition: 'background-color 0.3s ease',
     },
+    removeButton: { 
+        padding: '8px 15px',
+        backgroundColor: '#dc3545', 
+        color: 'white',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        width: '100%',
+        transition: 'background-color 0.3s ease',
+    },
+    cancelRemoveButton: { 
+        padding: '8px 15px',
+        backgroundColor: '#ffc107', 
+        color: '#333',
+        border: 'none',
+        borderRadius: '6px',
+        cursor: 'pointer',
+        fontSize: '14px',
+        fontWeight: 'bold',
+        transition: 'background-color 0.3s ease',
+        marginTop: '8px',
+        width: '100%',
+    },
+    warningText: { 
+        color: '#ffc107',
+        fontWeight: '600',
+        fontSize: '14px',
+        marginBottom: '5px',
+        textAlign: 'center',
+        backgroundColor: '#fffbe6',
+        padding: '5px',
+        borderRadius: '4px',
+    },
     error: {
         color: '#dc3545',
         backgroundColor: '#f8d7da',
@@ -538,4 +635,3 @@ const styles = {
 };
 
 export default EditProfile;
-

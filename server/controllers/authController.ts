@@ -4,6 +4,7 @@ import type { Request, Response } from 'express';
 import * as fs from 'fs/promises';
 import User from '../models/User.ts'; // Alterado para .js para consistência ESM
 import jwt from 'jsonwebtoken';
+import { fileURLToPath } from 'url'
 import bcrypt from 'bcrypt';
 import { generateToken } from '../utils/generateToken.ts'; // Ou onde esta função estiver
 import path from 'path';
@@ -17,36 +18,26 @@ import path from 'path';
  * @throws {Error} Se JWT_SECRET não estiver configurado.
  */
 
-interface AuthenticatedRequest extends Request {
-  user?: any;
-}
-interface AuthRequest extends Request {
-  file?: Express.Multer.File;
-}
 
-const UserPlaceholder = {
-    create: async (data: any) => ({ _id: 'newUserId123', ...data }), // Simula a criação do usuário
-    findByIdAndUpdate: async (id: string, update: any, options: any) => ({ id, ...update }), // Simula a atualização
-};
-// const UPLOADS_ROOT_DIR = path.join(process.cwd(), 'uploads'); // Ajuste o caminho conforme necessário
-const bcryptPlaceholder = { hash: async (p: string) => p + '_hashed' }; // Placeholder para hashing
-const jwtPlaceholder = { sign: (p: any) => 'dummy_token' }; // Placeholder para JWT
-// --- FIM PLACEHOLDERS ---
-// const generateToken = (id: string): string => {
-  //     if(!process.env.JWT_SECRET) {
-    //         throw new Error('JWT_SECRET must be configured');
-    //     }
-    //     return jwt.sign({ id }, process.env.JWT_SECRET as string,  {
-      //         expiresIn: '30d',
-      //     });
-// };
-//
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+// Define o diretório raiz 'uploads' de forma consistente com o Middleware
+const UPLOADS_ROOT_DIR = path.resolve(__dirname, '..', '..', 'uploads');
+const TEMP_FOLDER_NAME = 'temp_register';
 
+/**
+ * Define a interface CustomRequest para incluir o campo 'user'
+ * populado pelo middleware 'protect' e 'file' pelo Multer.
+ */
+interface CustomRequest extends Request {
+  user?: any;
+  file?: Express.Multer.File;
+}
 
 export const getMe = async (req: Request, res: Response) => {
     // 1. O middleware 'protect' ou 'authenticate' DEVE ter populado req.user
     // Se estiver usando TypeScript, você pode precisar estender a interface Request.
-    const userObject = (req as any).user;
+    const userObject = (req as CustomRequest).user;
     
     // 2. Verifica se o usuário autenticado existe na requisição.
     // Se o middleware de proteção funcionou, userObject deve existir.
@@ -86,102 +77,107 @@ export const getMe = async (req: Request, res: Response) => {
  * Lida com o registro de novos usuários com credenciais de email/senha.
  */
 const saltRounds = 10;
-const UPLOADS_BASE_DIR = path.resolve(process.cwd(), 'uploads');
+// const UPLOADS_BASE_DIR = path.resolve(process.cwd(), 'uploads');
 
 export const registerUser = async(req: Request, res: Response) => {
-  console.log("Iniciando registro...");
- // let tempFilePath: string | undefined = undefined;
-  const { username, email, password } = req.body;
+    console.log("Iniciando registro...");
+    // Deve usar CustomRequest para acessar req.file
+    const { username, email, password } = req.body;
+    const avatarPath = (req as CustomRequest).file ? (req as CustomRequest).file!.path : null;
+    let userImagePath: string | undefined = undefined; 
+    
+    // 1. Validação e Limpeza de Arquivo Temporário (em caso de falha de dados)
+    if(!username || !email || !password) {
+        if (avatarPath) {
+            // Deleta o arquivo temporário se a validação falhar
+            await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar temporário (dados ausentes)", err));
+        }
+        return res.status(400).json({message: 'Todos os campos são obrigatórios (username, email, password).'});
+    }
 
-  const avatarPath = req.file ? (req.file as Express.Multer.File).path : null;
-  let userImagePath: string | undefined = undefined; // ⬅️ MUST BE DECLARED HERE!
-  let newUser;
-  console.log("Caminho Multer ():", avatarPath);
-  // console.log("Dados recebidos para registro:", req.body);
-  if(!username || !email || !password) {
-    // ... (código para deletar avatar e erro 400)
-    if (avatarPath) {
-      await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar", err))
-      // const fs = await import('fs/promises');
-      // await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar", err));
-    }
-    return res.status(400).json({message: 'Todos os campos são obrigatórios (username, email, password).'});
-  }
+    try {
+        // 2. Verifica se o usuário já existe
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            if( avatarPath ) {
+                // Deleta o arquivo temporário se o email já estiver em uso
+                await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar temporário (duplicidade)", err)); 
+            }
+            return res.status(409).json({ message: 'Este email já está em uso.' });
+        }
 
-  try {
-    // Verifica se o usuário já existe pelo email
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
-      if( avatarPath ) {
-        await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar por duplicidade", err)) 
-      }
-      return res.status(409).json({ message: 'Este email já está em uso.' });
-    }
+        // 3. GERA O HASH E CRIA O NOVO USUÁRIO
+        const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-    // 1. GERA O HASH
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+        let newUser = new User({ 
+            username, 
+            email, 
+            password: hashedPassword,
+            // userImagePath é definido como null/undefined por enquanto
+        });
 
-    // 2. CRIA O NOVO USUÁRIO USANDO O HASH
-    const newUser = new User({ 
-      username, 
-      email, 
-      password: hashedPassword, // <-- CORREÇÃO: Usar o HASH
-      userImagePath: avatarPath,
-    });
+        await newUser.save(); // Salva para obter o _id
 
-    await newUser.save();
-    if(avatarPath) {
-      const userId = newUser._id.toString()
-      const filename = path.basename(avatarPath)
-        // 1. Define o destino final
-        const destFolder = path.join(UPLOADS_BASE_DIR, userId);
-        const absolutePathFinal = path.join(destFolder, filename);
+        // --- 4. LÓGICA DE MOVER E PERSISTIR IMAGEM (CORREÇÃO) ---
+        if(avatarPath) {
+            const userId = newUser._id.toString();
+            const filename = path.basename(avatarPath);
+            
+            // Define o caminho final (uploads/ID/filename)
+            const destFolder = path.join(UPLOADS_ROOT_DIR, userId);
+            const absolutePathFinal = path.join(destFolder, filename);
 
-        // 2. Garante que a pasta de destino exista
-        await fs.mkdir(destFolder, { recursive: true });
+            try {
+                // Cria a pasta do ID do usuário (se não existir)
+                await fs.mkdir(destFolder, { recursive: true });
 
-        // 3. Move/Renomeia o arquivo
-        // Usa o novo nome da variável como origem
-        await fs.rename(avatarPath, absolutePathFinal);
+                // Move/Renomeia o arquivo da pasta temporária para a pasta final
+                await fs.rename(avatarPath, absolutePathFinal);
 
-        // 4. Calcula o caminho RELATIVO para salvar no DB ('uploads/ID/filename')
-        userImagePath = path.join('uploads', userId, filename).replace(/\\/g, '/');
+                // Calcula o caminho RELATIVO para salvar no DB ('uploads/ID/filename')
+                userImagePath = path.join('uploads', userId, filename).replace(/\\/g, '/');
 
-        // 5. Atualiza o usuário no DB com o caminho final
-        newUser.userImagePath = userImagePath;
-        await newUser.save();
-    }
-    //🛑 NOVO PASSO: GERAR O TOKEN
-    const token = generateToken(newUser._id.toString());
-    // ... (código para retorno 201)
-    return res.status(201).json({
-      message: 'Usuário registrado com sucesso!',
-      token: token,
-      user: {
-        id: newUser._id, // Usar _id do Mongoose
-        username: newUser.username,
-        // password: hashedPassword,
-        email: newUser.email,
-        // profileImagePath: newUser.profileImagePath
-        userImagePath: avatarPath,
+                // Atualiza o usuário no DB com o caminho final
+                newUser.userImagePath = userImagePath;
+                await newUser.save();
+                
+                console.log(`Avatar movido para: ${absolutePathFinal}`);
 
-      },
-    });       
-     }catch(error: any) {
-        // 11000 é o código para duplicidade no MongoDB (email ou username único)
-      if (avatarPath) {
-        // const fs = await import('fs/promises');
-        await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar após erro", err));
-      }
-       if(error.code === 11000) {
-        return res.status(409).json({message: 'Email ou nome de usuário já está em uso.'});
-      }
-      console.error("Erro no registro:", error);
-      return res.status(500).json({message:'Erro ao registrar usuário.', error: error.message })
-    }
-};
+            } catch (moveError) {
+                console.error('Erro ao mover o avatar após o registro. O usuário foi salvo, mas sem a imagem de perfil.', moveError);
+                // Se o movimento falhar, o avatarPath ainda está na temp_register.
+                // Tentativa de limpeza
+                await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar após erro de movimento", err));
+            }
+        }
+        // --- FIM DA LÓGICA DE IMAGEM ---
 
-/**
+        // 5. Geração e Retorno do Token
+        const token = generateToken(newUser._id.toString());
+        
+        return res.status(201).json({
+            message: 'Usuário registrado com sucesso!',
+            token: token,
+            user: {
+                id: newUser._id,
+                username: newUser.username,
+                email: newUser.email,
+                userImagePath: newUser.userImagePath, // Retorna o caminho final ou undefined
+            },
+        });       
+    } catch(error: any) {
+        // 6. Tratamento de Erro Global (inclui erro de DB 11000)
+        if (avatarPath) {
+            // Tenta limpar o arquivo temporário em caso de qualquer erro no TRY
+            await fs.unlink(avatarPath).catch(err => console.error("Falha ao deletar avatar após erro grave", err));
+        }
+        if(error.code === 11000) {
+            return res.status(409).json({message: 'Email ou nome de usuário já está em uso.'});
+        }
+        console.error("Erro no registro:", error);
+        return res.status(500).json({message:'Erro ao registrar usuário.', error: error.message })
+    }
+};/**
  * Lida com o login de usuários com credenciais de email/senha.
  */
 export const loginUser = async (req: Request, res: Response) => {
