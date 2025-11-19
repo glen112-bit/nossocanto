@@ -71,8 +71,9 @@ if (process.env.JWT_SECRET) {
 // A solução mais segura é usar o path.join com o diretório correto **
 // const UPLOADS_ROOT_DIR = path.join(__dirname, '..', 'uploads'); // Assumindo que 'uploads' está na raiz do 'server'
 const UPLOADS_ROOT_DIR = path.join(__dirname, '..', '..', 'uploads');
-console.log('✅ DEBUG EXPRESS: Pasta de uploads servida em:', UPLOADS_ROOT_DIR)
+// console.log('✅ DEBUG EXPRESS: Pasta de uploads servida em:', UPLOADS_ROOT_DIR)
 app.use('/uploads', express.static(UPLOADS_ROOT_DIR));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // --- 3. CONFIGURAÇÃO E MIDDLEWARE DO PASSPORT (Sessões) ---

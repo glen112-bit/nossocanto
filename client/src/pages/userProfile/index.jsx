@@ -13,43 +13,48 @@ function ProfilePage() {
     const navigate = useNavigate();
     const [isLoading, setIsLoading] = useState(false);
 
-    // Função auxiliar para obter a URL correta da imagem
-    const getProfilePictureUrl = (path) => {
-        // Se o caminho for nulo ou vazio, retorna o avatar padrão
-        if (!path || typeof path !== 'string' || path.trim() === '') {
-            // Retorna um avatar gerado se o nome/email estiver disponível
-            const nameToUse = user?.name || user?.username || user?.email?.split('@')[0];
-            const initials = nameToUse ? nameToUse.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-            // Avatar mais moderno com cor primária
-            return `https://ui-avatars.com/api/?name=${initials}&background=1D4ED8&color=FFFFFF&size=128&bold=true`;
+
+// Função auxiliar para obter a URL correta da imagem
+const getProfilePictureUrl = (path) => {
+    // 1. Caso de Avatar Padrão ou URL Externa (Mantenha)
+    if (!path || typeof path !== 'string' || path.trim() === '' || path.startsWith('http')) {
+        // ... Lógica para ui-avatars.com ou URLs externas ...
+        if (path && path.startsWith('http')) {
+             return path;
         }
-            console.log('datos de usuario: ', user)
-            // Se for uma URL externa (Google, etc.), retorna a URL diretamente
-            if (path && path.startsWith('http')) {
-                return path;
-            }
-            // 3. Caso de Caminho Local (Multer/Upload)
-            // O backend deve salvar: 'uploads/ID_DO_USUARIO/nome.jpg'
+        const nameToUse = user?.name || user?.username || user?.email?.split('@')[0];
+        const initials = nameToUse ? nameToUse.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+        return `https://ui-avatars.com/api/?name=${initials}&background=1D4ED8&color=FFFFFF&size=128&bold=true`;
+    }
 
-            // Normaliza o caminho para ter barras '/' (Windows usa '\')
-            const normalizedPath = path.replace(/\\/g, '/');
+    // 2. CORREÇÃO PRINCIPAL: Normalização e Remoção do Prefixo de Disco
+    
+    // Normaliza as barras: substitui todas as barras invertidas (\) do Windows por barras frontais (/)
+    let normalizedPath = path.replace(/\\/g, '/');
 
-            // Garante que o caminho não comece com '/uploads/' duplicado no servidor
-            // Ex: Se o DB tiver 'uploads/ID/img.jpg', precisamos de '/uploads/ID/img.jpg'
-            const finalPathSegment = normalizedPath.startsWith('uploads/') 
-                ? normalizedPath // Se já começa com 'uploads/', usamos o caminho completo
-                : `uploads/${normalizedPath}`; // Se o DB salvou apenas 'ID/img.jpg'
+    // Remove o prefixo de disco (C:/Users/...) e tudo que vem antes da pasta 'uploads/'
+    // Isso garante que a URL comece apenas com 'uploads/...'
+    const uploadIndex = normalizedPath.toLowerCase().indexOf('uploads/');
+    
+    if (uploadIndex !== -1) {
+        // Se 'uploads/' for encontrado, pega o resto da string a partir desse ponto.
+        normalizedPath = normalizedPath.substring(uploadIndex);
+    } else {
+        // Se 'uploads/' não for encontrado, significa que o caminho no DB está malformado. 
+        // Você pode retornar o avatar padrão ou a URL como está (o que provavelmente falhará).
+        // Para robustez, vamos retornar o caminho normalizado, mas idealmente o DB deve salvar 'uploads/...'.
+        console.error("Caminho de imagem não contém 'uploads/'. Possível erro de configuração do backend.");
+    }
+    
+    // 3. Constrói a URL completa e adiciona o anti-cache
+    let finalUrl = `${BACKEND_URL}/${normalizedPath}`;
 
-                // Constrói a URL completa
-                const finalUrl = `${BACKEND_URL}/${finalPathSegment}`;
-
-                console.log('Caminho no DB:', path);
-                console.log('URL Final (A ser solicitada):', finalUrl); // 🛑 VERIFIQUE ESTA URL NO CONSOLE
-
-                return finalUrl;
-                // Se for um caminho local (Multer), constrói a URL completa
-                // Retorna um avatar padrão se todas as outras verificações falharem
-    };
+    // Adiciona o timestamp para quebrar o cache do navegador
+    finalUrl += `?t=${new Date().getTime()}`;
+    
+    // console.log('URL Final (Corrigida):', finalUrl); // 🛑 VERIFIQUE ESTA URL NO CONSOLE
+    return finalUrl;
+};
 
     // Lógica de Logout
     const handleLogout = () => {
@@ -74,7 +79,9 @@ function ProfilePage() {
     }
 
     // Obter a URL da imagem de perfil
-    const profilePicUrl = getProfilePictureUrl(user.userImagePath || user.profileImageUrl || user.avatarUrl);
+    const imagePath = user.userImagePath || user.profileImageUrl || user.avatarUrl;
+    const profilePicUrl = getProfilePictureUrl(imagePath);
+    console.log(imagePath)
 
     // Estrutura do Perfil
     return (
@@ -87,6 +94,7 @@ function ProfilePage() {
                 <div className="relative">
             <img
                 className="profile-avatar" // ⬅️ Classe CSS
+                key={imagePath || user.id}
                 src={profilePicUrl}
                 alt={`Foto de Perfil de ${user.name || user.username}`}
                 onError={(e) => {

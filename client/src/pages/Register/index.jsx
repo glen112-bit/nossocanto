@@ -6,6 +6,8 @@ import { useNavigate  } from "react-router-dom";
 const REGISTER_URL = 'http://localhost:3000/api/auth/register'; 
 
 const Register = () => {
+
+    const navigate = useNavigate()
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -69,7 +71,7 @@ const Register = () => {
                         ¡Tu cuenta ha sido creada y la imagen de perfil ha sido subida!
                     </p>
                     {/* Botón para volver o navegar al login */}
-                    <button onClick={() => setIsRegistered(false)} style={{ ...styles.button, backgroundColor: '#1976d2', marginTop: '20px' }}>
+                    <button onClick={() => setIsRegistered(false), navigate('/login')} style={{ ...styles.button, backgroundColor: '#1976d2', marginTop: '20px' }}>
 Login
                     </button>
                 </div>
