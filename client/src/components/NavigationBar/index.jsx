@@ -9,9 +9,9 @@ import TravelExploreIcon from '@mui/icons-material/TravelExplore';
 import PersonIcon from '@mui/icons-material/Person';
 import AssignmentLateIcon from '@mui/icons-material/AssignmentLate';
 import Avatar from '@mui/material/Avatar';
-import VpnKeyIcon from '@mui/icons-material/VpnKey'; // Ícono para Login
-import AccountCircleIcon from '@mui/icons-material/AccountCircle'; // Ícono para Register
-import LogoutIcon from '@mui/icons-material/Logout'; // Ícone para Logout
+import VpnKeyIcon from '@mui/icons-material/VpnKey';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import Paper from '@mui/material/Paper'; 
 import { AuthContext } from '../../context/AuthContext'
@@ -20,19 +20,14 @@ import { AuthContext } from '../../context/AuthContext'
 const AIRBNB_URL = "https://www.airbnb.com.br/rooms/1337549417158200548?location=Centro%2C%20São%20Paulo&...";
 const SERVER_BASE_URL = 'http://localhost:3000'; 
 
-// Altura de la barra de navegación (56px por defecto en Material-UI)
-// Úsalo como padding-top en tu componente principal para evitar solapamiento.
+// Altura de la barra de navegación
 const NAVIGATION_BAR_HEIGHT = 56;
 
 export default function NavigationBar() {
 
     const auth = React.useContext(AuthContext);
-    // Obtém user, isAuthenticated e logout do AuthContext
-    const { user, isAuthenticated, logout } = auth; 
-    
-    // Você não precisa de um estado 'user' local se estiver usando o Context
-    // const [user, setUser] = React.useState(null); 
-    const [loading, setLoading] = React.useState(false); // Mudado para false e removida a lógica de fetch local
+    const { user, isAuthenticated, logout } = auth; 
+    const [loading, setLoading] = React.useState(false); 
 
     const navigate = useNavigate()
     const handleLogout = () => {
@@ -40,21 +35,11 @@ export default function NavigationBar() {
         navigate('/')
     };
 
-    // Removendo a função fetchCurrentUser e o useEffect relacionado, pois a lógica de autenticação
-    // e re-hidratação deve estar totalmente contida no AuthProvider (AuthContext.jsx).
-    
-    // React.useEffect(() => {
-    //     fetchCurrentUser();
-    // }, [isAuthenticated]);
-
     // Función auxiliar para construir la URL de la imagen de perfil
-    // A propriedade para avatar do Google/local é 'avatar' (não 'profileImageUrl')
     const getProfileUrl = (path) => {
         if (!path) return null;
-        // Se for um caminho relativo (upload local), constrói o URL completo.
-        // Se for um URL absoluto (Google), o 'path' já será o URL completo.
-        return path.startsWith('http') || path.startsWith('data:') 
-            ? path 
+        return path.startsWith('http') || path.startsWith('data:') 
+            ? path 
             : `${SERVER_BASE_URL}/${path.replace(/\\/g, '/')}`;
     };
 
@@ -114,7 +99,7 @@ export default function NavigationBar() {
             const isRegisterPage = pathname.toLowerCase() === '/register';
 
             return (
-                <>
+                <Box sx={{ display: 'flex' }}>
                     {/* Botão de LOGIN */}
                     <BottomNavigationAction 
                         label="Login" 
@@ -122,7 +107,7 @@ export default function NavigationBar() {
                         onClick={() => {setValue(-1); navigate("/login");}} 
                         sx={{ minWidth: 'auto', p: 0.5 }}
                         showLabel
-                        value={isLoginPage ? 99 : undefined} // Ativa se estiver na rota /login
+                        value={isLoginPage ? 99 : undefined}
                     />
                      {/* Botão de REGISTER */}
                     <BottomNavigationAction 
@@ -131,22 +116,23 @@ export default function NavigationBar() {
                         onClick={() => {setValue(-1); navigate("/register");}}
                         sx={{ minWidth: 'auto', p: 0.5 }}
                         showLabel
-                        value={isRegisterPage ? 99 : undefined} // Ativa se estiver na rota /register
+                        value={isRegisterPage ? 99 : undefined}
                     /> 
-                </>
+                </Box>
             );
         }
 
         // Caso: Usuário autenticado -> Mostrar Perfil (Avatar) e Logout
-        const profileUrl = getProfileUrl(user.avatar); // USAR user.avatar
+        const profileUrl = getProfileUrl(user.avatar);
         const isActive = pathname.toLowerCase() === '/profile';
 
         return (
-            <>
+            <Box sx={{ display: 'flex' }}>
                 {/* AÇÃO DE PERFIL: Muestra el Avatar y el nombre (o "Perfil") */}
                 <BottomNavigationAction
+
                     label={user.name ? user.name.split(' ')[0] : "Perfil"}
-                    onClick={() => {setValue(-1); navigate("/profile");}} // Deseleccionar principal y navegar
+                    onClick={() => {setValue(-1); navigate("/profile");}}
                     showLabel
                     icon={
                         <Avatar 
@@ -165,9 +151,23 @@ export default function NavigationBar() {
                             {!profileUrl && (user.name ? user.name[0] : <PersonIcon />)}
                         </Avatar>
                     }
-                    sx={{ minWidth: 'auto', p: 0.5 }}
-                    value={isActive ? 99 : undefined}
-                />
+                   sx={{
+                        minWidth: 'auto',
+                        // Aumenta el padding para que el fondo se vea mejor
+                        p: '4px 10px', 
+                        borderRadius: '16px', // Borde redondeado
+                        // Fondo: Color gris claro cuando está activo. Usa 'transparent' o 'inherit' por defecto.
+                        backgroundColor: isActive ? 'action.hover' : 'inherit',
+                        
+                        // Estilos para el texto del Label (hacerlo negrita)
+                        '& .MuiBottomNavigationAction-label': {
+                            fontWeight: isActive ? 'bold' : 500,
+                            fontSize: '0.75rem',
+                            // Asegura que el color principal se aplique solo cuando está activo
+                            color: isActive ? 'primary.main' : 'text.primary',
+                        },
+                    }}
+                    value={isActive ? 99 : undefined}                />
 
                 {/* AÇÃO DE LOGOUT (Botão separado) */}
                 <BottomNavigationAction
@@ -177,13 +177,12 @@ export default function NavigationBar() {
                     sx={{ minWidth: 'auto', p: 0.5 }}
                     showLabel
                 />
-            </>
+            </Box>
         );
     };
 
 
     return (
-        // Contenedor que reserva el espacio del header para que el contenido principal no se solape
         <Box sx={{ height: `${NAVIGATION_BAR_HEIGHT}px` }}>
             <Paper 
                 sx={{ 
@@ -224,7 +223,8 @@ export default function NavigationBar() {
                 </BottomNavigation>
 
                 {/* Contenedor para el botón de Acesso/Perfil (Login/Register o Avatar) */}
-                <Box sx={{ display: 'flex', gap: 1 }}>
+                {/* ✅ ALTERADO: Aumenta o GAP para 3 (24px) para maior distância */}
+                <Box sx={{ display: 'flex', gap: 3 }}> 
                     <UserProfileContent />
                 </Box>
             </Paper>
